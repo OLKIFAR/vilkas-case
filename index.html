@@ -1,0 +1,3378 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The Vilkas Case</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="A team problem-solving case: find out why a sneaker brand lost 38% of its online orders, then pick the first fix.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Figtree:wght@400;500;600;700;800&display=swap">
+<style>
+/* Layout: phone-first single column (max 880px) under a frosted sticky bar. The case opens on an
+   ink "dossier" hero. Everyone makes a gut call on their own phone; then one "team screen" per team
+   opens up to 5 of the 10 clues from an evidence grid (clues open in a bottom sheet). The facilitator
+   view (#host) is a two-column projector board: QR on the left, session clock on the right. */
+:root{
+  color-scheme:light;
+  --bg:#F2F3F7; --surface:#FFFFFF; --surface-2:#F7F8FB; --sunk:#EBEDF3;
+  --ink:#0A0E1C; --ink-2:#2B3145; --muted:#596175; --faint:#868DA2;
+  --line:#DFE2EA; --line-2:#C9CEDA;
+  --accent:#3640F0; --accent-ink:#2A33CF; --accent-soft:#E9EBFF; --accent-line:#C5CAFF; --on-accent:#FFFFFF;
+  --hero:#0B0F20; --hero-ink:#F3F4FA; --hero-muted:#A3AAC6; --hero-accent:#8F98FF; --hero-line:rgba(243,244,250,.14); --hero-bar:rgba(243,244,250,.24); --hero-glow:rgba(54,64,240,.45);
+  --good:#0A855A; --good-soft:#DCF3E8; --warn:#9A5900; --warn-soft:#FBEFD5; --bad:#CC3328; --bad-soft:#FBE3E0;
+  --shadow-1:0 1px 2px rgba(10,14,28,.05),0 10px 28px -16px rgba(10,14,28,.22);
+  --shadow-2:0 2px 6px rgba(10,14,28,.08),0 30px 60px -24px rgba(10,14,28,.42);
+  --scrim:rgba(7,10,19,.56);
+  --bar-bg:rgba(242,243,247,.82);
+  --qr-light:#FFFFFF; --qr-dark:#05060A;
+  --f-display:"Archivo","Arial Black","Helvetica Neue",Arial,sans-serif;
+  --f-body:"Figtree","Segoe UI",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+  --f-mono:"DM Mono",ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace;
+  --r-md:16px; --r-lg:22px; --r-xl:30px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#070A13; --surface:#0F1428; --surface-2:#131A32; --sunk:#0B0F1F;
+    --ink:#EDEFF8; --ink-2:#C8CDE0; --muted:#979FB9; --faint:#6E7693;
+    --line:#1F2740; --line-2:#2E3755;
+    --accent:#7E87FF; --accent-ink:#A9AFFF; --accent-soft:#191F4B; --accent-line:#343E8C; --on-accent:#0A0E1C;
+    --hero:#0E1331; --hero-ink:#F3F4FA; --hero-muted:#A7AECB; --hero-accent:#9DA5FF; --hero-line:rgba(243,244,250,.14); --hero-bar:rgba(243,244,250,.22); --hero-glow:rgba(126,135,255,.32);
+    --good:#45D49F; --good-soft:#0E2C21; --warn:#F1B54C; --warn-soft:#31240E; --bad:#FF7D72; --bad-soft:#381614;
+    --shadow-1:0 1px 0 rgba(0,0,0,.35),0 12px 30px -16px rgba(0,0,0,.8);
+    --shadow-2:0 2px 0 rgba(0,0,0,.35),0 30px 60px -20px rgba(0,0,0,.85);
+    --scrim:rgba(0,0,0,.66);
+    --bar-bg:rgba(7,10,19,.82);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#070A13; --surface:#0F1428; --surface-2:#131A32; --sunk:#0B0F1F;
+  --ink:#EDEFF8; --ink-2:#C8CDE0; --muted:#979FB9; --faint:#6E7693;
+  --line:#1F2740; --line-2:#2E3755;
+  --accent:#7E87FF; --accent-ink:#A9AFFF; --accent-soft:#191F4B; --accent-line:#343E8C; --on-accent:#0A0E1C;
+  --hero:#0E1331; --hero-ink:#F3F4FA; --hero-muted:#A7AECB; --hero-accent:#9DA5FF; --hero-line:rgba(243,244,250,.14); --hero-bar:rgba(243,244,250,.22); --hero-glow:rgba(126,135,255,.32);
+  --good:#45D49F; --good-soft:#0E2C21; --warn:#F1B54C; --warn-soft:#31240E; --bad:#FF7D72; --bad-soft:#381614;
+  --shadow-1:0 1px 0 rgba(0,0,0,.35),0 12px 30px -16px rgba(0,0,0,.8);
+  --shadow-2:0 2px 0 rgba(0,0,0,.35),0 30px 60px -20px rgba(0,0,0,.85);
+  --scrim:rgba(0,0,0,.66);
+  --bar-bg:rgba(7,10,19,.82);
+  color-scheme:dark;
+}
+
+*,*::before,*::after{box-sizing:border-box}
+[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--bg)}
+body.lock{overflow:hidden}
+h1,h2,h3,h4{text-wrap:balance;margin:0}
+p,figure,dl,dd,ol,ul{margin:0}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.wrap{max-width:880px;margin-inline:auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap-wide{max-width:1220px}
+
+/* Top bar */
+.topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--bar-bg);-webkit-backdrop-filter:saturate(160%) blur(14px);backdrop-filter:saturate(160%) blur(14px);border-bottom:1px solid var(--line)}
+.topbar-in{display:flex;align-items:center;gap:12px;min-height:60px;padding-block:8px}
+.mark{display:flex;align-items:center;gap:10px;font-family:var(--f-display);font-weight:800;font-stretch:118%;font-size:15px;letter-spacing:.03em;text-transform:uppercase;white-space:nowrap;flex:none}
+.mark-v{width:30px;height:30px;border-radius:9px;background:var(--ink);color:var(--bg);display:grid;place-items:center}
+.mark-v svg{width:17px;height:17px;display:block}
+.phase-chip{font-family:var(--f-mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.timer{margin-left:auto;display:flex;align-items:baseline;gap:6px;padding:6px 13px;border-radius:999px;background:var(--surface);border:1px solid var(--line);font-family:var(--f-mono);font-variant-numeric:tabular-nums;font-weight:500;font-size:18px;white-space:nowrap;flex:none}
+.timer small{font-size:10.5px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase}
+.timer[data-tone="warn"]{color:var(--warn);border-color:var(--warn);background:var(--warn-soft)}
+.timer[data-tone="warn"] small,.timer[data-tone="bad"] small{color:inherit}
+.timer[data-tone="bad"]{color:var(--bad);border-color:var(--bad);background:var(--bad-soft)}
+@media (max-width:480px){.mark-t{display:none}}
+
+/* Page */
+main.wrap{display:grid;gap:30px;padding-block:20px 56px}
+.screen{display:grid;gap:22px;min-width:0}
+.stack{display:grid;gap:14px;min-width:0}
+.sec{display:grid;gap:14px;min-width:0}
+.sec-head{display:grid;gap:8px}
+.eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent-ink);font-weight:500}
+.h2{font-family:var(--f-display);font-weight:800;font-stretch:112%;font-size:clamp(28px,5.6vw,42px);line-height:1.02;letter-spacing:-.005em}
+.h3{font-family:var(--f-display);font-weight:750;font-stretch:108%;font-size:21px;line-height:1.15}
+.lead{font-size:17px;color:var(--ink-2);max-width:60ch}
+.muted{color:var(--muted)}
+.fine{font-size:13.5px;color:var(--muted)}
+.center{text-align:center}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:20px;display:grid;gap:16px;min-width:0;box-shadow:var(--shadow-1)}
+.alert{border-radius:12px;padding:10px 14px;font-weight:600;font-size:14.5px;background:var(--bad-soft);color:var(--bad)}
+.alert[data-tone="warn"]{background:var(--warn-soft);color:var(--warn)}
+.alert[data-tone="info"]{background:var(--accent-soft);color:var(--accent-ink)}
+
+/* Buttons */
+.btn{appearance:none;border:0;display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:52px;padding:0 24px;border-radius:999px;font-weight:700;font-size:16px;cursor:pointer;text-decoration:none;line-height:1.15;text-align:center}
+.btn svg{width:18px;height:18px;flex:none}
+.btn-primary{background:var(--accent);color:var(--on-accent);box-shadow:0 10px 24px -12px var(--accent)}
+.btn-dark{background:var(--ink);color:var(--bg)}
+.btn-ghost{background:transparent;color:var(--ink);border:1px solid var(--line-2)}
+.btn-light{background:var(--hero-ink);color:var(--hero)}
+.btn-danger{background:var(--bad);color:var(--surface)}
+.btn-warn{background:var(--warn);color:var(--surface)}
+.btn-block{width:100%}
+.btn:disabled,.btn[aria-disabled="true"]{opacity:.42;cursor:not-allowed;box-shadow:none}
+.linkbtn{appearance:none;background:none;border:0;color:var(--accent-ink);text-decoration:underline;text-underline-offset:3px;cursor:pointer;padding:6px 2px;font-size:13.5px}
+.actions{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+@media (hover:hover){
+  .btn-primary:hover{filter:brightness(1.07)}
+  .btn-dark:hover{filter:brightness(1.18)}
+  .btn-ghost:hover{border-color:var(--ink)}
+  .btn-light:hover{filter:brightness(.94)}
+}
+
+/* Hero */
+.hero{position:relative;overflow:hidden;border-radius:var(--r-xl);background:radial-gradient(110% 85% at 100% 0%,var(--hero-glow),transparent 62%),var(--hero);color:var(--hero-ink);padding:30px 26px 26px;display:grid;gap:24px;box-shadow:var(--shadow-2)}
+.hero-meta{display:flex;flex-wrap:wrap;gap:6px 18px;font-family:var(--f-mono);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--hero-muted)}
+.hero-title{font-family:var(--f-display);font-weight:850;font-stretch:125%;font-size:clamp(48px,11.5vw,104px);line-height:.86;letter-spacing:-.012em;text-transform:uppercase}
+.hero-title span{display:block}
+.hero-title .hl{color:var(--hero-accent)}
+.hero-row{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:22px;align-items:end}
+.stat-big{font-family:var(--f-display);font-weight:850;font-stretch:108%;font-size:clamp(60px,12vw,108px);line-height:.88;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.stat-label{color:var(--hero-muted);font-size:15px;max-width:24ch;margin-top:10px}
+.hero-chart{display:grid;gap:6px;min-width:0}
+.hero-chart svg{width:100%;height:auto;display:block}
+.hero-chart figcaption{font-family:var(--f-mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--hero-muted)}
+.hb-n{fill:var(--hero-bar)}
+.hb-d{fill:var(--hero-accent)}
+.hb-base{stroke:var(--hero-line);stroke-width:1}
+.hb-v{fill:var(--hero-ink);font-family:var(--f-mono);font-size:11px}
+.hb-m{fill:var(--hero-muted);font-family:var(--f-mono);font-size:11px;letter-spacing:.06em}
+.hero-lede{font-size:clamp(17px,2.4vw,20px);line-height:1.45;max-width:44ch;padding-top:18px;border-top:1px solid var(--hero-line)}
+@media (max-width:640px){.hero{padding:24px 20px 22px}.hero-row{grid-template-columns:1fr}}
+
+/* How it works */
+.how{list-style:none;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.how li{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-md);padding:16px 16px 18px;display:grid;gap:8px;align-content:start}
+.how-n{font-family:var(--f-mono);font-size:12px;color:var(--accent-ink);letter-spacing:.06em}
+.how-t{font-family:var(--f-display);font-weight:850;font-stretch:118%;font-size:26px;line-height:1;text-transform:uppercase}
+.how-d{font-size:14.5px;color:var(--ink-2);line-height:1.45}
+@media (max-width:640px){.how{grid-template-columns:1fr}}
+
+/* Fields */
+.fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+@media (max-width:600px){.fields{grid-template-columns:1fr}}
+.field{display:grid;gap:8px;min-width:0;align-content:start}
+.label{font-weight:700;font-size:14.5px}
+.input{font:inherit;font-size:16px;color:var(--ink);background:var(--surface-2);border:1px solid var(--line-2);border-radius:14px;padding:12px 14px;min-height:52px;width:100%}
+.input::placeholder{color:var(--faint)}
+.input:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+textarea.input{min-height:100px;resize:vertical;line-height:1.45}
+.seg{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr);gap:4px;background:var(--sunk);padding:4px;border-radius:15px}
+.seg label{position:relative;display:grid;place-items:center;min-height:44px;border-radius:11px;font-weight:700;font-size:14.5px;cursor:pointer;color:var(--muted);text-align:center;padding:4px 8px;line-height:1.2}
+.seg input{position:absolute;opacity:0;width:1px;height:1px;pointer-events:none}
+.seg label.on{background:var(--surface);color:var(--ink);box-shadow:var(--shadow-1)}
+.seg label:focus-within{outline:2px solid var(--accent);outline-offset:1px}
+.scale{display:flex;justify-content:space-between;gap:8px;font-size:13px;color:var(--muted)}
+
+/* Brief */
+.brief{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:20px;display:grid;gap:16px;box-shadow:var(--shadow-1);min-width:0}
+.brief-from{display:flex;gap:12px;align-items:center}
+.avatar{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:var(--ink);color:var(--bg);font-family:var(--f-display);font-weight:800;font-size:16px;flex:none}
+.brief-name{font-weight:700;line-height:1.25}
+.brief-meta{font-size:13px;color:var(--muted)}
+.brief-text{font-size:clamp(17px,2.3vw,19px);line-height:1.5;max-width:60ch}
+.theories{display:grid;gap:10px}
+.theory-list{list-style:none;padding:0;display:grid;gap:8px}
+.theory-list li{display:grid;grid-template-columns:104px minmax(0,1fr);gap:12px;align-items:baseline;padding:10px 12px;border-radius:12px;background:var(--surface-2);border:1px solid var(--line)}
+.who{font-family:var(--f-mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+@media (max-width:480px){.theory-list li{grid-template-columns:1fr;gap:2px}}
+.fact-list{list-style:none;padding:0;display:grid;gap:8px}
+.fact-list li{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border-radius:12px;background:var(--accent-soft);border:1px solid var(--accent-line)}
+.fact-list li::before{content:"";flex:none;width:8px;height:8px;border-radius:50%;background:var(--accent);margin-top:8px}
+.rows.co{margin-top:0}
+.rows.co > div{padding:8px 0}
+
+/* Role choice */
+.choices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+@media (max-width:600px){.choices{grid-template-columns:1fr}}
+.choice{appearance:none;width:100%;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:20px;display:grid;gap:10px;align-content:start;cursor:pointer;box-shadow:var(--shadow-1)}
+.choice-ic{width:46px;height:46px;border-radius:13px;background:var(--accent);color:var(--on-accent);display:grid;place-items:center}
+.choice-ic svg{width:24px;height:24px}
+.choice.alt .choice-ic{background:var(--sunk);color:var(--ink-2)}
+.choice-t{font-family:var(--f-display);font-weight:800;font-stretch:110%;font-size:21px;line-height:1.12}
+.choice-d{color:var(--muted);font-size:15px;line-height:1.45}
+@media (hover:hover){.choice:hover{border-color:var(--accent)}}
+.tips{display:grid;gap:10px;padding-left:22px}
+.tips li{padding-left:4px}
+
+/* Evidence board */
+.rulestrip{display:flex;flex-wrap:wrap;gap:6px}
+.rulestrip span{font-family:var(--f-mono);font-size:12px;letter-spacing:.02em;padding:6px 11px;border-radius:999px;background:var(--surface);border:1px solid var(--line);color:var(--ink-2);white-space:nowrap}
+.rulestrip b{font-weight:500}
+.rulestrip .plus b{color:var(--good)}
+.rulestrip .minus b{color:var(--bad)}
+.board-head{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 16px}
+.picks{display:inline-flex;align-items:center;gap:10px;font-family:var(--f-mono);font-size:12.5px;letter-spacing:.04em;color:var(--ink-2)}
+.pips{display:inline-flex;gap:5px;align-items:center}
+.pips i{width:12px;height:12px;border-radius:50%;border:2px solid var(--accent);display:block}
+.pips i.on{background:var(--accent)}
+.pips i.extra{border-color:var(--warn);border-style:dashed;margin-left:4px}
+.pips i.extra.on{background:var(--warn);border-style:solid}
+.board{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+@media (min-width:820px){.board{grid-template-columns:repeat(5,minmax(0,1fr))}}
+.clue{appearance:none;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-md);padding:13px 13px 12px;display:grid;grid-template-rows:auto auto auto 1fr auto;gap:7px;min-height:198px;cursor:pointer;min-width:0;position:relative;transition:transform .16s ease,box-shadow .16s ease,border-color .16s ease,background-color .16s ease}
+.clue-top{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.clue-n{font-family:var(--f-display);font-weight:850;font-stretch:112%;font-size:22px;line-height:1;color:var(--ink);font-variant-numeric:tabular-nums}
+.clue-ic{width:34px;height:34px;border-radius:10px;background:var(--sunk);display:grid;place-items:center;color:var(--ink-2)}
+.clue-ic svg{width:19px;height:19px;display:block}
+.clue-kind{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.clue-t{font-weight:800;font-size:15.5px;line-height:1.22}
+.clue-d{font-size:13px;line-height:1.38;color:var(--muted)}
+.clue-s{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);display:flex;align-items:center;gap:6px;padding-top:8px;border-top:1px dashed var(--line-2)}
+.clue-s svg{width:14px;height:14px}
+.clue.is-open{border-color:var(--accent-line);background:var(--accent-soft)}
+.clue.is-open .clue-ic{background:var(--accent);color:var(--on-accent)}
+.clue.is-open .clue-s{color:var(--accent-ink);border-top-color:var(--accent-line)}
+.clue.is-extra{border-style:dashed;border-color:var(--warn)}
+.clue.is-extra .clue-s{color:var(--warn)}
+.clue.is-spent{opacity:.55}
+@media (hover:hover){.clue:not(.is-spent):hover{transform:translateY(-2px);box-shadow:var(--shadow-1);border-color:var(--line-2)}.clue.is-open:hover{border-color:var(--accent)}.clue.is-extra:hover{border-color:var(--warn)}}
+@media (max-width:380px){.clue-d{display:none}.clue{min-height:150px}}
+
+/* Clue content */
+.cl{display:grid;gap:12px;min-width:0}
+.sheet-sub{color:var(--muted);font-size:15px}
+.cl-note{font-size:14px;color:var(--muted)}
+.scroll{overflow-x:auto;max-width:100%}
+.tbl{width:100%;min-width:290px;border-collapse:collapse;font-size:15px;font-variant-numeric:tabular-nums}
+.tbl caption{text-align:left;font-family:var(--f-mono);font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding-bottom:8px}
+.tbl th,.tbl td{padding:11px 8px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
+.tbl th:first-child,.tbl td:first-child{text-align:left;padding-left:0;white-space:normal}
+.tbl th:last-child,.tbl td:last-child{padding-right:0}
+.tbl thead th{font-family:var(--f-mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:400}
+.tbl tbody th{font-weight:700}
+.tbl tr.hl th,.tbl tr.hl td{color:var(--accent-ink)}
+.tbl tbody tr:last-child th,.tbl tbody tr:last-child td{border-bottom:0}
+.prod{border:1px solid var(--line);border-radius:18px;padding:16px;display:grid;gap:4px;background:var(--surface-2)}
+.prod-top{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.prod-brand{font-family:var(--f-display);font-weight:850;font-stretch:125%;letter-spacing:.1em;font-size:14px}
+.pill-s{font-family:var(--f-mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;padding:4px 9px;border-radius:999px;background:var(--accent-soft);color:var(--accent-ink);white-space:nowrap}
+.prod-name{font-family:var(--f-display);font-weight:800;font-stretch:110%;font-size:28px;line-height:1.1;margin-top:6px}
+.prod-price{font-family:var(--f-mono);font-size:22px;font-weight:500}
+.rows{display:grid;margin-top:8px}
+.rows > div{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:12px;padding:10px 0;border-top:1px solid var(--line)}
+.rows dt{color:var(--muted);font-size:14px}
+.rows dd{font-weight:700;font-size:14.5px}
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.stats > div{background:var(--surface-2);border:1px solid var(--line);border-radius:14px;padding:12px;display:grid;gap:4px;align-content:start;min-width:0}
+.st-v{font-family:var(--f-display);font-weight:850;font-stretch:105%;font-size:24px;line-height:1;font-variant-numeric:tabular-nums}
+.st-k{font-size:13px;color:var(--muted);line-height:1.35}
+@media (max-width:520px){.stats{grid-template-columns:1fr}.stats > div{grid-template-columns:96px minmax(0,1fr);align-items:center;gap:12px}}
+.delta{display:grid;gap:4px;border-radius:14px;padding:12px 14px;background:var(--sunk)}
+.delta-k{font-family:var(--f-mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.delta-v{font-size:15px;display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 10px}
+.delta-v b{font-family:var(--f-mono);font-weight:500;font-size:22px}
+.fn{display:grid;gap:14px}
+.fn-key{display:flex;flex-wrap:wrap;gap:6px 16px;align-items:center;font-size:13px;color:var(--muted)}
+.sw{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+.sw-old{background:var(--line-2)}
+.sw-new{background:var(--accent)}
+.fn-row{display:grid;gap:6px}
+.fn-l{font-weight:700;font-size:14.5px}
+.fn-bars{display:grid;gap:4px}
+.fn-bar{height:28px;border-radius:8px;display:flex;align-items:center;justify-content:flex-end;padding:0 10px;font-family:var(--f-mono);font-size:13px;font-variant-numeric:tabular-nums;min-width:72px}
+.fn-bar.old{background:var(--line-2);color:var(--ink)}
+.fn-bar.new{background:var(--accent);color:var(--on-accent)}
+.dev{display:grid;gap:10px}
+.dev-row{display:grid;grid-template-columns:42px minmax(0,1fr) auto;gap:12px;align-items:center;padding:12px;border:1px solid var(--line);border-radius:14px;background:var(--surface-2)}
+.dev-ic{width:42px;height:42px;border-radius:12px;background:var(--sunk);display:grid;place-items:center}
+.dev-ic svg{width:22px;height:22px}
+.dev-name{font-weight:800;display:block}
+.dev-nums{display:block;font-family:var(--f-mono);font-size:15px;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.chg{font-family:var(--f-mono);font-weight:500;font-size:14px;padding:6px 11px;border-radius:999px;white-space:nowrap}
+.chg.down{background:var(--bad-soft);color:var(--bad)}
+.chg.up{background:var(--good-soft);color:var(--good)}
+.log{list-style:none;padding:0;display:grid}
+.log li{display:grid;grid-template-columns:62px minmax(0,1fr);gap:6px 14px;padding:12px 0;border-top:1px solid var(--line)}
+.log li:first-child{border-top:0;padding-top:2px}
+.log time{font-family:var(--f-mono);font-size:13px;color:var(--muted);padding-top:2px;grid-row:span 2}
+.log .tag{justify-self:start;font-family:var(--f-mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;border-radius:999px;background:var(--sunk);color:var(--ink-2)}
+.msgs{display:grid;gap:10px}
+.msg{background:var(--surface-2);border:1px solid var(--line);border-radius:18px 18px 18px 6px;padding:12px 14px;display:grid;gap:4px;max-width:94%}
+.msg-meta{font-family:var(--f-mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.svy{display:grid;gap:14px}
+.svy-src{font-family:var(--f-mono);font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.svy-row{display:grid;grid-template-columns:minmax(0,1fr) 46px;gap:6px 12px;align-items:center}
+.svy-l{grid-column:1/-1;font-size:14.5px;font-weight:700;line-height:1.3}
+.svy-track{height:10px;border-radius:99px;background:var(--sunk);overflow:hidden}
+.svy-fill{height:100%;border-radius:99px;background:var(--accent);display:block}
+.svy-v{font-family:var(--f-mono);font-size:15px;text-align:right;font-variant-numeric:tabular-nums}
+
+/* Decisions */
+.decide-head{display:grid;gap:6px}
+.opts{display:grid;gap:8px}
+.opt{position:relative;display:grid;grid-template-columns:36px minmax(0,1fr);gap:12px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 14px;cursor:pointer;min-width:0;transition:border-color .12s ease,background-color .12s ease}
+.opt input{position:absolute;opacity:0;width:1px;height:1px;pointer-events:none}
+.opt-k{width:36px;height:36px;border-radius:11px;background:var(--sunk);display:grid;place-items:center;font-family:var(--f-mono);font-weight:500;font-size:14px;color:var(--ink-2)}
+.opt-t{font-weight:700;line-height:1.32}
+.opt-sub{display:block;font-weight:500;font-size:13.5px;color:var(--muted);margin-top:2px}
+.opt.on{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+.opt.on .opt-k{background:var(--accent);color:var(--on-accent)}
+.opt:focus-within{outline:2px solid var(--accent);outline-offset:2px}
+.opts.is-locked .opt{cursor:default}
+.opts.is-locked .opt:not(.on){opacity:.42}
+@media (hover:hover){.opts:not(.is-locked) .opt:hover{border-color:var(--line-2)}.opts:not(.is-locked) .opt.on:hover{border-color:var(--ink)}}
+.locked-note{display:flex;align-items:center;gap:10px;font-weight:700;color:var(--good);background:var(--good-soft);border-radius:12px;padding:12px 14px}
+.locked-note svg{width:18px;height:18px;flex:none}
+.sealed{display:flex;align-items:center;gap:12px;border:1px dashed var(--line-2);border-radius:14px;padding:18px;color:var(--muted)}
+.sealed svg{width:20px;height:20px;flex:none}
+.flow3{list-style:none;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.flow3 li{display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:10px 12px;font-weight:700;font-size:14px;line-height:1.25;min-width:0}
+.flow3 b{flex:none;width:26px;height:26px;border-radius:8px;display:grid;place-items:center;background:var(--ink);color:var(--bg);font-family:var(--f-mono);font-weight:500;font-size:13px}
+@media (max-width:560px){.flow3{grid-template-columns:1fr}}
+details.more{border:1px solid var(--line);border-radius:var(--r-md);background:var(--surface)}
+details.more summary{cursor:pointer;list-style:none;padding:14px 16px;font-weight:700;display:flex;justify-content:space-between;align-items:center;gap:12px}
+details.more summary::-webkit-details-marker{display:none}
+details.more summary::after{content:"+";font-family:var(--f-mono);font-size:18px;color:var(--muted)}
+details.more[open] summary::after{content:"\2212"}
+details.more .more-body{padding:0 16px 16px;display:grid;gap:12px}
+.rules{display:grid;gap:8px;padding-left:20px;font-size:14.5px}
+
+/* Wait + result */
+.kv{display:grid;gap:12px}
+.kv > div{display:grid;gap:2px}
+.kv dt{font-family:var(--f-mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.kv dd{font-weight:700}
+.coderow{display:flex;flex-wrap:wrap;gap:10px}
+.still{display:grid;grid-template-columns:auto minmax(0,1fr);gap:14px;align-items:start;border-radius:var(--r-lg);padding:18px 20px;background:var(--accent-soft);border:1px solid var(--accent-line);color:var(--accent-ink)}
+.still-ic svg{width:36px;height:36px;display:block}
+.still-copy{display:grid;gap:4px;min-width:0}
+.still-t{font-family:var(--f-display);font-weight:850;font-size:clamp(20px,4.6vw,26px);line-height:1.15}
+.still-d{color:var(--ink);font-size:15.5px}
+.unlock{border-color:var(--accent-line)}
+.unlocked{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center}
+.coderow .input{flex:1 1 180px;width:auto;font-family:var(--f-mono);letter-spacing:.16em;text-transform:uppercase}
+.scores{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr) minmax(0,1fr);gap:10px}
+.scores.two{grid-template-columns:minmax(0,1.2fr) minmax(0,1fr)}
+.score{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:18px;display:grid;gap:8px;align-content:start;min-width:0}
+.score-k{font-family:var(--f-mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.score-v{font-family:var(--f-display);font-weight:850;font-stretch:110%;font-size:clamp(50px,8vw,78px);line-height:.9;font-variant-numeric:tabular-nums}
+.score-v small{font-size:.34em;font-weight:700;color:var(--muted);margin-left:4px;font-stretch:100%}
+.score-n{font-size:14px;color:var(--muted);line-height:1.35}
+.score.main{background:radial-gradient(120% 100% at 100% 0%,var(--hero-glow),transparent 62%),var(--hero);border-color:transparent;color:var(--hero-ink);box-shadow:var(--shadow-2)}
+.score.main .score-k,.score.main .score-n,.score.main .score-v small{color:var(--hero-muted)}
+@media (max-width:700px){.scores{grid-template-columns:repeat(2,minmax(0,1fr))}.score.main{grid-column:1/-1}.scores.two{grid-template-columns:1fr}}
+.verdict{font-family:var(--f-display);font-weight:750;font-stretch:104%;font-size:clamp(20px,3vw,26px);line-height:1.22;padding:2px 0 2px 16px;border-left:4px solid var(--muted)}
+.verdict[data-tone="good"]{border-color:var(--good)}
+.verdict[data-tone="warn"]{border-color:var(--warn)}
+.verdict[data-tone="bad"]{border-color:var(--bad)}
+.bd{width:100%;border-collapse:collapse}
+.bd td{padding:12px 0;border-bottom:1px solid var(--line);vertical-align:top}
+.bd td:last-child{text-align:right;font-family:var(--f-mono);font-weight:500;font-size:16px;white-space:nowrap;padding-left:14px;font-variant-numeric:tabular-nums}
+.bd .sub{display:block;font-size:13.5px;color:var(--muted);margin-top:2px}
+.bd tr.total td{border-bottom:0;font-weight:800;font-size:18px}
+.pos{color:var(--good)} .neg{color:var(--bad)} .zero{color:var(--muted)}
+.truth{border-radius:var(--r-lg);padding:22px;background:var(--accent-soft);border:1px solid var(--accent-line);display:grid;gap:14px}
+.truth p{max-width:64ch}
+.truth .fixline{font-weight:800}
+.money{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.money > div{background:var(--surface);border-radius:14px;padding:14px;display:grid;gap:2px}
+.money-v{font-family:var(--f-display);font-weight:850;font-stretch:108%;font-size:clamp(26px,5vw,34px);font-variant-numeric:tabular-nums;line-height:1.05}
+.money-v.good{color:var(--good)} .money-v.bad{color:var(--bad)}
+.money-k{font-size:13.5px;color:var(--muted)}
+.method{list-style:none;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.method li{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-md);padding:16px;display:grid;gap:6px;align-content:start}
+.m-n{font-family:var(--f-mono);font-size:12px;color:var(--accent-ink)}
+.m-t{font-family:var(--f-display);font-weight:850;font-stretch:115%;font-size:21px;line-height:1.02;text-transform:uppercase}
+.m-d{font-size:14px;color:var(--ink-2);line-height:1.45}
+.method li:not(:last-child)::after{content:"";position:absolute;top:50%;right:-11px;width:8px;height:8px;border-top:2px solid var(--line-2);border-right:2px solid var(--line-2);transform:translateY(-50%) rotate(45deg)}
+@media (max-width:760px){.method{grid-template-columns:1fr}.method li:not(:last-child)::after{top:auto;right:auto;left:26px;bottom:-11px;transform:rotate(135deg)}}
+.exl{list-style:none;padding:0;display:grid}
+.exl li{display:grid;gap:4px;padding:12px 0;border-top:1px solid var(--line)}
+.exl li:first-child{border-top:0;padding-top:0}
+.exl-top{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px}
+.exl-n{font-family:var(--f-mono);font-size:12px;color:var(--accent-ink)}
+.exl-t{font-weight:800}
+.exl-tags{display:flex;gap:6px;margin-left:auto}
+.exl-m{color:var(--muted);font-size:14.5px}
+.chip{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;padding:4px 9px;border-radius:999px;font-weight:500;white-space:nowrap}
+.chip-key{background:var(--good-soft);color:var(--good)}
+.chip-clear{background:var(--sunk);color:var(--ink-2)}
+.chip-mixed{background:var(--warn-soft);color:var(--warn)}
+.chip-trap{background:var(--bad-soft);color:var(--bad)}
+.chip-you{background:var(--ink);color:var(--bg)}
+#copy-fallback{width:100%;min-height:160px;font-family:var(--f-mono);font-size:13px}
+.save-row{display:grid;grid-template-columns:minmax(0,220px) minmax(0,1fr);gap:20px;align-items:start}
+.save-prev{display:grid;gap:8px;min-width:0}
+.prev-box{aspect-ratio:3/4;border-radius:14px;background:var(--sunk);border:1px solid var(--line);overflow:hidden;display:grid;place-items:center;max-width:100%}
+.prev-box img{width:100%;height:100%;object-fit:contain;display:block;background:var(--surface-2)}
+button.prev-box{appearance:none;padding:0;width:100%;cursor:zoom-in}
+.full-card{width:100%;height:auto;display:block;border-radius:12px;border:1px solid var(--line)}
+@media (max-width:560px){.save-row{grid-template-columns:1fr}.save-prev{max-width:240px}}
+
+/* Feedback */
+.q{display:grid;gap:10px}
+.q + .q{padding-top:18px;border-top:1px solid var(--line)}
+.q-top{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.q-n{font-family:var(--f-mono);font-size:12px;color:var(--accent-ink)}
+.q-t{font-weight:800;font-size:17px;line-height:1.3}
+.req{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.rate{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
+.rate label{position:relative;display:grid;place-items:center;min-height:54px;border-radius:14px;border:1px solid var(--line);background:var(--surface);font-family:var(--f-display);font-weight:850;font-size:21px;cursor:pointer}
+.rate input{position:absolute;opacity:0;width:1px;height:1px;pointer-events:none}
+.rate label.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.rate label:focus-within{outline:2px solid var(--accent);outline-offset:2px}
+@media (hover:hover){.rate label:hover{border-color:var(--line-2)}.rate label.on:hover{border-color:var(--ink)}}
+.done-card{text-align:center;justify-items:center;padding:36px 22px}
+.done-mark{width:64px;height:64px;border-radius:50%;display:grid;place-items:center;background:var(--good-soft);color:var(--good)}
+.done-mark svg{width:30px;height:30px}
+
+/* Footer */
+.foot{border-top:1px solid var(--line);padding-top:18px;display:flex;flex-wrap:wrap;gap:8px 18px;justify-content:space-between;align-items:center;font-size:13.5px;color:var(--muted)}
+.foot span{max-width:62ch}
+
+/* Sheet */
+.sheet{position:fixed;inset:0;z-index:60;display:grid;align-items:end;justify-items:center;background:var(--scrim);padding-top:max(28px,env(safe-area-inset-top,0px))}
+.sheet-panel{width:min(640px,100%);max-height:100%;overflow:auto;overscroll-behavior:contain;background:var(--surface);border-radius:26px 26px 0 0;box-shadow:var(--shadow-2);padding:10px max(20px,env(safe-area-inset-right,0px)) max(22px,env(safe-area-inset-bottom,0px)) max(20px,env(safe-area-inset-left,0px));display:grid;gap:16px;align-content:start}
+@media (min-width:720px){.sheet{align-items:center;padding:28px}.sheet-panel{border-radius:26px;max-height:calc(100vh - 56px);padding:12px 26px 26px}}
+@media (prefers-reduced-motion:no-preference){.sheet-panel{animation:sheetIn .26s cubic-bezier(.2,.8,.2,1)}@keyframes sheetIn{from{transform:translateY(28px);opacity:.3}to{transform:none;opacity:1}}}
+.sheet-handle{width:44px;height:5px;border-radius:99px;background:var(--line-2);justify-self:center}
+.sheet-head{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.sheet-kicker{font-family:var(--f-mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent-ink)}
+.icon-btn{appearance:none;width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:var(--surface-2);display:grid;place-items:center;cursor:pointer;flex:none}
+.icon-btn svg{width:18px;height:18px}
+.sheet-title{font-family:var(--f-display);font-weight:800;font-stretch:110%;font-size:clamp(24px,5vw,30px);line-height:1.08}
+.sheet-title:focus{outline:none}
+.sheet-body{display:grid;gap:14px;min-width:0}
+.sheet-actions{display:flex;flex-wrap:wrap;gap:10px;justify-content:flex-end}
+.sheet-actions .btn{flex:1 1 160px}
+.pickline{display:flex;align-items:center;gap:12px;padding:14px;border-radius:14px;background:var(--accent-soft);color:var(--accent-ink);font-weight:700}
+.pickline.extra{background:var(--warn-soft);color:var(--warn)}
+
+/* Host view */
+.host{display:grid;grid-template-columns:minmax(0,360px) minmax(0,1fr);gap:20px;align-items:start;padding-block:20px 56px}
+@media (max-width:980px){.host{grid-template-columns:1fr}}
+.join{background:radial-gradient(120% 90% at 100% 0%,var(--hero-glow),transparent 62%),var(--hero);color:var(--hero-ink);border-radius:var(--r-xl);padding:22px;display:grid;gap:14px;box-shadow:var(--shadow-2);min-width:0}
+@media (min-width:981px){.join{position:sticky;top:calc(env(safe-area-inset-top,0px) + 80px)}}
+.join-k{font-family:var(--f-mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--hero-muted)}
+.join-h{font-family:var(--f-display);font-weight:850;font-stretch:122%;font-size:36px;line-height:.92;text-transform:uppercase}
+.qr-tile{background:var(--qr-light);color:var(--qr-dark);border-radius:20px;padding:16px;width:100%;max-width:100%;aspect-ratio:1/1;display:grid;place-items:center;font-family:var(--f-mono);font-size:13px;text-align:center}
+.qr-tile svg{width:100%;height:100%;display:block}
+.qr-bg{fill:var(--qr-light)}
+.qr-fg{fill:var(--qr-dark)}
+.join-url{font-family:var(--f-mono);font-size:13px;color:var(--hero-muted);word-break:break-all}
+.join-msg{font-size:13.5px;color:var(--hero-muted);min-height:1.2em}
+.host-main{display:grid;gap:16px;min-width:0}
+.clock-card{gap:10px}
+.clock-top{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:8px 16px}
+.clock-phase{font-family:var(--f-display);font-weight:850;font-stretch:120%;font-size:clamp(30px,5vw,46px);line-height:1;text-transform:uppercase}
+.clock-label{font-family:var(--f-mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.clock-time{font-family:var(--f-display);font-weight:850;font-stretch:100%;font-size:clamp(88px,15vw,190px);line-height:.92;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.clock-time[data-tone="warn"]{color:var(--warn)}
+.clock-time[data-tone="bad"]{color:var(--bad)}
+.clock-tip{font-size:17px;color:var(--ink-2);max-width:60ch}
+.clock-meta{display:flex;flex-wrap:wrap;gap:6px 18px;font-family:var(--f-mono);font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+.rail{list-style:none;padding:0;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:6px}
+.rail button{appearance:none;width:100%;border:1px solid var(--line);background:var(--surface);border-radius:12px;padding:10px;text-align:left;display:grid;gap:2px;cursor:pointer;min-width:0}
+.r-n{font-family:var(--f-mono);font-size:11px;color:var(--muted)}
+.r-t{font-weight:800;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.r-m{font-family:var(--f-mono);font-size:12px;color:var(--muted)}
+.rail button[data-s="done"]{background:var(--surface-2)}
+.rail button[data-s="done"] .r-t{color:var(--muted)}
+.rail button[data-s="now"]{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent);background:var(--accent-soft)}
+@media (max-width:700px){.rail{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.say{display:grid;gap:12px;padding-left:24px}
+.say li{font-size:clamp(17px,1.9vw,20px);line-height:1.45;padding-left:4px}
+.bul{display:grid;gap:8px;padding-left:20px;font-size:16px}
+.codebox{font-family:var(--f-display);font-weight:850;font-stretch:125%;font-size:clamp(56px,10vw,112px);letter-spacing:.12em;line-height:1;text-transform:uppercase;color:var(--accent-ink)}
+.sb-rows{display:grid;gap:8px}
+.sb-row{display:grid;grid-template-columns:minmax(0,1fr) 96px;gap:8px}
+.sb-row .num{text-align:right;font-family:var(--f-mono)}
+.rank{list-style:none;padding:0;display:grid;gap:8px}
+.rank li{display:grid;grid-template-columns:44px minmax(0,1fr) auto;gap:12px;align-items:center;padding:12px 14px;border-radius:14px;background:var(--surface-2);border:1px solid var(--line)}
+.rank li:first-child{background:var(--accent-soft);border-color:var(--accent-line)}
+.rk{font-family:var(--f-display);font-weight:850;font-size:26px;line-height:1}
+.rt{font-weight:800;font-size:18px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rs{font-family:var(--f-display);font-weight:850;font-size:30px;font-variant-numeric:tabular-nums;text-align:right}
+.rs small{display:block;font-family:var(--f-mono);font-weight:500;font-size:12px;color:var(--muted)}
+.rank li.empty{display:block;text-align:center;color:var(--muted);background:transparent;border-style:dashed}
+.key-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.key-grid > div{background:var(--surface-2);border:1px solid var(--line);border-radius:14px;padding:12px 14px;display:grid;gap:4px}
+@media (max-width:600px){.key-grid{grid-template-columns:1fr}}
+
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+
+<header class="topbar">
+  <div class="wrap topbar-in">
+    <span class="mark"><span class="mark-v"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4h4.4L12 15.3 16.6 4H21l-7 16h-4z" fill="currentColor"/></svg></span><span class="mark-t">Vilkas Case</span></span>
+    <span class="phase-chip" id="phase-chip">Case file</span>
+    <span class="timer" id="timer" role="timer" hidden><span id="timer-v">2:00</span><small id="timer-n">left</small></span>
+  </div>
+</header>
+
+<main class="wrap" id="play">
+
+  <!-- COVER -->
+  <section class="screen" id="s-cover" aria-labelledby="hero-title">
+    <div class="hero">
+      <div class="hero-meta"><span>Case file · Session 9</span><span>Vilnius · Online retail</span><span>A fictional case</span></div>
+      <h1 class="hero-title" id="hero-title"><span>The</span><span class="hl">Vilkas</span><span>Case</span></h1>
+      <div class="hero-row">
+        <div>
+          <div class="stat-big">−38%</div>
+          <p class="stat-label">online orders this October, compared with last October</p>
+        </div>
+        <figure class="hero-chart">
+          <svg viewBox="0 0 320 150" role="img" aria-labelledby="hc-t">
+            <title id="hc-t">Orders per month this year: June 1,420, July 1,480, August 1,510, September 1,040, October 930</title>
+            <line class="hb-base" x1="6" y1="118.5" x2="314" y2="118.5"/>
+            <rect class="hb-n" x="14" y="29.3" width="40" height="88.7" rx="5"/>
+            <rect class="hb-n" x="76" y="25.5" width="40" height="92.5" rx="5"/>
+            <rect class="hb-n" x="138" y="23.6" width="40" height="94.4" rx="5"/>
+            <rect class="hb-d" x="200" y="53" width="40" height="65" rx="5"/>
+            <rect class="hb-d" x="262" y="59.9" width="40" height="58.1" rx="5"/>
+            <text class="hb-v" x="34" y="22" text-anchor="middle">1,420</text>
+            <text class="hb-v" x="96" y="18" text-anchor="middle">1,480</text>
+            <text class="hb-v" x="158" y="16" text-anchor="middle">1,510</text>
+            <text class="hb-v" x="220" y="46" text-anchor="middle">1,040</text>
+            <text class="hb-v" x="282" y="53" text-anchor="middle">930</text>
+            <text class="hb-m" x="34" y="137" text-anchor="middle">JUN</text>
+            <text class="hb-m" x="96" y="137" text-anchor="middle">JUL</text>
+            <text class="hb-m" x="158" y="137" text-anchor="middle">AUG</text>
+            <text class="hb-m" x="220" y="137" text-anchor="middle">SEP</text>
+            <text class="hb-m" x="282" y="137" text-anchor="middle">OCT</text>
+          </svg>
+          <figcaption>Orders per month, this year</figcaption>
+        </figure>
+      </div>
+      <p class="hero-lede">VILKAS, a sneaker brand from Vilnius, is losing online sales fast. Find the real problem, and the first fix, before Black Friday.</p>
+    </div>
+
+    <section class="sec" aria-labelledby="how-h">
+      <div class="sec-head"><p class="eyebrow">How it works</p><h2 class="h2" id="how-h">Three parts, about 18 minutes</h2></div>
+      <ol class="how">
+        <li><span class="how-n">01 · 4 min · alone</span><span class="how-t">Gut call</span><span class="how-d">Read the brief and the team's five theories. Pick what you think is wrong. No talking.</span></li>
+        <li><span class="how-n">02 · 11 min · team</span><span class="how-t">Investigate</span><span class="how-d">One screen per team. Choose 5 clues out of the 10, find the problem, then the fix. Finish early for a bonus.</span></li>
+        <li><span class="how-n">03 · 3 min · class</span><span class="how-t">Reveal</span><span class="how-d">See the truth and your scores, then download your result card.</span></li>
+      </ol>
+    </section>
+
+    <section class="card" aria-labelledby="start-h">
+      <h2 class="h3" id="start-h">Before you start</h2>
+      <div class="fields">
+        <div class="field"><label class="label" for="f-name">Your name</label><input class="input" id="f-name" type="text" maxlength="30" placeholder="e.g. Maxime" autocomplete="given-name"></div>
+        <div class="field"><label class="label" for="f-team">Your team</label><input class="input" id="f-team" type="text" maxlength="30" placeholder="e.g. Team 2" autocomplete="off"></div>
+      </div>
+      <p class="alert" id="cover-alert" role="alert" hidden></p>
+      <button type="button" class="btn btn-primary btn-block" id="open-case">Start my gut call <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+      <p class="fine center" id="cover-fine">Your 4 minutes start when you press the button. Your answers stay on this device.</p>
+    </section>
+  </section>
+
+  <!-- PART 1: GUT CALL -->
+  <section class="screen" id="s-solo" hidden aria-labelledby="solo-h">
+    <div class="sec-head">
+      <p class="eyebrow">Part 1 · Gut call · 4 minutes · alone</p>
+      <h2 class="h2" id="solo-h">Read the brief. Trust your gut.</h2>
+      <p class="lead">No clues yet and no talking. At the reveal you'll see if your team beat your gut.</p>
+    </div>
+    <div id="brief-slot"></div>
+    <section class="card" aria-labelledby="solo-q">
+      <div class="decide-head"><p class="eyebrow">Your gut call</p><h3 class="h3" id="solo-q">What is really wrong?</h3></div>
+      <div class="opts" id="solo-opts" role="radiogroup" aria-labelledby="solo-q"></div>
+      <div class="field">
+        <span class="label" id="conf-l">How sure are you?</span>
+        <div class="seg" id="conf" role="radiogroup" aria-labelledby="conf-l">
+          <label><input type="radio" name="conf" id="conf-1" value="1">1</label>
+          <label><input type="radio" name="conf" id="conf-2" value="2">2</label>
+          <label><input type="radio" name="conf" id="conf-3" value="3">3</label>
+          <label><input type="radio" name="conf" id="conf-4" value="4">4</label>
+          <label><input type="radio" name="conf" id="conf-5" value="5">5</label>
+        </div>
+        <div class="scale"><span>1 · guessing</span><span>5 · certain</span></div>
+      </div>
+      <p class="alert" id="solo-late" data-tone="warn" hidden>Time's up. Pick your answer and lock it.</p>
+      <p class="alert" id="solo-alert" role="alert" hidden></p>
+      <button type="button" class="btn btn-primary btn-block" id="solo-lock">Lock my gut call</button>
+    </section>
+  </section>
+
+  <!-- PART 2: ROLE -->
+  <section class="screen" id="s-role" hidden aria-labelledby="role-h">
+    <div class="sec-head">
+      <p class="eyebrow">Part 2 · Team · 11 minutes</p>
+      <h2 class="h2" id="role-h">One screen per team</h2>
+      <p class="lead">Your team investigates together on one device, ideally a laptop. Agree who holds it, then choose below.</p>
+    </div>
+    <div class="choices">
+      <button type="button" class="choice" id="role-screen">
+        <span class="choice-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5" width="16" height="10.5" rx="1.5"/><path d="M2 18.5h20"/></svg></span>
+        <span class="choice-t">This is our team screen</span>
+        <span class="choice-d">You open the clues and lock the answers your team agrees on.</span>
+      </button>
+      <button type="button" class="choice alt" id="role-member">
+        <span class="choice-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 12s3.5-6.5 9.5-6.5 9.5 6.5 9.5 6.5-3.5 6.5-9.5 6.5S2.5 12 2.5 12z"/><circle cx="12" cy="12" r="2.8"/></svg></span>
+        <span class="choice-t">I'll follow our team screen</span>
+        <span class="choice-d">Your phone shows a waiting screen. You read the clues on your teammate's screen and help decide.</span>
+      </button>
+    </div>
+    <p class="fine center">Only one person per team picks "team screen".</p>
+  </section>
+
+  <!-- PART 2: TEAM SCREEN -->
+  <section class="screen" id="s-team" hidden aria-labelledby="team-h">
+    <section class="card" id="team-pre">
+      <p class="eyebrow">Part 2 · Team screen · 11 minutes</p>
+      <h2 class="h2" id="team-h">Get your team around this screen</h2>
+      <ol class="tips">
+        <li>Everyone in your team should be able to see this screen. Online teammates: share your screen on the call.</li>
+        <li>You have 11 minutes. Choose 5 clues out of the 10. A 6th clue costs 2 points.</li>
+        <li>Find the problem first, then the fix.</li>
+        <li>Finish early for a bonus: +5 with 5 minutes or more left, +3 with 3 minutes or more. It counts if your problem is right or half right. Going over 11 minutes costs 2 points.</li>
+        <li>Press Start when your facilitator says go.</li>
+      </ol>
+      <button type="button" class="btn btn-primary btn-block" id="start-team">Start team time</button>
+    </section>
+
+    <div class="screen" id="team-live" hidden>
+      <div class="sec-head">
+        <p class="eyebrow">Part 2 · Team screen</p>
+        <h2 class="h2">Investigate together.</h2>
+      </div>
+      <ol class="flow3"><li><b>1</b>Open up to 5 clues</li><li><b>2</b>Lock the problem</li><li><b>3</b>Lock the fix</li></ol>
+      <div class="rulestrip" aria-label="Scoring">
+        <span>Problem <b>up to 10</b></span><span>Fix <b>up to 10</b></span><span class="plus">Finish early <b>+5 / +3</b></span><span class="minus">6th clue <b>−2</b></span><span class="minus">Overtime <b>−2</b></span>
+      </div>
+      <p class="alert" id="team-alert" data-tone="warn" role="status" hidden></p>
+
+      <section class="sec" aria-labelledby="ev-h">
+        <div class="board-head"><h3 class="h3" id="ev-h">The evidence</h3><span class="picks" id="picks"></span></div>
+        <div class="board" id="board"></div>
+      </section>
+
+      <section class="card" aria-labelledby="tp-q">
+        <div class="decide-head"><p class="eyebrow">A · The problem</p><h3 class="h3" id="tp-q">What is really wrong?</h3></div>
+        <div class="opts" id="team-p-opts" role="radiogroup" aria-labelledby="tp-q"></div>
+        <p class="alert" id="tp-alert" role="alert" hidden></p>
+        <button type="button" class="btn btn-primary btn-block" id="lock-problem">Lock the problem</button>
+        <p class="locked-note" id="p-locked" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.2 4.2L19 7"/></svg>Problem locked. Now choose the fix.</p>
+      </section>
+
+      <section class="card" aria-labelledby="tf-q" id="fix-card">
+        <div class="decide-head"><p class="eyebrow">B · The fix</p><h3 class="h3" id="tf-q">What should VILKAS do first?</h3><p class="muted">Black Friday is three weeks away.</p></div>
+        <div class="sealed" id="fix-sealed"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="10.5" width="14" height="10" rx="2"/><path d="M8 10.5V7.8a4 4 0 0 1 8 0v2.7"/></svg><span>The fix options open once your team locks the problem.</span></div>
+        <div class="stack" id="fix-live" hidden>
+          <div class="opts" id="team-f-opts" role="radiogroup" aria-labelledby="tf-q"></div>
+          <p class="alert" id="tf-alert" role="alert" hidden></p>
+          <button type="button" class="btn btn-primary btn-block" id="lock-fix">Lock the fix and close the case</button>
+        </div>
+      </section>
+
+      <details class="more">
+        <summary>How scoring works</summary>
+        <div class="more-body">
+          <ul class="rules">
+            <li>The problem: the real cause scores 10, the symptom scores 5.</li>
+            <li>The fix: the best fix scores 10, a half fix scores 5.</li>
+            <li>Finish early: +5 if you lock with 5:00 or more left, +3 with 3:00 or more. It only counts if your problem is right or half right.</li>
+            <li>A 6th clue costs 2 points. Overtime costs 2 points, and the case closes by itself at 13:00.</li>
+            <li>Best possible score: 25.</li>
+          </ul>
+        </div>
+      </details>
+      <details class="more">
+        <summary>Re-read the brief</summary>
+        <div class="more-body" id="brief-copy"></div>
+      </details>
+    </div>
+  </section>
+
+  <!-- PART 2: FOLLOWER -->
+  <section class="screen" id="s-follow" hidden aria-labelledby="follow-h">
+    <div class="sec-head">
+      <p class="eyebrow">Part 2 · Team · 11 minutes</p>
+      <h2 class="h2" id="follow-h">Look at your team screen now</h2>
+      <p class="lead">Your teammate's laptop is where the clues open and the answers get locked.</p>
+    </div>
+    <div class="still" role="note">
+      <span class="still-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2.2"/><path d="M11 18.5h2"/><path d="M3 3l18 18"/></svg></span>
+      <div class="still-copy">
+        <p class="still-t">This screen won't change.</p>
+        <p class="still-d">It doesn't follow the team screen. Put your phone down and look at your teammate's laptop until your facilitator reads out the reveal code.</p>
+      </div>
+    </div>
+    <section class="card">
+      <ol class="tips">
+        <li>Sit where you can see the team screen. Online? Ask whoever holds it to share their screen on the call.</li>
+        <li>Your team can open only 5 of the 10 clues, so argue about which ones are worth it.</li>
+        <li>Agree on the problem, then the fix, before your teammate locks anything.</li>
+      </ol>
+    </section>
+    <details class="more">
+      <summary>Re-read the brief</summary>
+      <div class="more-body" id="brief-copy-m"></div>
+    </details>
+    <section class="card">
+      <label class="label" for="f-code-m">Reveal code</label>
+      <p class="fine">Type it when your facilitator reads it out, after every team has locked its answers.</p>
+      <div class="coderow">
+        <input class="input" id="f-code-m" type="text" maxlength="16" autocomplete="off" autocapitalize="characters" spellcheck="false">
+        <button type="button" class="btn btn-primary" id="do-reveal-m">Reveal the truth</button>
+      </div>
+      <p class="alert" id="code-alert-m" role="alert" hidden></p>
+    </section>
+    <button type="button" class="linkbtn" id="switch-screen">Need this device as your team screen instead?</button>
+  </section>
+
+  <!-- WAIT (team screen) -->
+  <section class="screen" id="s-wait" hidden aria-labelledby="wait-h">
+    <div class="sec-head">
+      <p class="eyebrow">Part 3 · Reveal</p>
+      <h2 class="h2" id="wait-h">Case locked.</h2>
+      <p class="lead" id="wait-line"></p>
+    </div>
+    <section class="card"><dl class="kv" id="wait-summary"></dl></section>
+    <section class="card">
+      <label class="label" for="f-code">Reveal code</label>
+      <p class="fine">Your facilitator reads it out once every team has locked.</p>
+      <div class="coderow">
+        <input class="input" id="f-code" type="text" maxlength="16" autocomplete="off" autocapitalize="characters" spellcheck="false">
+        <button type="button" class="btn btn-primary" id="do-reveal">Reveal the truth</button>
+      </div>
+      <p class="alert" id="code-alert" role="alert" hidden></p>
+    </section>
+  </section>
+
+  <!-- RESULT -->
+  <section class="screen" id="s-result" hidden aria-labelledby="res-h">
+    <div class="sec-head"><p class="eyebrow">Part 3 · Reveal</p><h2 class="h2" id="res-h">The verdict</h2></div>
+    <div id="res-team" class="stack">
+      <div class="scores">
+        <div class="score main"><span class="score-k">Team score</span><span class="score-v"><span id="r-team">0</span><small>/ 25</small></span><span class="score-n" id="r-team-n"></span></div>
+        <div class="score"><span class="score-k">Your gut call</span><span class="score-v"><span id="r-solo">0</span><small>/ 10</small></span><span class="score-n" id="r-solo-n"></span></div>
+        <div class="score"><span class="score-k">Team beat your gut?</span><span class="score-v" id="r-beat">—</span><span class="score-n" id="r-beat-n"></span></div>
+      </div>
+      <p class="verdict" id="verdict"></p>
+      <section class="card" aria-labelledby="bd-h">
+        <h3 class="h3" id="bd-h">How your team scored</h3>
+        <div class="scroll"><table class="bd" id="breakdown"></table></div>
+      </section>
+    </div>
+    <div id="res-member" class="stack">
+      <div class="scores two">
+        <div class="score main"><span class="score-k">Your gut call</span><span class="score-v"><span id="m-solo">0</span><small>/ 10</small></span><span class="score-n" id="m-solo-n"></span></div>
+        <div class="score" id="m-real"></div>
+      </div>
+      <p class="verdict" id="m-verdict"></p>
+      <p class="alert" data-tone="info">Your team's score is on your team screen. Did your team beat your gut call? Add it below so it's on your result card.</p>
+    </div>
+    <section class="truth" id="truth" aria-labelledby="truth-h"></section>
+    <section class="sec" id="method" aria-labelledby="m-h"></section>
+    <section class="card" aria-labelledby="all-h">
+      <h3 class="h3" id="all-h">All 10 clues</h3>
+      <ul class="exl" id="exl"></ul>
+    </section>
+    <section class="card" aria-labelledby="save-h" id="save-card">
+      <div class="decide-head">
+        <p class="eyebrow">Save your result</p>
+        <h3 class="h3" id="save-h">Download your result card</h3>
+        <p class="muted">Your name, your team, your gut call and your team's result in one file, ready to upload.</p>
+      </div>
+      <div class="field" id="m-score-field" hidden>
+        <label class="label" for="m-team-score">Your team's score, from your team screen</label>
+        <input class="input" id="m-team-score" type="text" inputmode="numeric" maxlength="3" placeholder="e.g. 18" autocomplete="off">
+      </div>
+      <div class="save-row">
+        <figure class="save-prev">
+          <button type="button" class="prev-box" id="prev-open" aria-label="Open your result card full size"><img id="card-preview" alt="Your result card" hidden></button>
+          <figcaption class="fine">Tap the card to open it. On a phone you can also press and hold it to save the image.</figcaption>
+        </figure>
+        <div class="stack">
+          <button type="button" class="btn btn-primary btn-block" id="dl-png">Download PNG</button>
+          <button type="button" class="btn btn-ghost btn-block" id="dl-pdf">Download PDF</button>
+          <p class="fine" id="dl-msg" aria-live="polite"></p>
+          <div><button type="button" class="linkbtn" id="copy-result">Copy my result as text</button> <span class="fine" id="copy-msg" aria-live="polite"></span></div>
+        </div>
+      </div>
+      <textarea class="input" id="copy-fallback" readonly hidden aria-label="Your result as text"></textarea>
+    </section>
+    <div class="actions">
+      <button type="button" class="btn btn-primary" id="to-feedback">Next: give feedback · 1 minute</button>
+    </div>
+  </section>
+
+  <!-- FEEDBACK -->
+  <section class="screen" id="s-feedback" hidden aria-labelledby="fb-h">
+    <div class="sec-head">
+      <p class="eyebrow">Feedback · anonymous · about 1 minute</p>
+      <h2 class="h2" id="fb-h">How did it go?</h2>
+      <p class="lead">Our objective was better problem-solving: finding the real cause and the right fix as a team.</p>
+    </div>
+    <section class="card">
+      <div class="q">
+        <div class="q-top"><span class="q-n">01</span><span class="q-t" id="q1-l">Did the activity reach its objective?</span><span class="req">Required</span></div>
+        <div class="rate" id="fb-objective" role="radiogroup" aria-labelledby="q1-l">
+          <label><input type="radio" name="fb-objective" id="fbo-1" value="1">1</label><label><input type="radio" name="fb-objective" id="fbo-2" value="2">2</label><label><input type="radio" name="fb-objective" id="fbo-3" value="3">3</label><label><input type="radio" name="fb-objective" id="fbo-4" value="4">4</label><label><input type="radio" name="fb-objective" id="fbo-5" value="5">5</label>
+        </div>
+        <div class="scale"><span>1 · not at all</span><span>5 · completely</span></div>
+      </div>
+      <div class="q">
+        <div class="q-top"><span class="q-n">02</span><span class="q-t" id="q2-l">Were the instructions clear?</span><span class="req">Required</span></div>
+        <div class="rate" id="fb-clarity" role="radiogroup" aria-labelledby="q2-l">
+          <label><input type="radio" name="fb-clarity" id="fbc-1" value="1">1</label><label><input type="radio" name="fb-clarity" id="fbc-2" value="2">2</label><label><input type="radio" name="fb-clarity" id="fbc-3" value="3">3</label><label><input type="radio" name="fb-clarity" id="fbc-4" value="4">4</label><label><input type="radio" name="fb-clarity" id="fbc-5" value="5">5</label>
+        </div>
+        <div class="scale"><span>1 · not clear</span><span>5 · very clear</span></div>
+      </div>
+      <div class="q">
+        <div class="q-top"><span class="q-n">03</span><label class="q-t" for="fb-improve">One thing to improve</label><span class="req">Required</span></div>
+        <textarea class="input" id="fb-improve" maxlength="300" placeholder="One sentence is enough."></textarea>
+      </div>
+      <div class="q">
+        <div class="q-top"><span class="q-n">04</span><span class="q-t" id="q4-l">Was the time right?</span><span class="req">Optional</span></div>
+        <div class="seg" id="fb-time" role="radiogroup" aria-labelledby="q4-l">
+          <label><input type="radio" name="fb-time" id="fbt-short" value="short">Too short</label>
+          <label><input type="radio" name="fb-time" id="fbt-right" value="right">About right</label>
+          <label><input type="radio" name="fb-time" id="fbt-long" value="long">Too long</label>
+        </div>
+      </div>
+      <div class="q">
+        <div class="q-top"><span class="q-n">05</span><span class="q-t" id="q5-l">Did working as a team help you find the answer?</span><span class="req">Optional</span></div>
+        <div class="rate" id="fb-teamwork" role="radiogroup" aria-labelledby="q5-l">
+          <label><input type="radio" name="fb-teamwork" id="fbw-1" value="1">1</label><label><input type="radio" name="fb-teamwork" id="fbw-2" value="2">2</label><label><input type="radio" name="fb-teamwork" id="fbw-3" value="3">3</label><label><input type="radio" name="fb-teamwork" id="fbw-4" value="4">4</label><label><input type="radio" name="fb-teamwork" id="fbw-5" value="5">5</label>
+        </div>
+        <div class="scale"><span>1 · not at all</span><span>5 · a lot</span></div>
+      </div>
+      <p class="alert" id="fb-alert" role="alert" hidden></p>
+      <button type="button" class="btn btn-primary btn-block" id="fb-send-btn">Send feedback</button>
+      <p class="fine center">No names or teams are sent with your feedback.</p>
+    </section>
+    <button type="button" class="linkbtn" id="fb-back">Back to my results</button>
+  </section>
+
+  <!-- DONE -->
+  <section class="screen" id="s-done" hidden aria-labelledby="done-h">
+    <section class="card done-card">
+      <span class="done-mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.2 4.2L19 7"/></svg></span>
+      <h2 class="h2" id="done-h">Thank you.</h2>
+      <p class="lead" id="done-line">Case closed.</p>
+      <button type="button" class="btn btn-ghost" id="done-back">Back to my results</button>
+    </section>
+  </section>
+
+  <footer class="foot">
+    <span>A fictional case made by Seven Kings for Team Building and Leadership, Session 9. VILKAS and KOVA are invented brands.</span>
+    <button type="button" class="linkbtn" id="reset">Start over on this device</button>
+  </footer>
+</main>
+
+<!-- FACILITATOR VIEW (#host) -->
+<main class="wrap wrap-wide" id="host" hidden>
+  <div class="host">
+    <aside class="join" aria-labelledby="join-h">
+      <p class="join-k">Scan to join</p>
+      <h1 class="join-h" id="join-h">The Vilkas Case</h1>
+      <div class="qr-tile" id="qr"></div>
+      <p class="join-url" id="join-url"></p>
+      <div class="actions"><button type="button" class="btn btn-light" id="copy-link">Copy link</button></div>
+      <p class="join-msg" id="copy-link-msg" aria-live="polite"></p>
+    </aside>
+
+    <div class="host-main">
+      <section class="card clock-card" aria-labelledby="clock-phase">
+        <div class="clock-top"><h2 class="clock-phase" id="clock-phase">Intro</h2><span class="clock-label" id="clock-label">Ready</span></div>
+        <div class="clock-time" id="clock-time" role="timer">3:00</div>
+        <p class="clock-tip" id="clock-tip"></p>
+        <div class="actions">
+          <button type="button" class="btn btn-ghost" id="h-back">Back</button>
+          <button type="button" class="btn btn-primary" id="h-start">Start</button>
+          <button type="button" class="btn btn-dark" id="h-next">Next part</button>
+        </div>
+        <div class="clock-meta"><span id="clock-total">Session 0:00 of 27:00</span><button type="button" class="linkbtn" id="h-reset">Reset clock</button></div>
+      </section>
+
+      <ol class="rail" id="rail"></ol>
+
+      <section class="card unlock" id="h-unlock" aria-labelledby="unlock-h">
+        <div class="decide-head"><p class="eyebrow">Facilitator notes</p><h3 class="h3" id="unlock-h">Locked: type the reveal code to unlock</h3><p class="muted">The answers are encrypted, so players can't find them in the page code. Unlocking shows the answer key, the debrief guide and the code display on this device only. Do it before class, not on the projector.</p></div>
+        <div class="coderow"><input class="input" id="h-unlock-code" type="password" autocomplete="off" spellcheck="false" maxlength="16" aria-label="Reveal code"><button type="button" class="btn btn-primary" id="h-unlock-btn">Unlock</button></div>
+        <p class="alert" id="h-unlock-alert" role="alert" hidden></p>
+      </section>
+      <section class="card" id="h-sheet" aria-labelledby="sheet-h">
+        <div class="decide-head"><p class="eyebrow">Results sheet</p><h3 class="h3" id="sheet-h">Checking…</h3><p class="muted" id="sheet-d"></p></div>
+        <div class="actions"><button type="button" class="btn btn-ghost" id="sheet-test" hidden>Send a test row</button><button type="button" class="btn btn-ghost" id="sheet-recheck" hidden>Check again</button></div>
+        <p class="fine" id="sheet-msg" aria-live="polite"></p>
+      </section>
+      <p class="fine unlocked" id="h-unlocked" hidden><span>Facilitator notes unlocked on this device.</span><button type="button" class="linkbtn" id="h-relock">Lock them again</button></p>
+
+      <section class="card" data-panel="intro">
+        <p class="eyebrow">Say it · lead facilitator</p>
+        <ol class="say">
+          <li>Today you're consultants. VILKAS, a sneaker brand from Vilnius, lost 38% of its online orders. Find the real problem and the first fix before Black Friday.</li>
+          <li>Scan the code and type your name and your team.</li>
+          <li>First, a 4-minute gut call, alone, on your own phone. No talking.</li>
+          <li>Then you'll have 11 minutes as a team. Use only one team screen per team, ideally a laptop.</li>
+          <li>Choose 5 clues out of the 10. Find the problem, then the fix.</li>
+          <li>Bonus: finish with 5 minutes left for +5 points, or with 3 minutes left for +3. It counts if your problem is right or half right.</li>
+          <li>Careful: a 6th clue costs 2 points, and so does going over time.</li>
+        </ol>
+      </section>
+      <section class="card" data-panel="you">
+        <p class="eyebrow">While they make their gut call</p>
+        <ul class="bul">
+          <li>No talking for these 4 minutes.</li>
+          <li>Each team picks its team screen now: a laptop if possible.</li>
+          <li>Online host: keep the call muted.</li>
+        </ul>
+      </section>
+      <section class="card" data-panel="team">
+        <p class="eyebrow">While teams work</p>
+        <ul class="bul">
+          <li>Say "go": every team screen presses Start team time.</li>
+          <li>Online teammates follow through screen share on the call.</li>
+          <li>Followers' phones stay on a waiting screen. Remind them to watch the team screen.</li>
+          <li>At 5:00 left: "Lock now for +5." At 3:00 left: "Last call for +3."</li>
+          <li>Team screens lock by themselves at 13:00.</li>
+        </ul>
+      </section>
+      <section class="card" data-panel="reveal">
+        <p class="eyebrow">Reveal</p>
+        <div class="actions"><button type="button" class="btn btn-primary" id="h-code">Show the reveal code</button></div>
+        <p class="fine" id="h-code-note" hidden>Unlock the facilitator notes first, at the top of this screen.</p>
+        <p class="codebox" id="h-codebox" hidden></p>
+        <p class="clock-tip">After the reveal, everyone downloads their result card (PNG or PDF), then gives feedback.</p>
+        <div class="stack">
+          <h3 class="h3">Scoreboard</h3>
+          <p class="fine">Ask each team screen for its score (out of 25) and type it in.</p>
+          <div class="sb-rows" id="sb-rows"></div>
+          <div class="actions"><button type="button" class="btn btn-ghost" id="sb-add">Add a team</button></div>
+          <ol class="rank" id="sb-rank"></ol>
+        </div>
+      </section>
+      <section class="card" data-panel="debrief">
+        <p class="eyebrow">Debrief · debrief lead</p>
+        <div class="stack" id="h-debrief"></div>
+      </section>
+      <section class="card" data-panel="feedback">
+        <p class="eyebrow">Feedback</p>
+        <p class="clock-tip">Everyone taps <b>Give feedback</b> under their results. It's anonymous and takes about a minute.</p>
+      </section>
+
+      <details class="more">
+        <summary>Answer key (facilitators only)</summary>
+        <div class="more-body" id="h-key"></div>
+      </details>
+    </div>
+  </div>
+</main>
+
+<div class="sheet" id="sheet" hidden>
+  <div class="sheet-panel" id="sheet-panel" role="dialog" aria-modal="true" aria-labelledby="sheet-title">
+    <span class="sheet-handle" aria-hidden="true"></span>
+    <div class="sheet-head"><span class="sheet-kicker" id="sheet-kicker"></span><button type="button" class="icon-btn" id="sheet-x" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+    <h2 class="sheet-title" id="sheet-title" tabindex="-1"></h2>
+    <div class="sheet-body" id="sheet-body"></div>
+    <div class="sheet-actions" id="sheet-actions"></div>
+  </div>
+</div>
+<p class="sr-only" id="live" aria-live="polite"></p>
+
+<script>
+/* QR Code encoder for JavaScript. Copyright (c) 2009 Kazuhiko Arase. Licensed under the MIT license.
+   "QR Code" is a registered trademark of DENSO WAVE INCORPORATED. Bundled from qrcode-terminal's vendor copy. */
+var VilkasQR = (function () {
+  var F = {}, C = {};
+  function req(p) { var k = p.replace(/^\.\//, "").replace(/\.js$/, ""); if (!(k in C)) { var m = { exports: {} }; C[k] = m.exports; F[k](m, m.exports, req); C[k] = m.exports; } return C[k]; }
+  F["QRMode"] = function (module, exports, require) {
+module.exports = {
+    MODE_NUMBER :       1 << 0,
+    MODE_ALPHA_NUM :    1 << 1,
+    MODE_8BIT_BYTE :    1 << 2,
+    MODE_KANJI :        1 << 3
+};
+
+};
+  F["QRErrorCorrectLevel"] = function (module, exports, require) {
+module.exports = {
+	L : 1,
+	M : 0,
+	Q : 3,
+	H : 2
+};
+
+
+};
+  F["QRMaskPattern"] = function (module, exports, require) {
+module.exports = {
+	PATTERN000 : 0,
+	PATTERN001 : 1,
+	PATTERN010 : 2,
+	PATTERN011 : 3,
+	PATTERN100 : 4,
+	PATTERN101 : 5,
+	PATTERN110 : 6,
+	PATTERN111 : 7
+};
+
+};
+  F["QRMath"] = function (module, exports, require) {
+var QRMath = {
+
+	glog : function(n) {
+	
+		if (n < 1) {
+			throw new Error("glog(" + n + ")");
+		}
+		
+		return QRMath.LOG_TABLE[n];
+	},
+	
+	gexp : function(n) {
+	
+		while (n < 0) {
+			n += 255;
+		}
+	
+		while (n >= 256) {
+			n -= 255;
+		}
+	
+		return QRMath.EXP_TABLE[n];
+	},
+	
+	EXP_TABLE : new Array(256),
+	
+	LOG_TABLE : new Array(256)
+
+};
+	
+for (var i = 0; i < 8; i++) {
+	QRMath.EXP_TABLE[i] = 1 << i;
+}
+for (var i = 8; i < 256; i++) {
+	QRMath.EXP_TABLE[i] = QRMath.EXP_TABLE[i - 4]
+		^ QRMath.EXP_TABLE[i - 5]
+		^ QRMath.EXP_TABLE[i - 6]
+		^ QRMath.EXP_TABLE[i - 8];
+}
+for (var i = 0; i < 255; i++) {
+	QRMath.LOG_TABLE[QRMath.EXP_TABLE[i] ] = i;
+}
+
+module.exports = QRMath;
+
+};
+  F["QRPolynomial"] = function (module, exports, require) {
+var QRMath = require('./QRMath');
+
+function QRPolynomial(num, shift) {
+	if (num.length === undefined) {
+		throw new Error(num.length + "/" + shift);
+	}
+
+	var offset = 0;
+
+	while (offset < num.length && num[offset] === 0) {
+		offset++;
+	}
+
+	this.num = new Array(num.length - offset + shift);
+	for (var i = 0; i < num.length - offset; i++) {
+		this.num[i] = num[i + offset];
+	}
+}
+
+QRPolynomial.prototype = {
+
+	get : function(index) {
+		return this.num[index];
+	},
+	
+	getLength : function() {
+		return this.num.length;
+	},
+	
+	multiply : function(e) {
+	
+		var num = new Array(this.getLength() + e.getLength() - 1);
+	
+		for (var i = 0; i < this.getLength(); i++) {
+			for (var j = 0; j < e.getLength(); j++) {
+				num[i + j] ^= QRMath.gexp(QRMath.glog(this.get(i) ) + QRMath.glog(e.get(j) ) );
+			}
+		}
+	
+		return new QRPolynomial(num, 0);
+	},
+	
+	mod : function(e) {
+	
+		if (this.getLength() - e.getLength() < 0) {
+			return this;
+		}
+	
+		var ratio = QRMath.glog(this.get(0) ) - QRMath.glog(e.get(0) );
+	
+		var num = new Array(this.getLength() );
+		
+		for (var i = 0; i < this.getLength(); i++) {
+			num[i] = this.get(i);
+		}
+		
+		for (var x = 0; x < e.getLength(); x++) {
+			num[x] ^= QRMath.gexp(QRMath.glog(e.get(x) ) + ratio);
+		}
+	
+		// recursive call
+		return new QRPolynomial(num, 0).mod(e);
+	}
+};
+
+module.exports = QRPolynomial;
+
+};
+  F["QR8bitByte"] = function (module, exports, require) {
+var QRMode = require('./QRMode');
+
+function QR8bitByte(data) {
+	this.mode = QRMode.MODE_8BIT_BYTE;
+	this.data = data;
+}
+
+QR8bitByte.prototype = {
+
+	getLength : function() {
+		return this.data.length;
+	},
+	
+	write : function(buffer) {
+		for (var i = 0; i < this.data.length; i++) {
+			// not JIS ...
+			buffer.put(this.data.charCodeAt(i), 8);
+		}
+	}
+};
+
+module.exports = QR8bitByte;
+
+};
+  F["QRBitBuffer"] = function (module, exports, require) {
+function QRBitBuffer() {
+	this.buffer = [];
+	this.length = 0;
+}
+
+QRBitBuffer.prototype = {
+
+	get : function(index) {
+		var bufIndex = Math.floor(index / 8);
+		return ( (this.buffer[bufIndex] >>> (7 - index % 8) ) & 1) == 1;
+	},
+	
+	put : function(num, length) {
+		for (var i = 0; i < length; i++) {
+			this.putBit( ( (num >>> (length - i - 1) ) & 1) == 1);
+		}
+	},
+	
+	getLengthInBits : function() {
+		return this.length;
+	},
+	
+	putBit : function(bit) {
+	
+		var bufIndex = Math.floor(this.length / 8);
+		if (this.buffer.length <= bufIndex) {
+			this.buffer.push(0);
+		}
+	
+		if (bit) {
+			this.buffer[bufIndex] |= (0x80 >>> (this.length % 8) );
+		}
+	
+		this.length++;
+	}
+};
+
+module.exports = QRBitBuffer;
+
+};
+  F["QRRSBlock"] = function (module, exports, require) {
+var QRErrorCorrectLevel = require('./QRErrorCorrectLevel');
+
+function QRRSBlock(totalCount, dataCount) {
+	this.totalCount = totalCount;
+	this.dataCount  = dataCount;
+}
+
+QRRSBlock.RS_BLOCK_TABLE = [
+
+	// L
+	// M
+	// Q
+	// H
+
+	// 1
+	[1, 26, 19],
+	[1, 26, 16],
+	[1, 26, 13],
+	[1, 26, 9],
+	
+	// 2
+	[1, 44, 34],
+	[1, 44, 28],
+	[1, 44, 22],
+	[1, 44, 16],
+
+	// 3
+	[1, 70, 55],
+	[1, 70, 44],
+	[2, 35, 17],
+	[2, 35, 13],
+
+	// 4		
+	[1, 100, 80],
+	[2, 50, 32],
+	[2, 50, 24],
+	[4, 25, 9],
+	
+	// 5
+	[1, 134, 108],
+	[2, 67, 43],
+	[2, 33, 15, 2, 34, 16],
+	[2, 33, 11, 2, 34, 12],
+	
+	// 6
+	[2, 86, 68],
+	[4, 43, 27],
+	[4, 43, 19],
+	[4, 43, 15],
+	
+	// 7		
+	[2, 98, 78],
+	[4, 49, 31],
+	[2, 32, 14, 4, 33, 15],
+	[4, 39, 13, 1, 40, 14],
+	
+	// 8
+	[2, 121, 97],
+	[2, 60, 38, 2, 61, 39],
+	[4, 40, 18, 2, 41, 19],
+	[4, 40, 14, 2, 41, 15],
+	
+	// 9
+	[2, 146, 116],
+	[3, 58, 36, 2, 59, 37],
+	[4, 36, 16, 4, 37, 17],
+	[4, 36, 12, 4, 37, 13],
+	
+	// 10		
+	[2, 86, 68, 2, 87, 69],
+	[4, 69, 43, 1, 70, 44],
+	[6, 43, 19, 2, 44, 20],
+	[6, 43, 15, 2, 44, 16],
+
+	// 11
+	[4, 101, 81],
+	[1, 80, 50, 4, 81, 51],
+	[4, 50, 22, 4, 51, 23],
+	[3, 36, 12, 8, 37, 13],
+
+	// 12
+	[2, 116, 92, 2, 117, 93],
+	[6, 58, 36, 2, 59, 37],
+	[4, 46, 20, 6, 47, 21],
+	[7, 42, 14, 4, 43, 15],
+
+	// 13
+	[4, 133, 107],
+	[8, 59, 37, 1, 60, 38],
+	[8, 44, 20, 4, 45, 21],
+	[12, 33, 11, 4, 34, 12],
+
+	// 14
+	[3, 145, 115, 1, 146, 116],
+	[4, 64, 40, 5, 65, 41],
+	[11, 36, 16, 5, 37, 17],
+	[11, 36, 12, 5, 37, 13],
+
+	// 15
+	[5, 109, 87, 1, 110, 88],
+	[5, 65, 41, 5, 66, 42],
+	[5, 54, 24, 7, 55, 25],
+	[11, 36, 12],
+
+	// 16
+	[5, 122, 98, 1, 123, 99],
+	[7, 73, 45, 3, 74, 46],
+	[15, 43, 19, 2, 44, 20],
+	[3, 45, 15, 13, 46, 16],
+
+	// 17
+	[1, 135, 107, 5, 136, 108],
+	[10, 74, 46, 1, 75, 47],
+	[1, 50, 22, 15, 51, 23],
+	[2, 42, 14, 17, 43, 15],
+
+	// 18
+	[5, 150, 120, 1, 151, 121],
+	[9, 69, 43, 4, 70, 44],
+	[17, 50, 22, 1, 51, 23],
+	[2, 42, 14, 19, 43, 15],
+
+	// 19
+	[3, 141, 113, 4, 142, 114],
+	[3, 70, 44, 11, 71, 45],
+	[17, 47, 21, 4, 48, 22],
+	[9, 39, 13, 16, 40, 14],
+
+	// 20
+	[3, 135, 107, 5, 136, 108],
+	[3, 67, 41, 13, 68, 42],
+	[15, 54, 24, 5, 55, 25],
+	[15, 43, 15, 10, 44, 16],
+
+	// 21
+	[4, 144, 116, 4, 145, 117],
+	[17, 68, 42],
+	[17, 50, 22, 6, 51, 23],
+	[19, 46, 16, 6, 47, 17],
+
+	// 22
+	[2, 139, 111, 7, 140, 112],
+	[17, 74, 46],
+	[7, 54, 24, 16, 55, 25],
+	[34, 37, 13],
+
+	// 23
+	[4, 151, 121, 5, 152, 122],
+	[4, 75, 47, 14, 76, 48],
+	[11, 54, 24, 14, 55, 25],
+	[16, 45, 15, 14, 46, 16],
+
+	// 24
+	[6, 147, 117, 4, 148, 118],
+	[6, 73, 45, 14, 74, 46],
+	[11, 54, 24, 16, 55, 25],
+	[30, 46, 16, 2, 47, 17],
+
+	// 25
+	[8, 132, 106, 4, 133, 107],
+	[8, 75, 47, 13, 76, 48],
+	[7, 54, 24, 22, 55, 25],
+	[22, 45, 15, 13, 46, 16],
+
+	// 26
+	[10, 142, 114, 2, 143, 115],
+	[19, 74, 46, 4, 75, 47],
+	[28, 50, 22, 6, 51, 23],
+	[33, 46, 16, 4, 47, 17],
+
+	// 27
+	[8, 152, 122, 4, 153, 123],
+	[22, 73, 45, 3, 74, 46],
+	[8, 53, 23, 26, 54, 24],
+	[12, 45, 15, 28, 46, 16],
+
+	// 28
+	[3, 147, 117, 10, 148, 118],
+	[3, 73, 45, 23, 74, 46],
+	[4, 54, 24, 31, 55, 25],
+	[11, 45, 15, 31, 46, 16],
+
+	// 29
+	[7, 146, 116, 7, 147, 117],
+	[21, 73, 45, 7, 74, 46],
+	[1, 53, 23, 37, 54, 24],
+	[19, 45, 15, 26, 46, 16],
+
+	// 30
+	[5, 145, 115, 10, 146, 116],
+	[19, 75, 47, 10, 76, 48],
+	[15, 54, 24, 25, 55, 25],
+	[23, 45, 15, 25, 46, 16],
+
+	// 31
+	[13, 145, 115, 3, 146, 116],
+	[2, 74, 46, 29, 75, 47],
+	[42, 54, 24, 1, 55, 25],
+	[23, 45, 15, 28, 46, 16],
+
+	// 32
+	[17, 145, 115],
+	[10, 74, 46, 23, 75, 47],
+	[10, 54, 24, 35, 55, 25],
+	[19, 45, 15, 35, 46, 16],
+
+	// 33
+	[17, 145, 115, 1, 146, 116],
+	[14, 74, 46, 21, 75, 47],
+	[29, 54, 24, 19, 55, 25],
+	[11, 45, 15, 46, 46, 16],
+
+	// 34
+	[13, 145, 115, 6, 146, 116],
+	[14, 74, 46, 23, 75, 47],
+	[44, 54, 24, 7, 55, 25],
+	[59, 46, 16, 1, 47, 17],
+
+	// 35
+	[12, 151, 121, 7, 152, 122],
+	[12, 75, 47, 26, 76, 48],
+	[39, 54, 24, 14, 55, 25],
+	[22, 45, 15, 41, 46, 16],
+
+	// 36
+	[6, 151, 121, 14, 152, 122],
+	[6, 75, 47, 34, 76, 48],
+	[46, 54, 24, 10, 55, 25],
+	[2, 45, 15, 64, 46, 16],
+
+	// 37
+	[17, 152, 122, 4, 153, 123],
+	[29, 74, 46, 14, 75, 47],
+	[49, 54, 24, 10, 55, 25],
+	[24, 45, 15, 46, 46, 16],
+
+	// 38
+	[4, 152, 122, 18, 153, 123],
+	[13, 74, 46, 32, 75, 47],
+	[48, 54, 24, 14, 55, 25],
+	[42, 45, 15, 32, 46, 16],
+
+	// 39
+	[20, 147, 117, 4, 148, 118],
+	[40, 75, 47, 7, 76, 48],
+	[43, 54, 24, 22, 55, 25],
+	[10, 45, 15, 67, 46, 16],
+
+	// 40
+	[19, 148, 118, 6, 149, 119],
+	[18, 75, 47, 31, 76, 48],
+	[34, 54, 24, 34, 55, 25],
+	[20, 45, 15, 61, 46, 16]
+];
+
+QRRSBlock.getRSBlocks = function(typeNumber, errorCorrectLevel) {
+	
+	var rsBlock = QRRSBlock.getRsBlockTable(typeNumber, errorCorrectLevel);
+	
+	if (rsBlock === undefined) {
+		throw new Error("bad rs block @ typeNumber:" + typeNumber + "/errorCorrectLevel:" + errorCorrectLevel);
+	}
+
+	var length = rsBlock.length / 3;
+	
+	var list = [];
+	
+	for (var i = 0; i < length; i++) {
+
+		var count = rsBlock[i * 3 + 0];
+		var totalCount = rsBlock[i * 3 + 1];
+		var dataCount  = rsBlock[i * 3 + 2];
+
+		for (var j = 0; j < count; j++) {
+			list.push(new QRRSBlock(totalCount, dataCount) );	
+		}
+	}
+	
+	return list;
+};
+
+QRRSBlock.getRsBlockTable = function(typeNumber, errorCorrectLevel) {
+
+	switch(errorCorrectLevel) {
+	case QRErrorCorrectLevel.L :
+		return QRRSBlock.RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 0];
+	case QRErrorCorrectLevel.M :
+		return QRRSBlock.RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 1];
+	case QRErrorCorrectLevel.Q :
+		return QRRSBlock.RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 2];
+	case QRErrorCorrectLevel.H :
+		return QRRSBlock.RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 3];
+	default :
+		return undefined;
+	}
+};
+
+module.exports = QRRSBlock;
+
+};
+  F["QRUtil"] = function (module, exports, require) {
+var QRMode = require('./QRMode');
+var QRPolynomial = require('./QRPolynomial');
+var QRMath = require('./QRMath');
+var QRMaskPattern = require('./QRMaskPattern');
+
+var QRUtil = {
+
+    PATTERN_POSITION_TABLE : [
+        [],
+        [6, 18],
+        [6, 22],
+        [6, 26],
+        [6, 30],
+        [6, 34],
+        [6, 22, 38],
+        [6, 24, 42],
+        [6, 26, 46],
+        [6, 28, 50],
+        [6, 30, 54],        
+        [6, 32, 58],
+        [6, 34, 62],
+        [6, 26, 46, 66],
+        [6, 26, 48, 70],
+        [6, 26, 50, 74],
+        [6, 30, 54, 78],
+        [6, 30, 56, 82],
+        [6, 30, 58, 86],
+        [6, 34, 62, 90],
+        [6, 28, 50, 72, 94],
+        [6, 26, 50, 74, 98],
+        [6, 30, 54, 78, 102],
+        [6, 28, 54, 80, 106],
+        [6, 32, 58, 84, 110],
+        [6, 30, 58, 86, 114],
+        [6, 34, 62, 90, 118],
+        [6, 26, 50, 74, 98, 122],
+        [6, 30, 54, 78, 102, 126],
+        [6, 26, 52, 78, 104, 130],
+        [6, 30, 56, 82, 108, 134],
+        [6, 34, 60, 86, 112, 138],
+        [6, 30, 58, 86, 114, 142],
+        [6, 34, 62, 90, 118, 146],
+        [6, 30, 54, 78, 102, 126, 150],
+        [6, 24, 50, 76, 102, 128, 154],
+        [6, 28, 54, 80, 106, 132, 158],
+        [6, 32, 58, 84, 110, 136, 162],
+        [6, 26, 54, 82, 110, 138, 166],
+        [6, 30, 58, 86, 114, 142, 170]
+    ],
+
+    G15 : (1 << 10) | (1 << 8) | (1 << 5) | (1 << 4) | (1 << 2) | (1 << 1) | (1 << 0),
+    G18 : (1 << 12) | (1 << 11) | (1 << 10) | (1 << 9) | (1 << 8) | (1 << 5) | (1 << 2) | (1 << 0),
+    G15_MASK : (1 << 14) | (1 << 12) | (1 << 10)    | (1 << 4) | (1 << 1),
+
+    getBCHTypeInfo : function(data) {
+        var d = data << 10;
+        while (QRUtil.getBCHDigit(d) - QRUtil.getBCHDigit(QRUtil.G15) >= 0) {
+            d ^= (QRUtil.G15 << (QRUtil.getBCHDigit(d) - QRUtil.getBCHDigit(QRUtil.G15) ) );    
+        }
+        return ( (data << 10) | d) ^ QRUtil.G15_MASK;
+    },
+
+    getBCHTypeNumber : function(data) {
+        var d = data << 12;
+        while (QRUtil.getBCHDigit(d) - QRUtil.getBCHDigit(QRUtil.G18) >= 0) {
+            d ^= (QRUtil.G18 << (QRUtil.getBCHDigit(d) - QRUtil.getBCHDigit(QRUtil.G18) ) );    
+        }
+        return (data << 12) | d;
+    },
+
+    getBCHDigit : function(data) {
+
+        var digit = 0;
+
+        while (data !== 0) {
+            digit++;
+            data >>>= 1;
+        }
+
+        return digit;
+    },
+
+    getPatternPosition : function(typeNumber) {
+        return QRUtil.PATTERN_POSITION_TABLE[typeNumber - 1];
+    },
+
+    getMask : function(maskPattern, i, j) {
+        
+        switch (maskPattern) {
+            
+        case QRMaskPattern.PATTERN000 : return (i + j) % 2 === 0;
+        case QRMaskPattern.PATTERN001 : return i % 2 === 0;
+        case QRMaskPattern.PATTERN010 : return j % 3 === 0;
+        case QRMaskPattern.PATTERN011 : return (i + j) % 3 === 0;
+        case QRMaskPattern.PATTERN100 : return (Math.floor(i / 2) + Math.floor(j / 3) ) % 2 === 0;
+        case QRMaskPattern.PATTERN101 : return (i * j) % 2 + (i * j) % 3 === 0;
+        case QRMaskPattern.PATTERN110 : return ( (i * j) % 2 + (i * j) % 3) % 2 === 0;
+        case QRMaskPattern.PATTERN111 : return ( (i * j) % 3 + (i + j) % 2) % 2 === 0;
+
+        default :
+            throw new Error("bad maskPattern:" + maskPattern);
+        }
+    },
+
+    getErrorCorrectPolynomial : function(errorCorrectLength) {
+
+        var a = new QRPolynomial([1], 0);
+
+        for (var i = 0; i < errorCorrectLength; i++) {
+            a = a.multiply(new QRPolynomial([1, QRMath.gexp(i)], 0) );
+        }
+
+        return a;
+    },
+
+    getLengthInBits : function(mode, type) {
+
+        if (1 <= type && type < 10) {
+
+            // 1 - 9
+
+            switch(mode) {
+            case QRMode.MODE_NUMBER     : return 10;
+            case QRMode.MODE_ALPHA_NUM  : return 9;
+            case QRMode.MODE_8BIT_BYTE  : return 8;
+            case QRMode.MODE_KANJI      : return 8;
+            default :
+                throw new Error("mode:" + mode);
+            }
+
+        } else if (type < 27) {
+
+            // 10 - 26
+
+            switch(mode) {
+            case QRMode.MODE_NUMBER     : return 12;
+            case QRMode.MODE_ALPHA_NUM  : return 11;
+            case QRMode.MODE_8BIT_BYTE  : return 16;
+            case QRMode.MODE_KANJI      : return 10;
+            default :
+                throw new Error("mode:" + mode);
+            }
+
+        } else if (type < 41) {
+
+            // 27 - 40
+
+            switch(mode) {
+            case QRMode.MODE_NUMBER     : return 14;
+            case QRMode.MODE_ALPHA_NUM  : return 13;
+            case QRMode.MODE_8BIT_BYTE  : return 16;
+            case QRMode.MODE_KANJI      : return 12;
+            default :
+                throw new Error("mode:" + mode);
+            }
+
+        } else {
+            throw new Error("type:" + type);
+        }
+    },
+
+    getLostPoint : function(qrCode) {
+        
+        var moduleCount = qrCode.getModuleCount();
+        var lostPoint = 0;
+        var row = 0; 
+        var col = 0;
+
+        
+        // LEVEL1
+        
+        for (row = 0; row < moduleCount; row++) {
+
+            for (col = 0; col < moduleCount; col++) {
+
+                var sameCount = 0;
+                var dark = qrCode.isDark(row, col);
+
+                for (var r = -1; r <= 1; r++) {
+
+                    if (row + r < 0 || moduleCount <= row + r) {
+                        continue;
+                    }
+
+                    for (var c = -1; c <= 1; c++) {
+
+                        if (col + c < 0 || moduleCount <= col + c) {
+                            continue;
+                        }
+
+                        if (r === 0 && c === 0) {
+                            continue;
+                        }
+
+                        if (dark === qrCode.isDark(row + r, col + c) ) {
+                            sameCount++;
+                        }
+                    }
+                }
+
+                if (sameCount > 5) {
+                    lostPoint += (3 + sameCount - 5);
+                }
+            }
+        }
+
+        // LEVEL2
+
+        for (row = 0; row < moduleCount - 1; row++) {
+            for (col = 0; col < moduleCount - 1; col++) {
+                var count = 0;
+                if (qrCode.isDark(row,     col    ) ) count++;
+                if (qrCode.isDark(row + 1, col    ) ) count++;
+                if (qrCode.isDark(row,     col + 1) ) count++;
+                if (qrCode.isDark(row + 1, col + 1) ) count++;
+                if (count === 0 || count === 4) {
+                    lostPoint += 3;
+                }
+            }
+        }
+
+        // LEVEL3
+
+        for (row = 0; row < moduleCount; row++) {
+            for (col = 0; col < moduleCount - 6; col++) {
+                if (qrCode.isDark(row, col) && 
+                        !qrCode.isDark(row, col + 1) && 
+                         qrCode.isDark(row, col + 2) && 
+                         qrCode.isDark(row, col + 3) && 
+                         qrCode.isDark(row, col + 4) && 
+                        !qrCode.isDark(row, col + 5) && 
+                         qrCode.isDark(row, col + 6) ) {
+                    lostPoint += 40;
+                }
+            }
+        }
+
+        for (col = 0; col < moduleCount; col++) {
+            for (row = 0; row < moduleCount - 6; row++) {
+                if (qrCode.isDark(row, col) &&
+                        !qrCode.isDark(row + 1, col) &&
+                         qrCode.isDark(row + 2, col) &&
+                         qrCode.isDark(row + 3, col) &&
+                         qrCode.isDark(row + 4, col) &&
+                        !qrCode.isDark(row + 5, col) &&
+                         qrCode.isDark(row + 6, col) ) {
+                    lostPoint += 40;
+                }
+            }
+        }
+
+        // LEVEL4
+        
+        var darkCount = 0;
+
+        for (col = 0; col < moduleCount; col++) {
+            for (row = 0; row < moduleCount; row++) {
+                if (qrCode.isDark(row, col) ) {
+                    darkCount++;
+                }
+            }
+        }
+        
+        var ratio = Math.abs(100 * darkCount / moduleCount / moduleCount - 50) / 5;
+        lostPoint += ratio * 10;
+
+        return lostPoint;       
+    }
+
+};
+
+module.exports = QRUtil;
+
+};
+  F["index"] = function (module, exports, require) {
+//---------------------------------------------------------------------
+// QRCode for JavaScript
+//
+// Copyright (c) 2009 Kazuhiko Arase
+//
+// URL: http://www.d-project.com/
+//
+// Licensed under the MIT license:
+//   http://www.opensource.org/licenses/mit-license.php
+//
+// The word "QR Code" is registered trademark of 
+// DENSO WAVE INCORPORATED
+//   http://www.denso-wave.com/qrcode/faqpatent-e.html
+//
+//---------------------------------------------------------------------
+// Modified to work in node for this project (and some refactoring)
+//---------------------------------------------------------------------
+
+var QR8bitByte = require('./QR8bitByte');
+var QRUtil = require('./QRUtil');
+var QRPolynomial = require('./QRPolynomial');
+var QRRSBlock = require('./QRRSBlock');
+var QRBitBuffer = require('./QRBitBuffer');
+
+function QRCode(typeNumber, errorCorrectLevel) {
+	this.typeNumber = typeNumber;
+	this.errorCorrectLevel = errorCorrectLevel;
+	this.modules = null;
+	this.moduleCount = 0;
+	this.dataCache = null;
+	this.dataList = [];
+}
+
+QRCode.prototype = {
+	
+	addData : function(data) {
+		var newData = new QR8bitByte(data);
+		this.dataList.push(newData);
+		this.dataCache = null;
+	},
+	
+	isDark : function(row, col) {
+		if (row < 0 || this.moduleCount <= row || col < 0 || this.moduleCount <= col) {
+			throw new Error(row + "," + col);
+		}
+		return this.modules[row][col];
+	},
+
+	getModuleCount : function() {
+		return this.moduleCount;
+	},
+	
+	make : function() {
+		// Calculate automatically typeNumber if provided is < 1
+		if (this.typeNumber < 1 ){
+			var typeNumber = 1;
+			for (typeNumber = 1; typeNumber < 40; typeNumber++) {
+				var rsBlocks = QRRSBlock.getRSBlocks(typeNumber, this.errorCorrectLevel);
+
+				var buffer = new QRBitBuffer();
+				var totalDataCount = 0;
+				for (var i = 0; i < rsBlocks.length; i++) {
+					totalDataCount += rsBlocks[i].dataCount;
+				}
+
+				for (var x = 0; x < this.dataList.length; x++) {
+					var data = this.dataList[x];
+					buffer.put(data.mode, 4);
+					buffer.put(data.getLength(), QRUtil.getLengthInBits(data.mode, typeNumber) );
+					data.write(buffer);
+				}
+				if (buffer.getLengthInBits() <= totalDataCount * 8)
+					break;
+			}
+			this.typeNumber = typeNumber;
+		}
+		this.makeImpl(false, this.getBestMaskPattern() );
+	},
+	
+	makeImpl : function(test, maskPattern) {
+		
+		this.moduleCount = this.typeNumber * 4 + 17;
+		this.modules = new Array(this.moduleCount);
+		
+		for (var row = 0; row < this.moduleCount; row++) {
+			
+			this.modules[row] = new Array(this.moduleCount);
+			
+			for (var col = 0; col < this.moduleCount; col++) {
+				this.modules[row][col] = null;//(col + row) % 3;
+			}
+		}
+	
+		this.setupPositionProbePattern(0, 0);
+		this.setupPositionProbePattern(this.moduleCount - 7, 0);
+		this.setupPositionProbePattern(0, this.moduleCount - 7);
+		this.setupPositionAdjustPattern();
+		this.setupTimingPattern();
+		this.setupTypeInfo(test, maskPattern);
+		
+		if (this.typeNumber >= 7) {
+			this.setupTypeNumber(test);
+		}
+	
+		if (this.dataCache === null) {
+			this.dataCache = QRCode.createData(this.typeNumber, this.errorCorrectLevel, this.dataList);
+		}
+	
+		this.mapData(this.dataCache, maskPattern);
+	},
+
+	setupPositionProbePattern : function(row, col)  {
+		
+		for (var r = -1; r <= 7; r++) {
+			
+			if (row + r <= -1 || this.moduleCount <= row + r) continue;
+			
+			for (var c = -1; c <= 7; c++) {
+				
+				if (col + c <= -1 || this.moduleCount <= col + c) continue;
+				
+				if ( (0 <= r && r <= 6 && (c === 0 || c === 6) ) || 
+                     (0 <= c && c <= 6 && (r === 0 || r === 6) ) || 
+                     (2 <= r && r <= 4 && 2 <= c && c <= 4) ) {
+					this.modules[row + r][col + c] = true;
+				} else {
+					this.modules[row + r][col + c] = false;
+				}
+			}		
+		}		
+	},
+	
+	getBestMaskPattern : function() {
+	
+		var minLostPoint = 0;
+		var pattern = 0;
+	
+		for (var i = 0; i < 8; i++) {
+			
+			this.makeImpl(true, i);
+	
+			var lostPoint = QRUtil.getLostPoint(this);
+	
+			if (i === 0 || minLostPoint >  lostPoint) {
+				minLostPoint = lostPoint;
+				pattern = i;
+			}
+		}
+	
+		return pattern;
+	},
+	
+	createMovieClip : function(target_mc, instance_name, depth) {
+	
+		var qr_mc = target_mc.createEmptyMovieClip(instance_name, depth);
+		var cs = 1;
+	
+		this.make();
+
+		for (var row = 0; row < this.modules.length; row++) {
+			
+			var y = row * cs;
+			
+			for (var col = 0; col < this.modules[row].length; col++) {
+	
+				var x = col * cs;
+				var dark = this.modules[row][col];
+			
+				if (dark) {
+					qr_mc.beginFill(0, 100);
+					qr_mc.moveTo(x, y);
+					qr_mc.lineTo(x + cs, y);
+					qr_mc.lineTo(x + cs, y + cs);
+					qr_mc.lineTo(x, y + cs);
+					qr_mc.endFill();
+				}
+			}
+		}
+		
+		return qr_mc;
+	},
+
+	setupTimingPattern : function() {
+		
+		for (var r = 8; r < this.moduleCount - 8; r++) {
+			if (this.modules[r][6] !== null) {
+				continue;
+			}
+			this.modules[r][6] = (r % 2 === 0);
+		}
+	
+		for (var c = 8; c < this.moduleCount - 8; c++) {
+			if (this.modules[6][c] !== null) {
+				continue;
+			}
+			this.modules[6][c] = (c % 2 === 0);
+		}
+	},
+	
+	setupPositionAdjustPattern : function() {
+	
+		var pos = QRUtil.getPatternPosition(this.typeNumber);
+		
+		for (var i = 0; i < pos.length; i++) {
+		
+			for (var j = 0; j < pos.length; j++) {
+			
+				var row = pos[i];
+				var col = pos[j];
+				
+				if (this.modules[row][col] !== null) {
+					continue;
+				}
+				
+				for (var r = -2; r <= 2; r++) {
+				
+					for (var c = -2; c <= 2; c++) {
+					
+						if (Math.abs(r) === 2 || 
+                            Math.abs(c) === 2 ||
+                            (r === 0 && c === 0) ) {
+							this.modules[row + r][col + c] = true;
+						} else {
+							this.modules[row + r][col + c] = false;
+						}
+					}
+				}
+			}
+		}
+	},
+	
+	setupTypeNumber : function(test) {
+	
+		var bits = QRUtil.getBCHTypeNumber(this.typeNumber);
+        var mod;
+	
+		for (var i = 0; i < 18; i++) {
+			mod = (!test && ( (bits >> i) & 1) === 1);
+			this.modules[Math.floor(i / 3)][i % 3 + this.moduleCount - 8 - 3] = mod;
+		}
+	
+		for (var x = 0; x < 18; x++) {
+			mod = (!test && ( (bits >> x) & 1) === 1);
+			this.modules[x % 3 + this.moduleCount - 8 - 3][Math.floor(x / 3)] = mod;
+		}
+	},
+	
+	setupTypeInfo : function(test, maskPattern) {
+	
+		var data = (this.errorCorrectLevel << 3) | maskPattern;
+		var bits = QRUtil.getBCHTypeInfo(data);
+        var mod;
+	
+		// vertical		
+		for (var v = 0; v < 15; v++) {
+	
+			mod = (!test && ( (bits >> v) & 1) === 1);
+	
+			if (v < 6) {
+				this.modules[v][8] = mod;
+			} else if (v < 8) {
+				this.modules[v + 1][8] = mod;
+			} else {
+				this.modules[this.moduleCount - 15 + v][8] = mod;
+			}
+		}
+	
+		// horizontal
+		for (var h = 0; h < 15; h++) {
+	
+			mod = (!test && ( (bits >> h) & 1) === 1);
+			
+			if (h < 8) {
+				this.modules[8][this.moduleCount - h - 1] = mod;
+			} else if (h < 9) {
+				this.modules[8][15 - h - 1 + 1] = mod;
+			} else {
+				this.modules[8][15 - h - 1] = mod;
+			}
+		}
+	
+		// fixed module
+		this.modules[this.moduleCount - 8][8] = (!test);
+	
+	},
+	
+	mapData : function(data, maskPattern) {
+		
+		var inc = -1;
+		var row = this.moduleCount - 1;
+		var bitIndex = 7;
+		var byteIndex = 0;
+		
+		for (var col = this.moduleCount - 1; col > 0; col -= 2) {
+	
+			if (col === 6) col--;
+	
+			while (true) {
+	
+				for (var c = 0; c < 2; c++) {
+					
+					if (this.modules[row][col - c] === null) {
+						
+						var dark = false;
+	
+						if (byteIndex < data.length) {
+							dark = ( ( (data[byteIndex] >>> bitIndex) & 1) === 1);
+						}
+	
+						var mask = QRUtil.getMask(maskPattern, row, col - c);
+	
+						if (mask) {
+							dark = !dark;
+						}
+						
+						this.modules[row][col - c] = dark;
+						bitIndex--;
+	
+						if (bitIndex === -1) {
+							byteIndex++;
+							bitIndex = 7;
+						}
+					}
+				}
+								
+				row += inc;
+	
+				if (row < 0 || this.moduleCount <= row) {
+					row -= inc;
+					inc = -inc;
+					break;
+				}
+			}
+		}
+		
+	}
+
+};
+
+QRCode.PAD0 = 0xEC;
+QRCode.PAD1 = 0x11;
+
+QRCode.createData = function(typeNumber, errorCorrectLevel, dataList) {
+	
+	var rsBlocks = QRRSBlock.getRSBlocks(typeNumber, errorCorrectLevel);
+	
+	var buffer = new QRBitBuffer();
+	
+	for (var i = 0; i < dataList.length; i++) {
+		var data = dataList[i];
+		buffer.put(data.mode, 4);
+		buffer.put(data.getLength(), QRUtil.getLengthInBits(data.mode, typeNumber) );
+		data.write(buffer);
+	}
+
+	// calc num max data.
+	var totalDataCount = 0;
+	for (var x = 0; x < rsBlocks.length; x++) {
+		totalDataCount += rsBlocks[x].dataCount;
+	}
+
+	if (buffer.getLengthInBits() > totalDataCount * 8) {
+		throw new Error("code length overflow. (" + 
+            buffer.getLengthInBits() + 
+            ">" +  
+            totalDataCount * 8 + 
+            ")");
+	}
+
+	// end code
+	if (buffer.getLengthInBits() + 4 <= totalDataCount * 8) {
+		buffer.put(0, 4);
+	}
+
+	// padding
+	while (buffer.getLengthInBits() % 8 !== 0) {
+		buffer.putBit(false);
+	}
+
+	// padding
+	while (true) {
+		
+		if (buffer.getLengthInBits() >= totalDataCount * 8) {
+			break;
+		}
+		buffer.put(QRCode.PAD0, 8);
+		
+		if (buffer.getLengthInBits() >= totalDataCount * 8) {
+			break;
+		}
+		buffer.put(QRCode.PAD1, 8);
+	}
+
+	return QRCode.createBytes(buffer, rsBlocks);
+};
+
+QRCode.createBytes = function(buffer, rsBlocks) {
+
+	var offset = 0;
+	
+	var maxDcCount = 0;
+	var maxEcCount = 0;
+	
+	var dcdata = new Array(rsBlocks.length);
+	var ecdata = new Array(rsBlocks.length);
+	
+	for (var r = 0; r < rsBlocks.length; r++) {
+
+		var dcCount = rsBlocks[r].dataCount;
+		var ecCount = rsBlocks[r].totalCount - dcCount;
+
+		maxDcCount = Math.max(maxDcCount, dcCount);
+		maxEcCount = Math.max(maxEcCount, ecCount);
+		
+		dcdata[r] = new Array(dcCount);
+		
+		for (var i = 0; i < dcdata[r].length; i++) {
+			dcdata[r][i] = 0xff & buffer.buffer[i + offset];
+		}
+		offset += dcCount;
+		
+		var rsPoly = QRUtil.getErrorCorrectPolynomial(ecCount);
+		var rawPoly = new QRPolynomial(dcdata[r], rsPoly.getLength() - 1);
+
+		var modPoly = rawPoly.mod(rsPoly);
+		ecdata[r] = new Array(rsPoly.getLength() - 1);
+		for (var x = 0; x < ecdata[r].length; x++) {
+            var modIndex = x + modPoly.getLength() - ecdata[r].length;
+			ecdata[r][x] = (modIndex >= 0)? modPoly.get(modIndex) : 0;
+		}
+
+	}
+	
+	var totalCodeCount = 0;
+	for (var y = 0; y < rsBlocks.length; y++) {
+		totalCodeCount += rsBlocks[y].totalCount;
+	}
+
+	var data = new Array(totalCodeCount);
+	var index = 0;
+
+	for (var z = 0; z < maxDcCount; z++) {
+		for (var s = 0; s < rsBlocks.length; s++) {
+			if (z < dcdata[s].length) {
+				data[index++] = dcdata[s][z];
+			}
+		}
+	}
+
+	for (var xx = 0; xx < maxEcCount; xx++) {
+		for (var t = 0; t < rsBlocks.length; t++) {
+			if (xx < ecdata[t].length) {
+				data[index++] = ecdata[t][xx];
+			}
+		}
+	}
+
+	return data;
+
+};
+
+module.exports = QRCode;
+
+};
+  var QRCode = req("index"), ECL = req("QRErrorCorrectLevel");
+  return function (text) { var q = new QRCode(-1, ECL.M); q.addData(text); q.make(); var n = q.getModuleCount(); return { size: n, isDark: function (r, c) { return q.isDark(r, c); } }; };
+})();
+
+</script>
+<script>
+(() => {
+  "use strict";
+
+  /* ---------- Settings ---------- */
+  const KEY = "vilkas-case-v2";
+  const HOST_KEY = "vilkas-host-v2";
+  const SOLO_SECONDS = 240;      // Part 1: 4-minute gut call
+  const TEAM_PICKS = 5;          // clues a team can open
+  const EXTRA_COST = -2;         // a 6th clue
+  const TEAM_SECONDS = 660;      // Part 2: 11 minutes
+  const TEAM_CLOSE = 780;        // team screens lock by themselves at 13:00
+  const BONUS5_LEFT = 300;       // +5 when locked with 5:00 or more left
+  const BONUS3_LEFT = 180;       // +3 when locked with 3:00 or more left
+  const OVERTIME = -2;
+  const MAX = 25;
+  /* The answers, points and explanations are encrypted with the reveal code, and the clue texts are
+     scrambled, so neither can be read from the page code. The build step fills these two values. */
+  const SEALED = "2Ek82W+xu0tK4j7YfQsWusrt3zYUsY1XJGyis/Di1hF1d119n3qvUNZl8Z18bXL6auHIyKV/K/fe63ZvOLfHec8TEIJcUCpuHKS9z5lrRioRfWviXUR5QXp6h3p1IpYRqQ88ykCm/UZlWMDuXyEEqpvaL+LSD3eLcRtTuyXGZQ3T/prr3qu2Q9t21PYp+HUaL111CwCOSUuiZWb9n5nnj+FdvIdXiMv8JXnf365762RdEaW6rymQCF9opfkISjfVcAphz/HFrkacY2teHtF4r5mVPCxQwInI5F14rUBD85wkqpqqjqqZTqymS8xwOtDrDnNfcVdQTeAIQmuhtdOasJx6iRlbnoniT9LQ9iIUkNesckBPuuPvpn8xYbQ7ETQm9eBoeYe6QnrUE+u0RrTZzFUYThh+Nqjom1szT9lE0kAVDE+SBr0ry7Y/XzSQRUc1qsth0Qnt7emzn/NDxxNBMLGykgWc7uvSpsrCd3iOtWbzFetQN/J6b9zvMbEjaWTD50qoCwojfLljXaPXj4tIW3EPlfTFjk3QzR163NPjEsuEVt/+ksE4nZyKSBil4/O1QTFtorLRuu6+uhGOSVhKnJNNP+1EpU0GzlGsUzAVEO5AK5XmhfWyVcJjIOGtZfkfSD30zFSStEahruCW3fmh2o5Cb9szUMPngx741EbrbKTnZAsNIBrQIGql1pSTzrK0cX10EK0b3aCRZRnmkCcuq4f1Mo42teiBNmbUtKI+BOy3iilhWPPrOa2U623p/MR8XDljif1OTFetJ6tbnxjDXknBBMQEUa4wZgxScr5G33Lz3n0/afXUlNaZr7YtGXN0b+4hUy4lFhIyDhQ0xPgZzAwiPx1r+nDFYtY/Kg9Cv8tGBnZNRU3MlyfnpAx7ndWr/fYSHoDu3UTpOokVLLA71KYZJZP+NiF9t8TXaHC5fkdkY955fML55b+nqkrdWhMXFd6U9HAFPgBXEQz6FzC7jwPsC/PNO/7mIqo0kfCfSjsIlBiiis4wq5gQClltzh7HjnlN5K5NTf/Tclx7lJm2fkWZrL0aMBzg2u+M4ypVrMA2Npa5rnexlVngrFCXNGUiFaA2eKxu296hxhViOf9vz5HtNzIt8vhXrqjqzVrG/Em0glyucqvATTi/1MGHz77CvkEnsCnDj0B9hVxS90+x40ERgg5RqP6y8VCkQTJrbEc/45nd4jA6Ol7ZCEp173LFqKcnP8KFoC30HqNLgRSgcHuUKmXmjAV0FZyRcK60/rf/h50oo2aIRp2r01ODOVq5RtqWx1ddDr807iBVKU8wNDvPkBR9UvXVUCZhPatMbNjLFXuoQjdvYwIMpQhxduZ1TbH2sVqErUrqiuF1nWhiOnohvWnFv5yXJfC4jrDxAPpGAyVMhV0kMSdr7Axzs/hH1tMrtaDTef7MdJr7zLeg181Rl5BTs1IuzPmcVyynUKv/4KDyg2KLbkGhH1rDqko6S9yFJN/QTTu8Ez+2fYK0b0WglbVMQP8OSQ+6wPHpQXi/cxx42EbGZjG5gXsE5/Lfwi1ogrfndrDJPK4nH5GOp0czQMwpQWe8lCyP1ofuP/3/WdKdOCjvd5OUD0AaqzbP3T9FNvqNhmgCFBs5YovgRNWQVybQTKkysw2mj6L/wAYbeHVVuJJ+zoE4+4K6MjEasByFLT/jhTrVznTLbSbKZTmF+wuKoywgMpZYtNlm5PskxCkisISC3nG97EpZuuu0+98Qg89ta5Xzl6DQhkg8sUQneLLX25e1M9zMTKmxHN3JM2x21isiqbG6J+jtnqPMzZHPyCRmSWP9k82vXSZq00jet63Q9yq95X4yh07/0+WpAQxnYwj2tTzZ1mO+yUM6BLpqjOGWT5548bR544vKp+E6AgR5HIOqSgnWlVfKgwMM0s883z6OaX1XjMMMWX7ANNrT1/8YOEU9JasgZcssNgtXVZAGNtgK4iJlbNEuCmOGjv9B5Zda8kQdF5eolHAmEeCtySL/mSuaEDzIVJPebK3wVQqDpWcGx1MNGXoSaIrPgoJiwVaI8mdvxh3xWwlVXVqM30R96b5MQxxbdwj+gXuaoRnCRvvPe+TdZdVhheIalHfZySGVGJggdeEn2gCINd1cP76UpVQsq4PJitJ+H83t6kxCGl30rVGcqoq0ErYReJlAgVeYvMBpimATbSMMY0NXfYbyEJaMaPFVeQa/o8ZC7uwNHvnZIofRPNXpXRXxYHPB7tlVdnA62rSrwLMH7UMd/y0ro+SGRGQNbYb+VCuz2fOa+bjkkiB7gBpiS5ttqIC3AH+kff//ibwW6L2fvSQbO37vocSeMH5AIdJpOZw9jxV718yNoo8BhGHQXm9l5wLu28IXBvyG6GUDq3s7wnPHahuRlvzLZ+qjnI6gt2/+UycqajRtze8CZxvIyeW1P29GNQI9gVCgwTnlPyHNd2guyU4GOQqmH9yn4H2NRhHjbR8skKu1MpcxodsybGSA2gxx5zmAXnwz43QLyNcuCE5qWMs2twXqaW+jAr5ItPdx0n6HSqFxwK/k3AizSWtVNCh6NVQGT/M33p1132e/fA0X+Mi6SheRt2GKoYEZ//bU8QgJKmm/oqFMNjKJohcTmtcAwV7Ymx6P4dJ3QyVtERT/2NYNR5GbLTxfxRQq+FxsXK4iYz0wKL4ZtiJsoY45aWoH9u0earWxEegxqQVmffCos0tZkql+TNjiZ7Tn8G7B4t9a6RTnBCQ3hsI9RK7G3z0mObCDbWUbcdP/sQy06hfAr2S6mS+HzTFUVHLc45Gf508QLhqJ4OYQwNC+UV/it6qleOWmHTrDE0ihmg3ZDSZtAp+eV36aBPffa2aIjm/LfBO7E4gEToB7nhtgs26pV/5cTVsp16QJumhRWLtU2zLXlAfCqMibjJza+NLHmPD9jDEZVwoQEWOSetCEndlXfL00PhYAuPEiWulz/snOuWM6RuzZjiKSP/+SMS2C8MRtMivHagODQaJVy8s+E5pAcCgf813pccM8rXn5GsMe6f0eSpT8fX0YdCji0AX9q4nsrBFozPrJ8Ph7YjJXZ+8LWYZ0OWZ4e8BjqjwZVU6wrk4qlZ5HSIKzhByNbcsWGhK3/IbkYs4gn1s1XcVoTzWm3HWiUGcnDQg77dsJJwhdv/eTt5BsQRHwjGCmIN2b1x/HF4zaX+XthoW4/9DdYpYt883Pn3A+5PAO/gjUHFGU7pmWVwVMB9hi46Typqe5OqdAV1a5E13JczmfkqFBPwP6E6p8U/VFVKw11LQm1fp68l8p9XxHhvo+PSxLuq7LT7eRQC0SYIp2apq4LZGyPUbRKC+tNrYZzmaScc/69sUPa9xPTwxS8kfbIKzJShrWPheWGEp8O13e+IazX2LqJJhb+EyVjPzUJQRpefvE/cdW3taXdtxo7u/S/AtSkbXam9whpKI4HQp9KKND4Ok8uFp9TFZmsOM4u2dzNvjpuSNARSigYHwltm1fmUjLC4F8MgP7pI3OiPuzv/lNdL03SRRpgYmHje6vOzLZozOwhd0wHv7jPwGTUSI94A6MRRbEsPtdK4hA6u3k0QAe/ZLJ5Ji57IG3HPhNxWUUCit6pXP314tQxIpymrgHBZNNBXoAb1EYv+maq4w4KnRlBgXOcVLFx1efwZ8IVD/u0w3F46wLvk75UB32g28qlscdj0uCZyTS/XZxGZei6UrhupPv5b2/wWBajtFfHnIonwQY29RXH0C8J9EPAl4/g5mEdWdH+Lv31l7MBtNyU5QaxiSA9XlyZML+XR+s48pKMSRD7C/GRVTyqLPAhic4+ZpLpQqPn1ARQH66XXmDkIzvtXKQHzSO8hyheY78FDiEwYgRYF1ba4/nMxIFuUi+63KkpM1cPDSJAjqDwmt26hwR04pTkeW163j2P32Chtvk40z1/MPBwMAQNQHyaY7K1JCAAMRz4pAEJ0Tfd+xCwhMKRJ/dVbytnNdVAVS7us93bStKhSveNJ5Xo92bmdNMQfmUPRoZoDQRklrI9tU063uL4pQdLk68TIspkGMyBlBrwZI7QLaH7SN5m13WJTBQDyWv6dfShRy/YwM4cqDHSqxngimXlnnjrSu5tzMsBiXoxVyfVttEZ/KKPO6XLz0IoevgFucAlpvWhaW9n3pA3iqb2yYRbOmhz0aFGlXSQZXoMXNRg/jlK+O59V3phh5VRTacQFGzN0AXekezT4PN+e1u0X6SiHXMqxhO4I/Tvsb6kF7v7Iatz+JXS5gumROt55gtpjX2BWmguiIL3a06+3Y63qEQbjH3Nj8yhmE48LemFC5XHJQT8FDRUFedI5rHextKijI4I83+XPRIir96Ww7NbZXkyEyl4lkaSQ1yyJmOxOV8/LOhjM9tCWtB1SIhQ1Ie0hbVZAS3eKRQD1gkddgUYdN/pP+dGQH419qeC9tjAxxPO0DIKYkwUYZWARLtSQ2KobpOvOcUgu9CeqrGKoIX/EHArDYWy303n3qsXCIKqwSp3VZJLvY8im3mTKlbpRnctWFTOc3E/ebb5fzvsz5xU1T1H3Ov/+Kimwf4nlS+613/J7qHQ041vH6u02s7Z9MgOfnOsp0HF8EY49PVUB5vKYYFnyKxkRZKo3HDDAp2E8TfOVKE+OxrNzhCKxpETEx/W3T3+CCaZGduAivjyM0AG+UNyssRSqvDvlLqn1VfrYnSfj20oK3aXFzQcP9KvQcr6UDl1BITsYYxzNPqGuROMgdJlE1rJYO63u865VQq11e+niFc468TDX6ahqCO2Jn/+k0XZpg1E7+YdrrY3rMY+qPwilegHLgUCD2XvgEbNSU95vN7At91Vuqqxl/61jKcMyFufbQtHLasJGW1sVKKaVldGlNi+HixwWKdpzXEmgwjexKQpjSKyipbW31+JQ2VXh1yKhs1TshCP45StZp8IhGTg2YZydL0sfPCqBn3x3dEo6Ty43H5WoHiD0YTUwuVoCyzMI2B+umqhXdlCS/KqZ1E2zd8xbQz7TlFdT1KbaOadPF0vOStL+iruWnmf3yDKnodExA6fLj1CT091SV9Nzd4hB8cFldgjMXs7FwFQaifvoL0tmfysl7XaEdljTFq8odF4aKzvRZPvUCiRdy8JayvROLlqeJRV7ucUkZ6IL5fVhnV+whjrnep+LRyrhS13VTXpabBp4pcWMkiwDJy1lAhLO//S+1mIwwgOGL3/zzIENBNVmLBiLVDI+a3C+mBImjTiJm8ZTBcgykAUA/OTBmMDM/ZpjmZXakbGaURHBVrOFKxZzU+HuuWKswKaUcXn1U6vRG9eDmFGeoadKIxDmVUaNidSiJDZputCV/YLdN9x2c4+jOIG/8zq+H60mbdY9T2Gpx1m5ltMxjNCABILTN8kZb9YoQydBjF2ci5eQI5Kxqirm6IL4pCSCmw8W3ZhHRKWZBOdgz+8PtuMWPAtlQheg8R6fduAme8z5lGnP7TZbYv5VDUHfPjqCpmD+W1QaS3fL1oeu1U8YWbo6hsUc+gQm27/uBhaG45taVs6wuUZUVuBruI9tS9oowrlr1yclriZru7751wwvR5Twjwh/HmsqwpfOkMcne+eTxcjTdYTZB+CvGr7IvtiIQvKuPBL6BRZtiO0u1CyIcAhyYn9ddIiBzILQ/Qg5EzZhavpikW/kr71pmfnFFTLZYTKYZx9dEoNE8vGbX/WTZiVbG1qFqUrHdT8Mjav0L+7UqNFn0kvISVa26/2TUfecyF8/Qpn8SHu3CU8SQzfvXQKJZnpfT/5woVdXmQPfWn0mhdTOXAMzIw2F0oIdR134wzL85kQ+MAYlM/SM5GCztbGyNkD2VN1gd6sQ5lOnRZmm2z2aqLXn75B7kv6Jomv6J+VG1bz15+PAqnbFztMPQpXNjqGfzPuriuwgXh9lRJvByELAkTpsahDzPDSfJPgTW9OikJ8iSTBV3jKp6kgxpv4nU+cPsRYGjANQ080yfSqsrrbyhzJDvNaig+aHvwHhAXnCeJ8IzILOT7I3tlMHlyFDFrB3BNEDhVQQobB/Crj4w6t9QbGpRDCDumgdy+AP+hshNHij5drXiIMyd92O7/KB3G15+aG3SzSkU4GqsyqdEV8lR1mE9aEQTT7pQaVCzS62UWWCJdxLlWJTbPYLkQkMZpSQ1TWHaSCRqCOMH2ULmqvW0I21UeGx9cLHsemnXOnATup97qyAF6CwibR+pCxxXho1HiZXjFGmsTqh77r58Adyrmg5c1AnYKk8MXjEzo8hQTF8VzBr7s+9RlB7SGn57kdfI/mEpqOZ4C0hMQ8st5GByz2VyMCMSS2uRACJzFJu50oDQIDOT9Sf4Ep7yzdR7GzghVny0ZgBD+t6O3Ie6k/vjSYIrhdxQ5/gml2GLT7irniDO48WPtAazfqWD8LfInH9BqgcrszxzULt5pNfkEGkqzCXUUtKx3nNY0kgbgX3ZAZXnEDDxin2xdbUUP8D7n21SY/EqjsUAAJJoEyUgcZoMHDQkIpigylghNuJz5YRPArDosufMkyLtDbtzxpWgOmyW77qKzAP74lSRHJAPn8zKYnykxt1kqF0LSOJgtFS8zr36mLB7Op+Sn/Ayt683UIAz5ZTH9LisAS2I3swC0YK+AYEQdIjDezTxWbAPP2xDe3HgDIaLFuy53mnMHrg14CU6Z6XZsuwhOOnEq9hY2Rtmq1MpChfQQyQDI3QpILXY6bE0DjhGHz+CbUPm5ZfVAe4yJoxA6ecat338Goe4SWDw/wd2yHnWZPilvwHefP7c7eIUS0pt0RpH5fjv4EYIe52jPhzPH7ABPSXWDBR0Ns2o9thwt9Z5z++i95e0tXAoDGcTrURkmfqsrNLo+Z6EuCLxa9ro8hbqK23/nqogWIq5Vdspwo+1FdKQJmIomzA1y6uECrbwp67hujGppf3S3eoZd5VsQWDmYVpsR0iim3yy4MzTqU+omI0iAg6YXAf2ytvWFRzGhZcW751DV0T+OlO8lVBxcpdV8u8LJ3njMvJaqR4jRNqqCFRCwuZ8slvD1tD7Jz9XP5QjA+BZ+5i+bbC6RX3DCSKLfd5udsbs6qSGBs/lD+lre+bZhwO59BQH1CEDG0w28EE7OuoO5hgcr4XJXfamHuEMc6GuKyj2XOsj50O5iDsg2TfQcmzi6Vrk4PxjlRE3FhB5a/j6RuozBY1JBuOmYCBNGY1mw07ttegPUdMUmi09ur8hmnUdkXXqjw7bkowuOAdnIMarCymAemn1A2zdBAqmVSkJPg9/qznsje0jZ2RDxCocY03XsZaRlfSVe52KOC8I3SBl9A9sD3chqu98kPWxejU+NfeLLmEd6jayJ30OC16HzpBi6GmEFDKntGjZ1Xx+09BZHSnGxdWc4hGVwrOtOmJwP6MpJz2hD5ZpHKSV3j0XEzzxkEv4cB6uSsLDiZigKOukybtVeXhTVsrKKn/WLrSYH+GhyQ4V8v34vgbfAbahWhMpVNSD6JgoX2FugY70EZ7YHU4nyUv6uSJEdtwiV5Rh48Fr7uEfCIDCGCeMdfKK4WIDrFVWfFsUGXbcbnxtkRDTLPxAEJxpWm1wZY9+hTbTFHzwI6U4clBXYnTNr7kogkJTaV86TdE81I3pDGAxkkMLZvMDwVaqN1+BtR+yVIWIIpINjdLvdUz2fBHE+V8edJtVNGy/BmWWx/E9UmrJbc8+TwGyyyeVSuPSuhTSEgw1upLrOtpNVcuFTZTtBduUfja/bIvC7VVs8aY1z7ydjhxk2oOHhv7mNrpVbjFGegAn1PNRpm/zb9EWJIpG+jUDSB0Dy7w86Ux+6BJpSvZs1+E02Rn7NrMQ5VMYNPADbUnH2lPMoMr2DrOIA3KCglW9Za081081E1oIQ09v3uUOHFYbN1LH/HX+eTEw23xGT/oIuWANZhghRBZFnMbggHCgDAifGzzXAzTHpcJBxHCZ+prY1MD1G2T6psSAvMa24/Mv0AuCGU+x3QYveb6tab2rvpTGO5F9rQbG3FmQPZb+ZzCGkly0jrCrsju9z5TvlN7WqJJn9apWqdkvLq9iig+8qZy/6EfRvye8vDSugh8kFxmkA5J2rEJ2I1wXtHUeaTpI6oGoLRfQVwlvDGL8wgFD59B+rIRQjjMb9GnTE+v/W939gy0ru6WzlhjKEmUe1577nwqg8y1mul3yr0t+YOTkr2ypCX5ARVMjDpc1QxNYeH/H+DJxcmsQfLPBve8pg1nwDYytnbv/NHxvxLX23w4Q9I46j0K1++H1PRLkNqoN+d/kL3N4SobmteYmqMWA6nmPhvmO3J4uNNUTWv8vij1HD6BMQRqFDjdi8IxKcDg0U4fk4wDlH5Mzr+G0SrE3eL3NWqXhdbbUnDJBdj1Kkewk3RrbnQfi8dgSvGvNMkmkKCvBgpfw14TcpFBM4fQ==";
+  const CLUEPACK = {"c01":"iUzwr64N5yiAM4BBB7EGOQQPnFOLvVKj3KXbqKCKOzArJf6YDGiNC7D/pIHkug4DocqUT3X0Y7QSdIypAmeAxcP9rArSBL7K0kD0D3mon6v+Exv9g5tYirpZNajR43sa/hqYIah4gq9LJJWK3DsdXrmjYewnXG85cb5CW58s9kAmVmMm3INWhAIJ391qYfX5LJBacfGPHCPXrosbCYruRw+0PLLbmU2PfnTqog8IVOPMxx3/+F+6zMVHj6YBZdot2mildsISOSUrKT79EJ1lbcGSUgzzF81K67AWyrffRDvvF31ZuK2R+wO6GuzcER1uolGGZgITQKwBh9IJEmgajNUF9Hjn++rWdOJFQ+MBAVh/6yYZTiSxq66fR/ZflK1luQnY9pNsrScWq61baClydfhqjVilNk/bZp8J6bjXWqIS/igVYMs+BIDz2qkpWoFqhNSFtNP63W3jX/9XS70YAtYk4jR845hAnYTUxhD2R5U1dTNE+zK0KFBTdhNQlCsVmA1PcuO9K0Hze6g5wQ4AQz1vtonX+kfW7mBC1oxwe0iiqTp8ekuLWlWjhsTUDL7Cpw==","c02":"xEew5VHM7WPW4JnyzBL2rWTJHCMwAvN3dZv8L1+huTG7SfI9RhSdOQrrmHG3qowIeKPyk0NV8ktYoKF0ysMQCRhoyQaR/isvoNZGzlJ7FI3qHb/edZjNeCRGXT1hjAGzaTDfZi+YwQhZ45ADADRAYZ4B8lzYVSbhKIi+JHQacKbigs74YbAdE+Hu8xAkW1adsFSTDFbU6fm5+HtXfyEflQTEx/fsNQ+zGOH7p7V9/EoCuRNw/OIH1p19iQBY7ki5zg8ivfAGaEDVyLa3r1MvRClB1pYGrCgkv+sJYQyOgb8Q3ZnxkHooayM8gMYZBT4VT60aEYziga0fOMXRLH9pX/OC50lM3J4Um9ePEwuyMXmdIhmIv3RTAbmRD0qeARr/dGTrvp1KFKw2WZOPykIfA2YmlzXPnbdU4Q1N5FMyIpPX1HuSLn+4KWwLqU91yhDTWd01cx4s8GRZqbgC1pMaUyc2Jjazi1sFqKRVpM1delIIebxsW83ZlyeuBcEhyOqG2ctD3cU7//hNB0IBdeqwhEK/Z32kAeeIkOdFWvoUF2cFZrloWMaVF8N2nypmJ8zthantcS9c4lwyb/TUVakDzcq94p5GKUirBhgSObPtpZvaNzLhz4sggPx1ZTdwUd1+q1AEN+Zyfcvp1FUO6TYGE16SxvV0Q2t4+BVfjRo5ibMDzqx5V1wqMy1reztl2y70cQMllFi3Db5Oc1Xn3l1PPcDoXVe1887G1SlfMc4Yye81eT1y3b6ah3e49ru2EGvgnj7BdnSqG/CyDx96YaSEVKmPC/hV72Gxzefxiuoqfj9StTEeNAzajAwc8Q==","c03":"+CEJ60X/Dg79muxY8HfMH01irL3hfxZ/3VlGqa5Qe7cALrjqWnIMLscIAWiCvN6RaG49BmMdn4aCaBXmkXGwDH3s3WOjdMk/Ps40l2PGsioGZ1wPzGWs6ALr0q5z5v+t+VzUBB7uxlN6fdxYMi/8miS19MAzxaH/aKOSp/A8WVTEYAsq9OS/3jyj/MO74pDlw5i5fCXZ1YeJeblNfUAZ9nFWlFYJ3+Umh5zr6f3jpQnZtHXGJHIOM+JKFUhy5amb0lO6G27lZWICE0W9iqFMY8EdggvOAStBXkv0KKFWA317u9zpHUpZO6/L2Cw5RwnLPSjrmI6hrDDhjYAUv+IYYE5kgFjD9fxiWspudTCNLnmlOrT5GVU8c6PEg1yOGuYAE8gf2Keq+oepane9On7kiy4xFIb6bu4xrD+BUu+kVoh5RAws/CNGQeWk9fX/plHZLxJiSHw5nOsKYmC7lREJm5FXm4cp8vSNh9X4I9gUl9S8YnRunDlykbWNZ+vfFsYOQ6oLmSIKL7IfEkaO0An65kF73Uli29D3zcbvfsN1bv0cjIVgTMwLHlGGlAE4eM/e+elf0WeSNg0M7jR8XDI2gSXh/0QUYRE+g605hyu8BlUZMf7XWshzVh9aQpaP6MpFsnU3soEWeJx0AZeoPuCW+T/u6FdcaZjZj3HUzCcps+x2pZNautP54n6J6KC5i0vvWg1j9K0sbtYDZ0YwZag/LPrpuEqz/IMNwfPV9bidiPcaSLwnQfq6hfqW9spV2gLQfjfRiWlhvt+cIiHvAUifAm1sRDO5VrzAgGUWVgQbJWPh75y8xgGK1tMy83urIrWMXLV3uTfvjlnNgin4oWO+ADznpTNp/py0674=","c04":"VTpKYy/n8K3ICqWsI4kWx2Y09fmxnx3pKTuIvYulH+V/87x4BntUNAaQADrkyk/xocE2olSktn+TgIeWh24BFcVwlHct7FPg028dP0+DVL2GKp4WgP+V//8JkZzuCzMZjKIhs/ePGmL2Lb6M9CWrC+9dOr3GlLV/+y5NKzZIh7vtNuQdPf+UY2Pw2sR6T9vDM1skQQ4/XgQTDNpoy1R2DEPQGqj1vgrhBrWxlY7rVmXiMeI6XnhjrNIPp/t29KG0C9huIlTX8Sd1qHFozG4GfiO4av3wXGozmPqI/SGOdOzhDsqYc/4DgSyoS0I1BLTOC/xPH0tenUD8RCPCK/0Ki9t2jeDCgKZNCFx52o5qsFmhX0tvyKbvMrvGbrJHjJpqiaqgehgDQQQBAaqnfELxt0jpzprOQIgFnuxCebrwyLSD3/OLV32sDpEafjTkzLXKjvvQna1pJRzJHeJdv3HafmqmZYjNVRz7xHglh7MV5aZNMvSSgQboeJMkYq/rPXHfsRADYSXncwWPtnEhsqiAxUzpnqAIkAw9szBHrdghoT/Wj7DNKIDoQ/RfGv1kg6i1nf/PixqNbVbOfghUj6oDIkOr5Xfr7DzX6MFR0fUhD3pFxrEJGM5MXGPTFd3b0lIOlbyIp03KKiAx7um5iukLj2iZ3p9t7dCGRRaXfmt1t6Rc2K0sR683Os4bNA+A/harFjtlZ25noJnaDkvJ40ijJRPXhUsy/mCZcoTtgJL9cWFaRXIn1FeArEgv9+LOtljL6dHf94Wtu8YrsVi77PzQvXxbpnJOAbwYoqvHGVwjqSv2yQjwThe0WK345pG0uflVYey9HFval7NFNGlS0zxpTMMu8RKwy152AaKXx+UjfF4kzkYy8bJ8UWcMDgWoxPrcfV79SyCv9NYZyB7ayJQfQYgdA/7uruI7voIB+UZSzjt2ahmPPh5d+x0HhSGe3KAE2qOKelTFVq8d2s2tj7dC7ftubugpU6qd0JKYmFYQ9mllSyF7Ml4TXxqroygcz4A6h2GdDCG5bcZAZEZB0ayG46MMF8Twm/tlFkUXqm6tBQC1yfUpI4ToZGqSXY9Pt+7dHAdyLKXTmF623by47MQclWqXJZq/djJ7xXL+lgAO/cPtNqigrKyWNE8e6KSAyW3RSJ4uyhv+RuCU93nZuNCQHfy4Rmkm7oinwvpStXTxQZiAed66XNTDSriWdlxMtretwUN/qg+Eaohp5jQVQAKQXBHmLz9E6hQphK9oAMYr7AeTQ0qOdMZ/btIxgs7knN7NPQPL1YwW/M3jaHEnkLZ/7FOVc3LpXwOvVRrsfEkxNeRkgcpFS0GqvGmU9Sp4CWERGXgmCHQ8r9Mk0VMQPHLvkXUNNv9K4jWXdCeiYrAhHmKqOK9751qOFQgs6Ug=","c05":"6/lqGRJ/KEZx8ZNeBiIwcjT/yM7zJQRePWmng6Cr2b51WOaH+6kiu5JlFbbP4YC/2lgDCVdgPPGe9Jm7p+9NzxgJ4Qo9cbN02sqLD2W+JFnDJJRYDsdGTEYzBzEJUzsxxCjiTvep4yQRO8JtASohDsnUdFFrrmtgDnqvblQNUTDTqaAhMgCwyeGW5ZT9K4C9AeQ3+yKXrBre53HpIhq9/2N+Qfy6MGMfEa2hwZhALx6Kyzy9n7ZPXoLhZEI3zbdmqkBkFHAfTYTYBbZpdvCACN3r0Yzm2QD9aaOy2sqBiXHUpcOsmHuZA+3WIQlxEW90KV6BKGK4ojzgBHVNvkJF0HuGSRmLOCIYbwy8djeWRTkz0UBEwPqQH2uMojsttGXvOrRopOwkBv3dGsS7+YOalTu/GjQnsQyUGD72tYyXwXmZtZKyDjVnEjdZ6IKaNBmd5QwxSnjwtQwSt7hZ0IoeKUlRHW7CYrf3cvq81FcYYOMeDOuJwbAuBi3N2QAvEA04epOAoki8Ui5XxbECLmqCgDUowuhCZSSl9WD0JHMvLS1MXu5sDOUAEAGTOPVMSdtOkfkKyj9HGr0PwrgPhcP28SfqFu3fdCJel8CIPkYKXgLtYU1UmnWHtjkvg5M3UJB6ZZjGdR6W8BmAgblpSAbA49JLErQak2GZjSSoxZId0WlO7I1s5d3ov8FNep1PFbG8PwYy3wh5UwsgHZk9cXC8fPeuB4A+W1iQuSsqUZi+56a9ucQ5opGmGn5l2D3SdpDYaaoR2M3V8BB1zd13qEhPlTS/P4DPK7Bftdcj0p+Z01PqA5HpUpldRzaRtMt6ZonOPtzJ+tT6BNSqSdzTmK8ywfEhzbVOuBLKoI48wj5Pbkah4pDe/i6EEBbTTisEiSvkObZc/j88ORYr1qDhADq/SWrjrXn8GH83e1zTjQClRyHXMPkf4NkONj/6M/liA3hc8O+iwZHz0+bJm4hY37rxx9TuCEtNLP4J+PYowimcejarQdSPjEqRKxrujixJMRKx1sysL2y+/RV0UDa0Jiat7nOo8H1s/y9sRawJ1qkbcXUk1VvdOp1I4ypgKSlkCaFnK9679v9VhliN4FYS7+0sUyEoG7DpXYNQRYcIVDgzKXDfOnUhN7NQ+zy+UCNATlMGdyN7De/bjrfy+bzwW5PlIGnZ8KtgVFzbzQaNILTgVO21MsvvU4mP","c06":"S+SFk2RHkMcWoNogWpcuafw1WEwuYYT+23dLlRHPTgyTuD4qfeqfp5J8nnUVFRWt3h3gTgT96I3gJrFCDRQVbu98ZgHubSFpjuGTFEumMBIZCQN+L/SCY8I0zIwKIE6SZ5t6Imz0+hb5hCwPEFBY8xclmEX8zCvqFr2mtXlG3aSXaE7Znu1nUUDRPcfaORYqXhxZdtiiCs9EM5nUgzrepXAMjfIudRLF6oLQAs8LYaH2km9ht4c3xgHqABEyVNGCcZyTNEg4mmUM11J+zqd3vATdMVVo5DvFKq1OJ0qiIYsk1/mJ9+Djacmg6ITQb+62yaul2RsKR0Smq5o13fIprRcZJrjTlrADp9hyeSFObMs00Aj+t8tRz9Ig1qTmvG8kTE/uiuhO362G6fDpcT4F9eGOJKuKG9y7h5hqSx7ydXE90T7QnIOo7rAHnqroBtH8f6/MPbhpeVoMMBa6pxAs/Y2ctr/OikoCt4T0V31+/Vyq/KUPQGJjLo9uKqhmqmTtBrMdQ4i36r45sBlsMjFL0xyvJlfRpxa5zO4xVgXgO7qlPx+G0kXMxzMKFshrPSy3IqrTUl8W30UzRvFEJ+EL71awxm1zy3iRBse3liLNzyjYVCBSCvD2CKyzlZABZYmfHg17e8zBvGEiNFPjLBSNtTKSVi6sPOyjsBiY","c07":"cb3GSsiehTI2ourjR4Td6Ta7t6EeUBfSILKYc6aq8xLYV0JbPQveVHix/aczhos21LHrZNVsBypck4XrveJYuXNpCItz0dAGS/XpxlxJO+RLQg99fNSd7QdC87z+ATpgamr9TJl8X3ppv7EJP5QKE0ufBY/Xk6K1np2B0BbqGwYOhFmxBsfMfOUV74/Na0yk5mh+0KakCS4vZoWwOXKVE/aSZ19Ki/wjrsKZnED9mwW1G0HRD+qEMbxWuHlqS4eYVKDy464BgLUeIEOwTrn4qIR37+g8sVi57/5RzXcI8qkKU/nwWMNnsiayIfYomCZAOxt33erumPFUcBCbc61JfOxfGIg2ix50NFMuRzwpvmeQS1gmMHQXqbKHr7qLmoTKI8vg021vBei5nPyLPPNY7ClBFeDUQegnjHcWSuS4WnIhC4tD3Sv9YM7qyGnOsQtYAquEnVjbao3lUG/PQkXp2uCxRwzvgLUZOMc+GZUtNiflFKmdoDc8CcMNtj33NyExJuEjKaK0l8qwxI66pPKjgZwbkeGb7Qoh830ija/+5OHEBAPCVhe+G/5w63DsEqN1sSaqx502GsvXEQ+E/Q==","c08":"+vCv+e4rRW5lqoizPSCNRk+Da35jcdqK9S/F/1trXZO5LCp2YrAIaktWmfQjeC4ACYtTCDip0hO7DrnThqXpnOtlOrbgmwc6lH5Nihp14PGnT/TsZW2VhPbWJKhP3dsza03Q9EJlQajzhSKzFD0SxaFdMmIOsTXJZyDeTle02aVHaeJtQnh8R6qs/CuyqxCRjJLMvf8dw7w2TEzrgeSzDko0m/nfph1neNDvI8m2jnW1H5q/qre5i7JnPLS+dLC1d4osTu5iI1rg8uUDYrm7RfmSLczpNRf9956Twf6dex/TKfKfz3Y/FD0AwLrj/pnNGEmDThNy5guFK2wWjvZ4SHXdgrPu3UleYtO2iasLwvRowpA3YT40zxa61AlIRIEgxrs0qshKIqHLrXa44MqoH7KbDMUP0FZpSQtlknMWZ4TstQaE7mDyx2xzkRqKm+WxJ1qTuNH0c3XM5E22ivxvcWjgHW32I3QnYKscsvy80X+0CaUsOO/YsThmetYaiwJlcmP0AmpNnQSw0ZxbvfUieuko1IAz2LAu/hRuseTQk7IDTyCLaD59rEK/4eZrA5Gy9bPNg+5gV8asmTlk9vgIW0+MuLPlI/G4FuFLqpp61j+D/qi32Mc2ni4GuPmcOtz6R0R3hJA3M8vss12q23yeHO3N3TW33Kf71VxvZA84SoWEwQ4Pj53pUXt+HVRBZqYZOLMXJbKjtZKr4a5ctfaWvjAFMgt8CO3XcOyR92IzQ8mUzLX/yHhFspW6j558E7BCi6Lpcw2KG0mN9w5QcQq81IW5JE82pBZLwj67yjwU3qU9htNRQr1i","c09":"h9lmKzWKGUmnnIj5sVENLR2L0Byo8IAkR/IHXU2sAr73vhwg3WpUWZE+7VPAzIFu8hlRIVOqriC+CYdubuAeBe3lFZ9raFevjkBO1WHHeWEse2MQHzSOpVCoDpfxX5BzqF+9NYnQacSSf9c1BX4H/Pq10zvR0XfhyJV+kzAyUonaDaZKEQk7vhBi+Un1Ec2EYs2cnhXK3Plrr27xolH2iWLQZnxjBdrwmKGrNmx2Z+6/SD8bdaNoYnBV2WwGlbLeqsK2+fp9B8S/Bngi0geZ37QaLcLFr8goJ9lUmLvct4s7m6TRzCxP0FLkFkMVVhNnJQrIOW6rfzOuxX4uoeOp7JYhB60foh/Or7aX7+62pNZhxCdiW/5GvPJg36ewXQQOJIwISQPJuMuGjKjEaWEa/l6y21dM6QFLPFt9HmYiTS6thKbKH2TqQz0RQIp3mCf1untuF0dQlAhs0NngcjN4N7LqKBPSLcQ5hzEt4lG88XNeK6JpQH/nzCXZeNCNPqm/uKLOL5lq7Blu3z20uU7pVJyxsQGReKTvXUZIdY9UOxkwC6yhTQOEq4u53InUIkrWZ5VdvMAo3MB6vXWEWk9IGexK9MvvNZQGK5RGHi7/nPPQ6AJqqPRA2uB07Xun7+JisNEYUpcQ+D/wre8xWdAZyyWz7INuyxMzBiWF234haZZMxOcoHNRRR9AsTseNY9ZZI300Xqb0KO70KVgf4VqtolLqU95/v7NZIEu17nLhStLvee3aRe6nkad03CT2xDlLzitRdNQ9CBA=","c10":"1PkDY3r+aI0wcSL3VTPg3mf7k7SokpWXaibziU64bTlQBMpKRRXkg1efnrq4rNWVfLsYwrVQvxWUO5bjKO77K9vnvCflBYTigGACKNBE/Dt9/Gq5GXd7dJmkioUJv9W4L9f78BVt3jHr5+p/TSGmXsgmhLvH/I7d7giVFt0MP11bQd7qCgqQyUygbZtGnmoAHS/AM1axg4M3Lp7tRkHlzXc98r2xwIBAiN4co2HjsdV9ITwwR/R5+c7++VPsNUspMQfMvLgQjl5xx1g9vX6+g2QLIdpo2xxJTCkxlgPdbLWrNkcJAz8kAwvnnDYBeh6wgkoXrj4zNj2FSy+xj3cqk8kW+2GFyvVFl1G7Bwd3utLv6pRjdT/FBzwZkLIZHQoL1wxo7MEDuEQJ34zZUexm6QoKjzzF21uI1Tc2Nf7sEfe9GRaIjbU4RRIr5hVq4Zk8eIyfsM8xqxWS4J8vcTw1CUsRHB2y91RHpcqcsgbRXbHV2lSfaNZxyCxQOaWW/uz0qMx5bwzjean0QuOLkQzdr5zH90EwaxZ8pBr2mPm4me9lDH7qKDn9amJHrjMftnHVZ8S9vYRSTihSHKQwoMmRywnAF1qaYQFD34Ohsqa9gpT3UqgapQLNXaINxKOZagEVcFtCGW6GNOU/+H5o4TBKvuVi/KwjGtgra/mArP0lkeH4EFemVxRO21YDp1hg0zQnt8zFzqy9i37LCMlehIcQYSxAKj8WZmQLMqpY9hVlmR/aZEuCoSlO7/8UGu6cvNzrug78DhNsTAGrW554hxrAXa7BSGX6iioFEoY+ocuQfqoM56dWQ87iBJFcJBKp+E31D0DelCldyYWCL9ThothXO7p5R3/u4I3Cxz4vPspItoQESk9F1JDGk/Fy3tJJ/If0Zb1MgTZLHrYF5CY6w+AXDbyMqFPtNpRGI2F0gPg5gBkzgQMne5ft+YRR+R68BUDf53DSTvXfk7KIB1meUHcuWdXhfzrSFXgt0I9uZpH/mF0a+CEOj0mYr7ETSQJ13mm8EP8ENZz7qYPrqM9kQX6KPnoD/nCslTzO03qE8xU+GpY6Gj2JS0uCc4D++6e5N000HDto7ckL9JmOZlbvKajtJYorOw=="};   // one scrambled entry per clue
+  const KDF_ROUNDS = 30000;
+  const SHARE_URL = "https://olkifar.github.io/vilkas-case/";
+  /* The facilitator view draws its QR code with the encoder in qr.js, for whatever site serves this page. */
+  /* To collect everyone's results and feedback in a Google Sheet, paste the Apps Script web app URL here
+     (see vilkas-collector.gs). Collection runs on the public website, not inside the Claude app. */
+  const COLLECT_URL = "";
+  const TIME_LABEL = { short: "Too short", right: "About right", long: "Too long" };
+
+  /* ---------- Helpers ---------- */
+  const $ = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+  const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  const pad = (n) => String(n).padStart(2, "0");
+  const fmt = (sec) => { sec = Math.max(0, Math.round(sec)); return Math.floor(sec / 60) + ":" + pad(sec % 60); };
+  const signed = (n) => (n > 0 ? "+" + n : n < 0 ? "−" + Math.abs(n) : "0");
+  const tone = (n) => (n > 0 ? "pos" : n < 0 ? "neg" : "zero");
+  const reduce = !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+  const announce = (msg) => { const l = $("#live"); l.textContent = ""; setTimeout(() => { l.textContent = msg; }, 40); };
+
+  const ICON = {
+    shoe: '<path d="M2.5 16.5h19"/><path d="M3 16.5V9.6c1.9 0 3.3-.7 4.1-2.1l3 2.6 2.6-.9 2.4 2.3 5.3 1.6c.7.2 1.1.8 1.1 1.4v2"/>',
+    tag: '<path d="M20.5 12.6l-7.9 7.9-9.1-9.1V3.5h7.9z"/><circle cx="7.7" cy="7.7" r="1.4"/>',
+    play: '<rect x="3" y="5" width="18" height="14" rx="3"/><path d="M10.5 9.2l4.6 2.8-4.6 2.8z"/>',
+    funnel: '<path d="M3.5 5h17l-6.5 7.5v5.6l-4 2v-7.6z"/>',
+    devices: '<rect x="2.5" y="5.5" width="12" height="9" rx="1.5"/><path d="M1.5 17.5h14"/><rect x="17" y="7.5" width="5.5" height="11" rx="1.4"/>',
+    log: '<path d="M9 6.5h11M9 12h11M9 17.5h11"/><circle cx="4.6" cy="6.5" r="1.1"/><circle cx="4.6" cy="12" r="1.1"/><circle cx="4.6" cy="17.5" r="1.1"/>',
+    chat: '<path d="M4 5.5h16v10.5H9.5L5 19.5v-3.5H4z"/>',
+    gauge: '<path d="M3.8 17a8.2 8.2 0 1 1 16.4 0"/><path d="M12 17l4.2-5"/>',
+    truck: '<path d="M2.5 6.5h11v9.5h-11z"/><path d="M13.5 9.5h4l3 3.2v3.3h-7z"/><circle cx="6.5" cy="17.8" r="1.7"/><circle cx="17" cy="17.8" r="1.7"/>',
+    people: '<circle cx="9" cy="8" r="3"/><path d="M3.2 19.5c.4-3.2 2.8-5.2 5.8-5.2s5.4 2 5.8 5.2"/><circle cx="17.2" cy="9" r="2.4"/><path d="M15.8 14.4c2.6.1 4.6 1.9 5 5.1"/>',
+    phone: '<rect x="7" y="2.5" width="10" height="19" rx="2.2"/><path d="M11 18.5h2"/>',
+    laptop: '<rect x="4" y="5" width="16" height="10.5" rx="1.5"/><path d="M2 18.5h20"/>',
+    check: '<path d="M5 12.5l4.2 4.2L19 7"/>'
+  };
+  /* ---------- Sealed answers ---------- */
+  const sha256 = (() => {
+    const K = new Uint32Array([0x428a2f98,0x71374491,0xb5c0fbcf,0xe9b5dba5,0x3956c25b,0x59f111f1,0x923f82a4,0xab1c5ed5,0xd807aa98,0x12835b01,0x243185be,0x550c7dc3,0x72be5d74,0x80deb1fe,0x9bdc06a7,0xc19bf174,0xe49b69c1,0xefbe4786,0x0fc19dc6,0x240ca1cc,0x2de92c6f,0x4a7484aa,0x5cb0a9dc,0x76f988da,0x983e5152,0xa831c66d,0xb00327c8,0xbf597fc7,0xc6e00bf3,0xd5a79147,0x06ca6351,0x14292967,0x27b70a85,0x2e1b2138,0x4d2c6dfc,0x53380d13,0x650a7354,0x766a0abb,0x81c2c92e,0x92722c85,0xa2bfe8a1,0xa81a664b,0xc24b8b70,0xc76c51a3,0xd192e819,0xd6990624,0xf40e3585,0x106aa070,0x19a4c116,0x1e376c08,0x2748774c,0x34b0bcb5,0x391c0cb3,0x4ed8aa4a,0x5b9cca4f,0x682e6ff3,0x748f82ee,0x78a5636f,0x84c87814,0x8cc70208,0x90befffa,0xa4506ceb,0xbef9a3f7,0xc67178f2]);
+    const W = new Int32Array(64);
+    const rotr = (x, n) => (x >>> n) | (x << (32 - n));
+    return (bytes) => {
+      const l = bytes.length, n = ((l + 9 + 63) >> 6) << 6, m = new Uint8Array(n), bits = l * 8;
+      m.set(bytes); m[l] = 0x80;
+      m[n - 4] = (bits >>> 24) & 255; m[n - 3] = (bits >>> 16) & 255; m[n - 2] = (bits >>> 8) & 255; m[n - 1] = bits & 255;
+      let h0 = 0x6a09e667, h1 = 0xbb67ae85 | 0, h2 = 0x3c6ef372, h3 = 0xa54ff53a | 0, h4 = 0x510e527f, h5 = 0x9b05688c | 0, h6 = 0x1f83d9ab, h7 = 0x5be0cd19;
+      for (let o = 0; o < n; o += 64) {
+        for (let i = 0; i < 16; i++) W[i] = (m[o + 4 * i] << 24) | (m[o + 4 * i + 1] << 16) | (m[o + 4 * i + 2] << 8) | m[o + 4 * i + 3];
+        for (let i = 16; i < 64; i++) {
+          const x = W[i - 15], y = W[i - 2];
+          W[i] = (W[i - 16] + (rotr(x, 7) ^ rotr(x, 18) ^ (x >>> 3)) + W[i - 7] + (rotr(y, 17) ^ rotr(y, 19) ^ (y >>> 10))) | 0;
+        }
+        let a = h0, b = h1, c = h2, d = h3, e = h4, f = h5, g = h6, h = h7;
+        for (let i = 0; i < 64; i++) {
+          const t1 = (h + (rotr(e, 6) ^ rotr(e, 11) ^ rotr(e, 25)) + ((e & f) ^ (~e & g)) + K[i] + W[i]) | 0;
+          const t2 = ((rotr(a, 2) ^ rotr(a, 13) ^ rotr(a, 22)) + ((a & b) ^ (a & c) ^ (b & c))) | 0;
+          h = g; g = f; f = e; e = (d + t1) | 0; d = c; c = b; b = a; a = (t1 + t2) | 0;
+        }
+        h0 = (h0 + a) | 0; h1 = (h1 + b) | 0; h2 = (h2 + c) | 0; h3 = (h3 + d) | 0; h4 = (h4 + e) | 0; h5 = (h5 + f) | 0; h6 = (h6 + g) | 0; h7 = (h7 + h) | 0;
+      }
+      const out = new Uint8Array(32);
+      [h0, h1, h2, h3, h4, h5, h6, h7].forEach((v, i) => { out[4 * i] = v >>> 24; out[4 * i + 1] = (v >>> 16) & 255; out[4 * i + 2] = (v >>> 8) & 255; out[4 * i + 3] = v & 255; });
+      return out;
+    };
+  })();
+  const utf8 = new TextEncoder(), unutf8 = new TextDecoder();
+  function keystream(key, data) {
+    const out = new Uint8Array(data.length), buf = new Uint8Array(key.length + 4);
+    buf.set(key);
+    for (let i = 0, blk = 0; i < data.length; blk++) {
+      buf[key.length] = blk >>> 24; buf[key.length + 1] = (blk >>> 16) & 255; buf[key.length + 2] = (blk >>> 8) & 255; buf[key.length + 3] = blk & 255;
+      const ks = sha256(buf);
+      for (let j = 0; j < 32 && i < data.length; j++, i++) out[i] = data[i] ^ ks[j];
+    }
+    return out;
+  }
+  const fromB64 = (s) => { const bin = atob(s); const u = new Uint8Array(bin.length); for (let i = 0; i < bin.length; i++) u[i] = bin.charCodeAt(i); return u; };
+  const normCode = (v) => String(v || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
+  const showCode = (v) => (v.length === 8 ? v.slice(0, 4) + "-" + v.slice(4) : v);
+  function unseal(code) {
+    code = normCode(code);
+    if (!code) return null;
+    try {
+      let k = sha256(utf8.encode("vilkas-case|" + code));
+      for (let i = 0; i < KDF_ROUNDS; i++) k = sha256(k);
+      const txt = unutf8.decode(keystream(k, fromB64(SEALED)));
+      if (txt.slice(0, 14) !== '{"ok":"VILKAS"') return null;
+      return JSON.parse(txt);
+    } catch (e) { return null; }
+  }
+  function unpackClue(id) {
+    try { return unutf8.decode(keystream(sha256(utf8.encode("vilkas-clue|" + id)), fromB64(CLUEPACK[id]))); } catch (e) { return ""; }
+  }
+  let SEC = null;
+
+  const icon = (n) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICON[n]}</svg>`;
+
+  /* ---------- The case ---------- */
+  const BRIEF = `
+    <article class="brief" aria-label="The brief">
+      <div class="theories">
+        <p class="eyebrow">The company</p>
+        <dl class="rows co">
+          <div><dt>Founded</dt><dd>2021 in Vilnius, by Rūta</dd></div>
+          <div><dt>Sells</dt><dd>Streetwear sneakers, from €109</dd></div>
+          <div><dt>Shop</dt><dd>Online only, delivered across the Baltics</dd></div>
+          <div><dt>Buyers</dt><dd>Mostly 18–27-year-olds</dd></div>
+          <div><dt>Marketing</dt><dd>Instagram, plus TikTok creators since September</dd></div>
+          <div><dt>Rivals</dt><dd>Big brands in shopping malls, and KOVA, a new Lithuanian sneaker brand</dd></div>
+        </dl>
+      </div>
+      <div class="brief-from"><span class="avatar" aria-hidden="true">R</span><div><div class="brief-name">Rūta, founder of VILKAS</div><div class="brief-meta">Message to your team · early November</div></div></div>
+      <p class="brief-text">“Last year we grew fast. Since September, our orders are down 38%, and Black Friday is three weeks away. My team has five theories. I need the real problem, and the first fix.”</p>
+      <div class="theories">
+        <p class="eyebrow">What Rūta has noticed</p>
+        <ul class="fact-list">
+          <li>More people visit the website than ever, and they still put sneakers in their carts. Somewhere after that, VILKAS loses them.</li>
+        </ul>
+      </div>
+      <div class="theories">
+        <p class="eyebrow">Her team's five theories</p>
+        <ul class="theory-list">
+          <li><span class="who">Marketing</span><span>“KOVA launched a cheaper sneaker in September. They're stealing our buyers.”</span></li>
+          <li><span class="who">Finance</span><span>“We raised prices by 10% in August. That's it.”</span></li>
+          <li><span class="who">Sales</span><span>“TikTok brings thousands of visitors who never buy.”</span></li>
+          <li><span class="who">Support</span><span>“People say the new website is slow.”</span></li>
+          <li><span class="who">Operations</span><span>“Our new courier is slower. Maybe that's it.”</span></li>
+        </ul>
+      </div>
+    </article>`;
+
+
+  const CLUES = [
+    { id: "c01", n: "01", icon: "shoe", kind: "Rival news", title: "KOVA's new sneaker", inside: "What the rival launched in September, and who buys it." },
+    { id: "c02", n: "02", icon: "tag", kind: "Price check", title: "Prices compared", inside: "VILKAS vs similar sneaker brands, before and after August." },
+    { id: "c03", n: "03", icon: "play", kind: "Campaign report", title: "TikTok campaign results", inside: "What the September campaign brought to the website." },
+    { id: "c04", n: "04", icon: "funnel", kind: "Sales report", title: "Where shoppers stop", inside: "How many people visit, add to cart, reach payment and pay." },
+    { id: "c05", n: "05", icon: "devices", kind: "Sales report", title: "Sales by device", inside: "Paid orders from phones vs laptops, this October vs last." },
+    { id: "c06", n: "06", icon: "log", kind: "Changelog", title: "Website changes since August", inside: "Everything the tech team changed on the website, with dates." },
+    { id: "c07", n: "07", icon: "chat", kind: "Messages", title: "Customer messages", inside: "Three messages the support team got in October." },
+    { id: "c08", n: "08", icon: "gauge", kind: "Tech report", title: "Website speed test", inside: "How fast each page loads on phones." },
+    { id: "c09", n: "09", icon: "truck", kind: "Delivery report", title: "Courier report", inside: "How deliveries changed after the courier switch in September." },
+    { id: "c10", n: "10", icon: "people", kind: "Survey", title: "Who buys VILKAS", inside: "How 1,200 VILKAS customers shop and pay. A July survey." }
+  ];
+  CLUES.forEach((c) => { c.body = () => unpackClue(c.id) || '<p class="cl-note">This clue could not be loaded. Reload the page.</p>'; });
+  const CLUE = Object.fromEntries(CLUES.map((c) => [c.id, c]));
+  const ROLE = { key: ["Key", "chip-key", 0], clear: ["Rules out", "chip-clear", 1], mixed: ["Mixed", "chip-mixed", 2], trap: ["Trap", "chip-trap", 3] };
+
+  const PROBLEMS = [
+    { id: "rival", k: "A", label: "KOVA's cheaper sneaker is taking VILKAS buyers" },
+    { id: "price", k: "B", label: "The 10% price rise pushed buyers away" },
+    { id: "tiktok", k: "C", label: "The TikTok campaign brings visitors who never buy" },
+    { id: "slow", k: "D", label: "The new website is too slow on phones" },
+    { id: "payment", k: "E", label: "Shoppers give up at the payment step" },
+    { id: "wallet", k: "F", label: "Paying by phone got harder" },
+    { id: "courier", k: "G", label: "The new courier is too slow" }
+  ];
+  const FIXES = [
+    { id: "discount", k: "1", label: "Cut all prices by 15% for Black Friday", sub: "Ready now · about €15,000 less profit a month" },
+    { id: "ads", k: "2", label: "Double the TikTok budget", sub: "Ready now · +€6,000 a month" },
+    { id: "video", k: "3", label: "Remove the homepage video so phones load faster", sub: "Ready in 2 days · free" },
+    { id: "codes", k: "4", label: "Email a 10% code to everyone who left at payment", sub: "Ready in 2 days · 10% off every order you win back" },
+    { id: "app", k: "5", label: "Build a VILKAS app with one-tap payment", sub: "Ready in about 6 months · €60,000" },
+    { id: "wallets", k: "6", label: "Add Apple Pay and Google Pay at checkout", sub: "Ready in 1 week · +€1,800 a month" },
+    { id: "courier", k: "7", label: "Go back to the old courier", sub: "Ready in 2 weeks · +€900 a month" }
+  ];
+  const PROB = Object.fromEntries(PROBLEMS.map((p) => [p.id, p]));
+  const FIX = Object.fromEntries(FIXES.map((f) => [f.id, f]));
+  /* Points, verdicts and clue roles arrive only once the reveal code unlocks them. */
+  function applySecrets(sec) {
+    SEC = sec;
+    PROBLEMS.forEach((p) => Object.assign(p, sec.prob[p.id]));
+    FIXES.forEach((f) => Object.assign(f, sec.fix[f.id]));
+    CLUES.forEach((c) => Object.assign(c, sec.clue[c.id]));
+  }
+
+  /* ---------- State ---------- */
+  const SCREENS = ["cover", "solo", "role", "team", "follow", "wait", "result", "feedback", "done"];
+  const fresh = () => ({ v: 2, screen: "cover", name: "", team: "", soloStartAt: 0, soloAnswer: "", soloConf: 0, soloLockedAt: 0, role: "",
+    teamStartAt: 0, opened: [], extra: false, teamProblem: "", teamProblemAt: 0, teamFix: "", teamLockedAt: 0, autoClosed: false, revealed: false,
+    memberScore: "", did: "", code: "", fb: { objective: 0, clarity: 0, improve: "", time: "", teamwork: 0 }, fbSent: false });
+  function clean(s) {
+    if (!s || s.v !== 2) return null;
+    const o = Object.assign(fresh(), s);
+    o.fb = Object.assign(fresh().fb, s.fb || {});
+    o.opened = Array.isArray(s.opened) ? s.opened.filter((id) => CLUE[id]).slice(0, TEAM_PICKS + 1) : [];
+    o.extra = o.opened.length > TEAM_PICKS;
+    if (!SCREENS.includes(o.screen)) o.screen = "cover";
+    if (o.soloAnswer && !PROB[o.soloAnswer]) o.soloAnswer = "";
+    if (o.teamProblem && !PROB[o.teamProblem]) o.teamProblem = "";
+    if (o.teamFix && !FIX[o.teamFix]) o.teamFix = "";
+    if (!["", "screen", "member"].includes(o.role)) o.role = "";
+    return o;
+  }
+  const load = (k) => { try { const r = localStorage.getItem(k); return r ? JSON.parse(r) : null; } catch (e) { return null; } };
+  const save = () => { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} };
+  const newId = () => Math.random().toString(36).slice(2, 9) + Date.now().toString(36).slice(-5);
+  let state = fresh();
+
+  /* ---------- Scoring ---------- */
+  const lockSec = () => (state.teamLockedAt && state.teamStartAt ? Math.round((state.teamLockedAt - state.teamStartAt) / 1000) : 0);
+  const bonusFor = (sec) => { const left = TEAM_SECONDS - sec; return left >= BONUS5_LEFT ? 5 : left >= BONUS3_LEFT ? 3 : 0; };
+  function teamScore() {
+    const p = PROB[state.teamProblem], f = FIX[state.teamFix];
+    const pp = p ? p.pts : 0, fp = f ? f.pts : 0, sec = lockSec();
+    const onTrack = pp > 0;
+    const speed = onTrack && sec <= TEAM_SECONDS ? bonusFor(sec) : 0;
+    const over = sec > TEAM_SECONDS ? OVERTIME : 0;
+    const extra = state.extra ? EXTRA_COST : 0;
+    return { pp, fp, speed, over, extra, sec, onTrack, total: pp + fp + speed + over + extra };
+  }
+  const soloPts = () => (PROB[state.soloAnswer] ? PROB[state.soloAnswer].pts : 0);
+  const timeText = (sec) => { const left = TEAM_SECONDS - sec; return left >= 0 ? fmt(left) + " left" : fmt(-left) + " into overtime"; };
+
+  /* ---------- Shared bits ---------- */
+  function syncOn(group) { $$("label", group).forEach((l) => { const i = l.querySelector("input"); l.classList.toggle("on", !!(i && i.checked)); }); }
+  function optsHTML(list, name, selected, locked) {
+    return list.map((o) => `<label class="opt${o.id === selected ? " on" : ""}"><input type="radio" name="${name}" id="${name}-${o.id}" value="${o.id}"${o.id === selected ? " checked" : ""}${locked ? " disabled" : ""}><span class="opt-k" aria-hidden="true">${o.k}</span><span class="opt-t">${esc(o.label)}${o.sub ? `<span class="opt-sub">${esc(o.sub)}</span>` : ""}</span></label>`).join("");
+  }
+  const showAlert = (el, msg) => { el.textContent = msg; el.hidden = false; };
+  const hideAlert = (el) => { el.hidden = true; el.textContent = ""; };
+  const toTop = () => { try { window.scrollTo({ top: 0, behavior: reduce ? "auto" : "smooth" }); } catch (e) { window.scrollTo(0, 0); } };
+  const pipsHTML = () => {
+    const n = state.opened.length;
+    let h = "";
+    for (let i = 0; i < TEAM_PICKS; i++) h += `<i class="${i < n ? "on" : ""}"></i>`;
+    h += `<i class="extra${state.extra ? " on" : ""}"></i>`;
+    return `<span class="pips" aria-hidden="true">${h}</span>`;
+  };
+
+  /* ---------- Sheet (clue viewer and confirmations) ---------- */
+  const sheet = $("#sheet"), panel = $("#sheet-panel");
+  let sheetReturn = null;
+  function openSheet({ kicker = "", title = "", body = "", actions = [] }) {
+    if (sheet.hidden) sheetReturn = document.activeElement;
+    $("#sheet-kicker").textContent = kicker;
+    $("#sheet-title").textContent = title;
+    $("#sheet-body").innerHTML = body;
+    const box = $("#sheet-actions");
+    box.innerHTML = "";
+    actions.forEach((a) => {
+      const b = document.createElement("button");
+      b.type = "button";
+      b.className = "btn " + (a.cls || "btn-ghost");
+      b.textContent = a.label;
+      b.addEventListener("click", () => { if (!a.keep) closeSheet(); if (a.onClick) a.onClick(); });
+      box.appendChild(b);
+    });
+    sheet.hidden = false;
+    document.body.classList.add("lock");
+    panel.scrollTop = 0;
+    try { $("#sheet-title").focus({ preventScroll: true }); } catch (e) {}
+  }
+  function closeSheet() {
+    if (sheet.hidden) return;
+    sheet.hidden = true;
+    document.body.classList.remove("lock");
+    if (sheetReturn && document.body.contains(sheetReturn)) { try { sheetReturn.focus({ preventScroll: true }); } catch (e) {} }
+    sheetReturn = null;
+  }
+  $("#sheet-x").addEventListener("click", closeSheet);
+  sheet.addEventListener("click", (e) => { if (e.target === sheet) closeSheet(); });
+  document.addEventListener("keydown", (e) => {
+    if (sheet.hidden) return;
+    if (e.key === "Escape") { e.preventDefault(); closeSheet(); return; }
+    if (e.key === "Tab") {
+      const f = $$("button, [href], input, textarea, [tabindex]:not([tabindex='-1'])", panel).filter((el) => !el.disabled && el.offsetParent !== null);
+      if (!f.length) return;
+      const first = f[0], last = f[f.length - 1];
+      if (e.shiftKey && (document.activeElement === first || document.activeElement === $("#sheet-title"))) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    }
+  });
+  function confirmSheet(kicker, title, bodyHTML, okLabel, onOk, okCls) {
+    openSheet({ kicker, title, body: bodyHTML, actions: [{ label: "Not yet" }, { label: okLabel, cls: okCls || "btn-primary", onClick: onOk }] });
+  }
+
+  /* ---------- Clues (team screen) ---------- */
+  const clueBody = (c) => `<p class="sheet-sub">${esc(c.inside)}</p><div class="cl">${c.body()}</div>`;
+  function showClue(id) {
+    const c = CLUE[id];
+    if (!c) return;
+    const kicker = `Clue ${c.n} · ${c.kind}`;
+    if (state.opened.includes(id)) { openSheet({ kicker, title: c.title, body: clueBody(c), actions: [{ label: "Close", cls: "btn-dark" }] }); return; }
+    if (state.teamLockedAt) { openSheet({ kicker, title: c.title, body: `<p class="sheet-sub">${esc(c.inside)}</p><p class="alert" data-tone="info">The case is locked, so this clue stays sealed.</p>`, actions: [{ label: "Close", cls: "btn-dark" }] }); return; }
+    const n = state.opened.length;
+    if (n < TEAM_PICKS) {
+      openSheet({ kicker, title: c.title,
+        body: `<p class="sheet-sub">${esc(c.inside)}</p><div class="pickline">${pipsHTML()}<span>This uses clue ${n + 1} of 5. Open it only if your team agrees.</span></div>`,
+        actions: [{ label: "Not now" }, { label: `Open clue ${c.n}`, cls: "btn-primary", keep: true, onClick: () => openClue(id) }] });
+    } else if (!state.extra) {
+      openSheet({ kicker, title: c.title,
+        body: `<p class="sheet-sub">${esc(c.inside)}</p><div class="pickline extra">${pipsHTML()}<span>You've used your 5 clues. A 6th costs your team 2 points.</span></div>`,
+        actions: [{ label: "Not now" }, { label: "Open it for −2 points", cls: "btn-warn", keep: true, onClick: () => openClue(id) }] });
+    } else {
+      openSheet({ kicker, title: c.title, body: `<p class="sheet-sub">${esc(c.inside)}</p><p class="alert" data-tone="info">No clues left. Your team has opened 6.</p>`, actions: [{ label: "Close", cls: "btn-dark" }] });
+    }
+  }
+  function openClue(id) {
+    if (state.opened.includes(id) || state.teamLockedAt) return;
+    if (state.opened.length >= TEAM_PICKS + 1) return;
+    state.opened.push(id);
+    if (state.opened.length > TEAM_PICKS) state.extra = true;
+    save();
+    renderBoard();
+    showClue(id);
+    const left = TEAM_PICKS - state.opened.length;
+    announce(`Clue ${CLUE[id].n} opened.` + (left > 0 ? ` ${left} left.` : ""));
+  }
+  function renderBoard() {
+    const n = state.opened.length, canPick = n < TEAM_PICKS, canExtra = !canPick && !state.extra;
+    $("#board").innerHTML = CLUES.map((c) => {
+      const open = state.opened.includes(c.id);
+      let cls = "clue", status;
+      if (open) { cls += " is-open"; status = `${icon("check")}Opened`; }
+      else if (state.teamLockedAt) { cls += " is-spent"; status = "Sealed"; }
+      else if (canPick) status = "Tap to open";
+      else if (canExtra) { cls += " is-extra"; status = "6th costs −2"; }
+      else { cls += " is-spent"; status = "Sealed"; }
+      return `<button type="button" class="${cls}" data-id="${c.id}" id="clue-${c.id}" aria-label="Clue ${c.n}, ${esc(c.title)}: ${open ? "opened" : "sealed"}"><span class="clue-top"><span class="clue-n">${c.n}</span><span class="clue-ic">${icon(c.icon)}</span></span><span class="clue-kind">${esc(c.kind)}</span><span class="clue-t">${esc(c.title)}</span><span class="clue-d">${esc(c.inside)}</span><span class="clue-s">${status}</span></button>`;
+    }).join("");
+    const left = TEAM_PICKS - n;
+    $("#picks").innerHTML = pipsHTML() + `<span>${left > 1 ? left + " clues left" : left === 1 ? "1 clue left" : state.extra ? "6th clue used · −2" : "5 used · a 6th costs −2"}</span>`;
+  }
+
+  /* ---------- Render: screens ---------- */
+  function renderCover() {
+    $("#cover-fine").textContent = canCollect()
+      ? "Your 4 minutes start when you press the button. Your name, team and answers go to the class results sheet. Feedback stays anonymous."
+      : "Your 4 minutes start when you press the button. Your answers stay on this device.";
+    $("#f-name").value = state.name;
+    $("#f-team").value = state.team;
+  }
+  function renderSolo() {
+    $("#brief-slot").innerHTML = BRIEF;
+    $("#solo-opts").innerHTML = optsHTML(PROBLEMS, "solo", state.soloAnswer, false);
+    $$("#conf input").forEach((i) => { i.checked = Number(i.value) === state.soloConf; });
+    syncOn($("#conf"));
+    hideAlert($("#solo-alert"));
+  }
+  function renderTeam() {
+    const live = !!state.teamStartAt;
+    $("#team-pre").hidden = live;
+    $("#team-live").hidden = !live;
+    if (!live) return;
+    $("#brief-copy").innerHTML = BRIEF;
+    renderBoard();
+    const pLocked = !!state.teamProblemAt;
+    const po = $("#team-p-opts");
+    po.innerHTML = optsHTML(PROBLEMS, "tp", state.teamProblem, pLocked);
+    po.classList.toggle("is-locked", pLocked);
+    $("#lock-problem").hidden = pLocked;
+    $("#p-locked").hidden = !pLocked;
+    $("#fix-sealed").hidden = pLocked;
+    $("#fix-live").hidden = !pLocked;
+    if (pLocked) $("#team-f-opts").innerHTML = optsHTML(FIXES, "tf", state.teamFix, false);
+    hideAlert($("#tp-alert"));
+    hideAlert($("#tf-alert"));
+  }
+  function renderFollow() {
+    $("#brief-copy-m").innerHTML = BRIEF;
+    $("#f-code-m").value = "";
+    hideAlert($("#code-alert-m"));
+  }
+  function renderWait() {
+    const sec = lockSec(), left = TEAM_SECONDS - sec;
+    $("#wait-line").textContent = state.autoClosed
+      ? "The case closed at 13:00, so this screen locked what your team had."
+      : left >= 0 ? `Your team locked with ${fmt(left)} left.` : `Your team locked ${fmt(-left)} into overtime.`;
+    const p = PROB[state.teamProblem], f = FIX[state.teamFix];
+    const rows = [
+      ["The problem", p ? `${p.k} · ${p.label}` : "Not chosen in time"],
+      ["The fix", f ? `${f.k} · ${f.label}` : "Not chosen in time"],
+      ["Clues opened", state.opened.length ? state.opened.map((id) => CLUE[id].n).join(", ") + (state.extra ? " (6th clue: −2)" : "") : "None"]
+    ];
+    $("#wait-summary").innerHTML = rows.map((r) => `<div><dt>${esc(r[0])}</dt><dd>${esc(r[1])}</dd></div>`).join("");
+    $("#f-code").value = "";
+    hideAlert($("#code-alert"));
+  }
+  let animateScores = false;
+  function countUp(el, to) {
+    if (reduce || !animateScores) { el.textContent = String(to); return; }
+    const t0 = performance.now(), d = 850;
+    const step = (t) => { const k = Math.min(1, (t - t0) / d), e = 1 - Math.pow(1 - k, 3); el.textContent = String(Math.round(to * e)); if (k < 1) requestAnimationFrame(step); };
+    el.textContent = "0";
+    requestAnimationFrame(step);
+  }
+  function renderResult() {
+    const isScreen = state.role === "screen";
+    $("#res-team").hidden = !isScreen;
+    $("#res-member").hidden = isScreen;
+    const solo = soloPts(), sp = PROB[state.soloAnswer];
+    const soloLine = sp ? `${sp.k} · ${sp.label} · sure ${state.soloConf}/5` : "No gut call locked";
+    if (isScreen) {
+      const s = teamScore(), p = PROB[state.teamProblem], f = FIX[state.teamFix];
+      countUp($("#r-team"), s.total);
+      countUp($("#r-solo"), solo);
+      $("#r-team-n").textContent = `${state.team.trim() || "Your team"} · ${Math.round(Math.max(0, s.total) / MAX * 100)}%`;
+      $("#r-solo-n").textContent = soloLine;
+      $("#r-beat").textContent = s.pp > solo ? "Yes" : s.pp === solo ? "Tied" : "No";
+      $("#r-beat-n").textContent = `Problem points: team ${s.pp}, your gut call ${solo}`;
+      const v = $("#verdict");
+      v.textContent = p ? p.verdict : "Your team didn't lock a problem in time.";
+      v.setAttribute("data-tone", p ? p.tone : "bad");
+      const rows = [
+        ["The problem", p ? `${p.k} · ${p.label}` : "Not chosen in time", s.pp],
+        ["The fix", f ? `${f.k} · ${f.label}. ${f.note}` : "Not chosen in time", s.fp],
+        ["Finish early", `Locked with ${timeText(s.sec)}${s.onTrack ? "" : ". Only counts when the problem is on track"}`, s.speed],
+        ["6th clue", state.extra ? "Your team opened a 6th clue" : "Not used", s.extra],
+        ["Overtime", s.over ? "Locked after 11:00" : "None", s.over]
+      ];
+      $("#breakdown").innerHTML = `<tbody>${rows.map((r) => `<tr><td>${esc(r[0])}<span class="sub">${esc(r[1])}</span></td><td class="${tone(r[2])}">${signed(r[2])}</td></tr>`).join("")}<tr class="total"><td>Team score</td><td>${s.total} / ${MAX}</td></tr></tbody>`;
+    } else {
+      countUp($("#m-solo"), solo);
+      $("#m-solo-n").textContent = soloLine;
+      const v = $("#m-verdict");
+      v.textContent = sp ? sp.verdict : "You didn't lock a gut call.";
+      v.setAttribute("data-tone", sp ? sp.tone : "bad");
+    }
+    animateScores = false;
+    $("#truth").innerHTML = SEC.html.truth;
+    $("#method").innerHTML = SEC.html.method;
+    $("#m-real").innerHTML = SEC.html.memberReal;
+    const sorted = CLUES.slice().sort((a, b) => ROLE[a.role][2] - ROLE[b.role][2] || CLUES.indexOf(a) - CLUES.indexOf(b));
+    $("#exl").innerHTML = sorted.map((c) => `<li><div class="exl-top"><span class="exl-n">${c.n}</span><span class="exl-t">${esc(c.title)}</span><span class="exl-tags">${isScreen && state.opened.includes(c.id) ? '<span class="chip chip-you">Your team opened it</span>' : ""}<span class="chip ${ROLE[c.role][1]}">${ROLE[c.role][0]}</span></span></div><p class="exl-m">${esc(c.meaning)}</p></li>`).join("");
+    $("#copy-fallback").hidden = true;
+    $("#copy-msg").textContent = "";
+    $("#m-score-field").hidden = isScreen;
+    $("#m-team-score").value = state.memberScore || "";
+    $("#dl-msg").textContent = "";
+    makeCard();
+  }
+
+  /* ---------- Result card: PNG and PDF ---------- */
+  let dlPromise = null;  // the platform's downloads capability, inside the Claude viewer
+  const getDl = () => {
+    if (!dlPromise) dlPromise = window.claude && typeof window.claude.use === "function" ? window.claude.use("downloads").then((ns) => ns || null, () => null) : Promise.resolve(null);
+    return dlPromise;
+  };
+  const inFrame = (() => { try { return window.self !== window.top; } catch (e) { return true; } })();
+  let cardPng = null, cardPdf = null, cardUrl = "", cardJob = 0, cardTimer = 0;
+  const CARD = { bg: "#F2F3F7", surface: "#FFFFFF", line: "#DFE2EA", ink: "#0A0E1C", muted: "#596175", hero: "#0B0F20", heroInk: "#F3F4FA", heroMuted: "#A3AAC6", heroAccent: "#8F98FF", good: "#0A855A", bad: "#CC3328" };
+  const CF = { display: '"Archivo", "Arial Black", Arial, sans-serif', body: '"Figtree", "Helvetica Neue", Arial, sans-serif', mono: '"DM Mono", Menlo, Consolas, monospace' };
+  const HOLD_TO_SAVE = "Downloads are blocked in this app. Tap the card, then press and hold it (or right-click it) to save the image.";
+  const slug = (s) => String(s).toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "") || "result";
+  function fontsReady() {
+    if (!document.fonts || !document.fonts.load) return Promise.resolve();
+    const specs = ['850 76px "Archivo"', '800 58px "Figtree"', '700 30px "Figtree"', '500 24px "Figtree"', '400 22px "DM Mono"'];
+    return Promise.race([Promise.all(specs.map((s) => document.fonts.load(s).catch(() => null))), new Promise((r) => setTimeout(r, 1500))]);
+  }
+  function rr(ctx, x, y, w, h, r) { ctx.beginPath(); ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r); ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath(); }
+  function wrapLines(ctx, text, maxW) {
+    const out = [];
+    let line = "";
+    String(text).split(/\s+/).forEach((w) => { const t = line ? line + " " + w : w; if (line && ctx.measureText(t).width > maxW) { out.push(line); line = w; } else line = t; });
+    if (line) out.push(line);
+    return out;
+  }
+  function drawCard() {
+    const W = 1200, M = 40, cv = document.createElement("canvas");
+    cv.width = W; cv.height = 2600;
+    const ctx = cv.getContext("2d");
+    const f = (w, s, fam) => `${w} ${s}px ${fam}`;
+    const fit = (text, w, s, fam, maxW, min) => { ctx.font = f(w, s, fam); while (ctx.measureText(text).width > maxW && s > min) { s -= 2; ctx.font = f(w, s, fam); } };
+    const isScreen = state.role === "screen", s = teamScore(), sp = PROB[state.soloAnswer];
+    const name = state.name.trim() || "Player", team = state.team.trim() || "Team";
+    const date = new Date().toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
+    let teamNum = "—", teamTail = "not added";
+    if (isScreen) { teamNum = String(s.total); teamTail = `/ ${MAX} · ${Math.round(Math.max(0, s.total) / MAX * 100)}%`; }
+    else { const v = parseInt(String(state.memberScore || "").replace("−", "-"), 10); if (!isNaN(v)) { teamNum = String(v); teamTail = `/ ${MAX} · ${Math.round(Math.max(0, v) / MAX * 100)}%`; } }
+    ctx.textBaseline = "alphabetic";
+    ctx.fillStyle = CARD.bg; ctx.fillRect(0, 0, W, cv.height);
+    // Header block
+    const hx = M, hy = M, hw = W - 2 * M, hh = 540, L = hx + 52, IW = hw - 104, half = L + IW / 2;
+    ctx.save(); rr(ctx, hx, hy, hw, hh, 36); ctx.clip();
+    ctx.fillStyle = CARD.hero; ctx.fillRect(hx, hy, hw, hh);
+    const g = ctx.createRadialGradient(hx + hw, hy, 0, hx + hw, hy, 860);
+    g.addColorStop(0, "rgba(54,64,240,0.55)"); g.addColorStop(1, "rgba(54,64,240,0)");
+    ctx.fillStyle = g; ctx.fillRect(hx, hy, hw, hh);
+    ctx.restore();
+    ctx.fillStyle = CARD.heroMuted; ctx.font = f(400, 22, CF.mono); ctx.fillText("TEAM BUILDING AND LEADERSHIP · SESSION 9 · RESULT CARD", L, hy + 72);
+    ctx.fillStyle = CARD.heroInk; fit("THE VILKAS CASE", 850, 76, CF.display, IW, 40); ctx.fillText("THE VILKAS CASE", L, hy + 160);
+    fit(name, 800, 58, CF.body, IW, 28); ctx.fillText(name, L, hy + 248);
+    ctx.fillStyle = CARD.heroMuted; fit(`${team} · ${date}`, 500, 30, CF.body, IW, 18); ctx.fillText(`${team} · ${date}`, L, hy + 296);
+    ctx.fillStyle = "rgba(243,244,250,0.16)"; ctx.fillRect(L, hy + 334, IW, 2);
+    ctx.fillStyle = CARD.heroMuted; ctx.font = f(400, 22, CF.mono); ctx.fillText("YOUR GUT CALL", L, hy + 386); ctx.fillText("TEAM SCORE", half, hy + 386);
+    const big = (num, x, color, tail) => { ctx.fillStyle = color; ctx.font = f(850, 96, CF.display); ctx.fillText(num, x, hy + 488); const w = ctx.measureText(num).width; ctx.fillStyle = CARD.heroMuted; ctx.font = f(700, 30, CF.body); ctx.fillText(tail, x + w + 14, hy + 488); };
+    big(String(soloPts()), L, CARD.heroInk, "/ 10");
+    big(teamNum, half, CARD.heroAccent, teamTail);
+    // Sections: measured first, then drawn
+    const CX = M + 44, CW = W - 2 * M - 88;
+    const opH = (o) => {
+      if (o.k === "label") return 34;
+      if (o.k === "para") { ctx.font = f(o.w, o.s, CF.body); return wrapLines(ctx, o.t, CW).length * Math.round(o.s * 1.3) + (o.gap == null ? 12 : o.gap); }
+      if (o.k === "row") { ctx.font = f(500, 24, CF.body); return 40 + wrapLines(ctx, o.d, CW - 140).length * 32 + 18; }
+      return 72;
+    };
+    const drawOps = (ops, y0) => {
+      let yy = y0;
+      ops.forEach((o) => {
+        if (o.k === "label") { ctx.fillStyle = CARD.muted; ctx.font = f(400, 22, CF.mono); ctx.fillText(o.t, CX, yy + 22); }
+        else if (o.k === "para") { ctx.fillStyle = o.c || CARD.ink; ctx.font = f(o.w, o.s, CF.body); const lh = Math.round(o.s * 1.3); wrapLines(ctx, o.t, CW).forEach((ln, i) => ctx.fillText(ln, CX, yy + o.s + i * lh)); }
+        else if (o.k === "row") {
+          ctx.fillStyle = CARD.line; ctx.fillRect(CX, yy, CW, 2);
+          ctx.fillStyle = CARD.ink; ctx.font = f(700, 28, CF.body); ctx.fillText(o.t, CX, yy + 40);
+          ctx.fillStyle = o.p > 0 ? CARD.good : o.p < 0 ? CARD.bad : CARD.muted; ctx.font = f(500, 30, CF.mono); ctx.textAlign = "right"; ctx.fillText(signed(o.p), CX + CW, yy + 40); ctx.textAlign = "left";
+          ctx.fillStyle = CARD.muted; ctx.font = f(500, 24, CF.body); wrapLines(ctx, o.d, CW - 140).forEach((ln, i) => ctx.fillText(ln, CX, yy + 72 + i * 32));
+        } else {
+          ctx.fillStyle = CARD.ink; ctx.fillRect(CX, yy, CW, 3);
+          ctx.font = f(800, 32, CF.body); ctx.fillText(o.t, CX, yy + 52);
+          ctx.font = f(850, 40, CF.display); ctx.textAlign = "right"; ctx.fillText(o.v, CX + CW, yy + 54); ctx.textAlign = "left";
+        }
+        yy += opH(o);
+      });
+    };
+    let y = hy + hh + 28;
+    const section = (ops) => {
+      const pad = 40, h = ops.reduce((a, o) => a + opH(o), 0) + pad * 2;
+      ctx.fillStyle = CARD.surface; rr(ctx, M, y, W - 2 * M, h, 28); ctx.fill();
+      ctx.strokeStyle = CARD.line; ctx.lineWidth = 2; rr(ctx, M, y, W - 2 * M, h, 28); ctx.stroke();
+      drawOps(ops, y + pad);
+      y += h + 24;
+    };
+    section([
+      { k: "label", t: "YOUR GUT CALL · ALONE" },
+      { k: "para", t: sp ? `${sp.k} · ${sp.label}` : "No gut call locked", w: 800, s: 36, gap: 8 },
+      { k: "para", t: `Sure ${state.soloConf}/5 · ${soloPts()} of 10 points`, w: 500, s: 26, c: CARD.muted, gap: 0 }
+    ]);
+    if (isScreen) {
+      const p = PROB[state.teamProblem], fx = FIX[state.teamFix];
+      section([
+        { k: "label", t: "TEAM RESULT" },
+        { k: "row", t: "The problem", d: p ? `${p.k} · ${p.label}` : "Not chosen in time", p: s.pp },
+        { k: "row", t: "The fix", d: fx ? `${fx.k} · ${fx.label}` : "Not chosen in time", p: s.fp },
+        { k: "row", t: "Finish early", d: `Locked with ${timeText(s.sec)}`, p: s.speed },
+        { k: "row", t: "6th clue", d: state.extra ? "Opened a 6th clue" : "Not used", p: s.extra },
+        { k: "row", t: "Overtime", d: s.over ? "Locked late" : "None", p: s.over },
+        { k: "total", t: "Team score", v: `${s.total} / ${MAX}` }
+      ]);
+    } else {
+      section([
+        { k: "label", t: "TEAM RESULT" },
+        { k: "para", t: teamNum === "—" ? "Your team's score is on your team screen." : `${teamNum} / ${MAX}, from our team screen`, w: 800, s: 34, gap: 0 }
+      ]);
+    }
+    section([
+      { k: "label", t: "THE ANSWER" },
+      { k: "para", t: SEC.answer[0], w: 700, s: 30, gap: 6 },
+      { k: "para", t: SEC.answer[1], w: 700, s: 30, gap: 0 }
+    ]);
+    ctx.fillStyle = CARD.muted; ctx.font = f(500, 22, CF.body); ctx.fillText("Made by Seven Kings · VILKAS and KOVA are invented brands", M + 4, y + 16);
+    const out = document.createElement("canvas");
+    out.width = W; out.height = Math.ceil(y + 52);
+    out.getContext("2d").drawImage(cv, 0, 0);
+    return out;
+  }
+  /* A one-page A4 PDF holding the card as a JPEG image. */
+  function buildPdf(jpg, imgW, imgH) {
+    const enc = new TextEncoder(), parts = [], offsets = [];
+    let len = 0;
+    const push = (d) => { const b = typeof d === "string" ? enc.encode(d) : d; parts.push(b); len += b.length; };
+    const PW = 595.28, PH = 841.89, PM = 28;
+    const sc = Math.min((PW - 2 * PM) / imgW, (PH - 2 * PM) / imgH), w = imgW * sc, h = imgH * sc, x = (PW - w) / 2, y = PH - PM - h;
+    const content = `q ${w.toFixed(2)} 0 0 ${h.toFixed(2)} ${x.toFixed(2)} ${y.toFixed(2)} cm /Im0 Do Q`;
+    const obj = (n, body) => { offsets[n] = len; push(`${n} 0 obj\n${body}\nendobj\n`); };
+    push("%PDF-1.4\n%âãÏÓ\n");
+    obj(1, "<< /Type /Catalog /Pages 2 0 R >>");
+    obj(2, "<< /Type /Pages /Kids [3 0 R] /Count 1 >>");
+    obj(3, `<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${PW} ${PH}] /Resources << /XObject << /Im0 4 0 R >> >> /Contents 5 0 R >>`);
+    offsets[4] = len;
+    push(`4 0 obj\n<< /Type /XObject /Subtype /Image /Width ${imgW} /Height ${imgH} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${jpg.length} >>\nstream\n`);
+    push(jpg);
+    push("\nendstream\nendobj\n");
+    obj(5, `<< /Length ${content.length} >>\nstream\n${content}\nendstream`);
+    obj(6, "<< /Title (The Vilkas Case - result card) /Producer (Seven Kings) >>");
+    const xref = len;
+    let t = "xref\n0 7\n0000000000 65535 f \n";
+    for (let i = 1; i <= 6; i++) t += String(offsets[i]).padStart(10, "0") + " 00000 n \n";
+    push(t);
+    push(`trailer\n<< /Size 7 /Root 1 0 R /Info 6 0 R >>\nstartxref\n${xref}\n%%EOF\n`);
+    const out = new Uint8Array(len);
+    let o = 0;
+    parts.forEach((p) => { out.set(p, o); o += p.length; });
+    return out;
+  }
+  async function makeCard() {
+    const job = ++cardJob;
+    $("#dl-png").disabled = true; $("#dl-pdf").disabled = true;
+    $("#dl-msg").textContent = "Preparing your card…";
+    try {
+      await fontsReady();
+      if (job !== cardJob) return;
+      const cv = drawCard();
+      const png = await new Promise((r) => cv.toBlob(r, "image/png"));
+      const jpg = await new Promise((r) => cv.toBlob(r, "image/jpeg", 0.92));
+      if (job !== cardJob) return;
+      if (!png || !jpg) throw new Error("no image");
+      cardPdf = buildPdf(new Uint8Array(await jpg.arrayBuffer()), cv.width, cv.height);
+      cardPng = png;
+      if (cardUrl) URL.revokeObjectURL(cardUrl);
+      cardUrl = URL.createObjectURL(png);
+      const img = $("#card-preview");
+      img.src = cardUrl;
+      img.hidden = false;
+      $("#dl-msg").textContent = "";
+    } catch (e) {
+      cardPng = null; cardPdf = null;
+      $("#dl-msg").textContent = "Your card couldn't be made in this browser. Use Copy my result as text instead.";
+    }
+    if (job === cardJob) { $("#dl-png").disabled = false; $("#dl-pdf").disabled = false; }
+  }
+  async function saveCard(kind) {
+    const msg = $("#dl-msg");
+    if (!cardPng || !cardPdf) { msg.textContent = "Your card is still being prepared. Try again in a second."; return; }
+    const base = "vilkas-case-" + slug(state.name || "result");
+    const file = kind === "pdf" ? { filename: base + ".pdf", data: new Blob([cardPdf], { type: "application/pdf" }) } : { filename: base + ".png", data: cardPng };
+    if (window.claude) {
+      const api = await getDl();
+      if (!api) { msg.textContent = HOLD_TO_SAVE; return; }
+      try { await api.save(file); msg.textContent = "Saved. Check your downloads."; }
+      catch (e) {
+        const c = e && e.code;
+        msg.textContent = c === "declined" ? "Download cancelled."
+          : c === "rate_limited" ? "A download is already waiting for your answer."
+          : (c === "extension_not_enabled" || c === "rejected_extension") && kind === "pdf" ? "PDF isn't available here. Download the PNG instead."
+          : HOLD_TO_SAVE;
+      }
+      return;
+    }
+    const url = URL.createObjectURL(file.data), a = document.createElement("a");
+    a.href = url; a.download = file.filename; a.rel = "noopener"; a.style.display = "none";
+    document.body.appendChild(a); a.click();
+    setTimeout(() => { a.remove(); URL.revokeObjectURL(url); }, 15000);
+    msg.textContent = inFrame
+      ? "If nothing downloaded, this preview blocks downloads. Tap the card, then press and hold it (or right-click it) to save the image."
+      : "Downloading. If nothing appears, tap the card, then press and hold it (or right-click it) to save the image.";
+  }
+
+  /* ---------- Collecting results and feedback in a Google Sheet ---------- */
+  /* The Google Sheet link comes from a small file next to this page, sheet-link.txt, so the
+     sheet can be set up or changed without touching this file. */
+  let collectUrl = COLLECT_URL, sheetState = COLLECT_URL ? "found" : "checking";
+  const onWeb = () => !window.claude && /^https?:$/.test(location.protocol);
+  const canCollect = () => !!collectUrl && onWeb();
+  const SHEET_RE = /^https:\/\/script\.google(usercontent)?\.com\/\S+$/;
+  function loadSheetLink() {
+    if (collectUrl || !onWeb()) { sheetState = collectUrl ? "found" : "off"; return Promise.resolve(); }
+    return fetch("sheet-link.txt", { cache: "no-store" })
+      .then((r) => (r.ok ? r.text() : ""))
+      .then((t) => { const v = String(t || "").trim().split(/\s+/)[0] || ""; if (SHEET_RE.test(v)) { collectUrl = v; sheetState = "found"; } else sheetState = v ? "bad" : "none"; },
+            () => { sheetState = "none"; })
+      .then(() => { if (route() === "host") renderSheetStatus(); else if (state.screen === "cover") renderCover(); });
+  }
+  function sendToSheet(payload) {
+    if (!canCollect()) return Promise.resolve(false);
+    try {
+      return fetch(collectUrl, { method: "POST", mode: "no-cors", keepalive: true, headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify(payload) }).then(() => true, () => false);
+    } catch (e) { return Promise.resolve(false); }
+  }
+  /* Each device keeps one row in the Results tab. Every send carries the full current answers,
+     so a later send simply updates that row (and doubles as a retry). */
+  function sendRow(status) {
+    if (!canCollect()) return;
+    const screen = state.role === "screen", sp = PROB[state.soloAnswer], p = PROB[state.teamProblem], fx = FIX[state.teamFix];
+    const scored = !!SEC, s = scored && screen ? teamScore() : null;
+    const typed = parseInt(String(state.memberScore || "").replace("−", "-"), 10);
+    sendToSheet({
+      kind: "result", id: state.did, status, name: state.name.trim(), team: state.team.trim(),
+      role: screen ? "Team screen" : state.role === "member" ? "Follower" : "",
+      gut: sp ? `${sp.k} · ${sp.label}` : "", sure: state.soloConf || "", gutPoints: scored && sp ? soloPts() : "",
+      problem: screen && p ? `${p.k} · ${p.label}` : "", problemPoints: s ? s.pp : "",
+      fix: screen && fx ? `${fx.k} · ${fx.label}` : "", fixPoints: s ? s.fp : "",
+      early: s ? s.speed : "", sixthClue: screen && state.teamLockedAt ? (state.extra ? EXTRA_COST : 0) : "", overtime: s ? s.over : "",
+      teamScore: s ? s.total : !screen && !isNaN(typed) ? typed : "",
+      clues: screen ? state.opened.map((id) => CLUE[id].n).join(" ") : "",
+      lockedWith: screen && state.teamLockedAt ? timeText(lockSec()) : ""
+    });
+  }
+  let rowTimer = 0;
+  const sendRowSoon = (status, ms) => { clearTimeout(rowTimer); rowTimer = setTimeout(() => sendRow(status), ms); };
+
+  /* ---------- Feedback ---------- */
+  const fbValid = () => state.fb.objective > 0 && state.fb.clarity > 0 && state.fb.improve.trim().length >= 2;
+  function renderFeedback() {
+    [["objective", "#fb-objective"], ["clarity", "#fb-clarity"], ["teamwork", "#fb-teamwork"]].forEach(([k, sel]) => {
+      $$(sel + " input").forEach((i) => { i.checked = Number(i.value) === state.fb[k]; });
+      syncOn($(sel));
+    });
+    $$("#fb-time input").forEach((i) => { i.checked = i.value === state.fb.time; });
+    syncOn($("#fb-time"));
+    $("#fb-improve").value = state.fb.improve;
+    hideAlert($("#fb-alert"));
+    $("#fb-send-btn").disabled = false;
+  }
+  function renderDone() {
+    $("#done-line").textContent = canCollect()
+      ? "Your feedback was sent. Case closed."
+      : collectUrl ? "Case closed. Feedback is collected on the class website only." : "Case closed. This version doesn't collect feedback yet.";
+  }
+
+  /* ---------- Top bar + timers ---------- */
+  const PHASE_NAME = { cover: "Case file", solo: "Part 1 of 3 · Gut call", role: "Part 2 of 3 · Team", team: "Part 2 of 3 · Team screen", follow: "Part 2 of 3 · Team", wait: "Part 3 of 3 · Reveal", result: "Part 3 of 3 · Reveal", feedback: "Feedback", done: "Case closed" };
+  function setTimer(left, toneName) {
+    const t = $("#timer");
+    t.hidden = false;
+    t.setAttribute("data-tone", toneName || "");
+    if (left >= 0) { $("#timer-v").textContent = fmt(left); $("#timer-n").textContent = "left"; }
+    else { $("#timer-v").textContent = "+" + fmt(-left); $("#timer-n").textContent = "over"; }
+  }
+  let lastTeamAlert = "";
+  function setTeamAlert(left) {
+    let msg = "";
+    if (left <= 0) msg = "Overtime: −2 points. The case closes by itself at 13:00.";
+    else if (left < BONUS3_LEFT) msg = "Under 3 minutes left. The bonus is gone: lock the problem and the fix before 0:00.";
+    else if (left < BONUS5_LEFT) msg = "Under 5 minutes left. Lock both now and you still get +3.";
+    if (msg === lastTeamAlert) return;
+    lastTeamAlert = msg;
+    const a = $("#team-alert");
+    a.textContent = msg;
+    a.hidden = !msg;
+  }
+  function autoClose() {
+    const end = state.teamStartAt + TEAM_CLOSE * 1000;
+    if (!state.teamProblemAt) state.teamProblemAt = end;
+    state.teamLockedAt = end;
+    state.autoClosed = true;
+    state.screen = "wait";
+    save();
+    closeSheet();
+    show();
+    sendRow("Team answers locked");
+    announce("The case closed. Your team's answers are locked.");
+  }
+  function tick() {
+    if (route() === "host") { renderHostClock(); return; }
+    const now = Date.now();
+    if (state.screen === "solo" && state.soloStartAt && !state.soloLockedAt) {
+      const left = SOLO_SECONDS - (now - state.soloStartAt) / 1000;
+      setTimer(left, left <= 0 ? "bad" : left <= 30 ? "warn" : "");
+      $("#solo-late").hidden = left > 0;
+    } else if (state.screen === "team" && state.teamStartAt && !state.teamLockedAt) {
+      const el = (now - state.teamStartAt) / 1000;
+      if (el >= TEAM_CLOSE) { autoClose(); return; }
+      const left = TEAM_SECONDS - el;
+      setTimer(left, left <= 0 ? "bad" : left < BONUS3_LEFT ? "warn" : "");
+      setTeamAlert(left);
+    } else {
+      $("#timer").hidden = true;
+    }
+  }
+
+  /* ---------- Routing ---------- */
+  const route = () => (location.hash === "#host" ? "host" : "play");
+  function show() {
+    const r = route();
+    $("#play").hidden = r !== "play";
+    $("#host").hidden = r !== "host";
+    if (r === "host") { renderHost(); return; }
+    if (["result", "feedback", "done"].includes(state.screen) && !SEC) {
+      const sec = unseal(state.code);
+      if (sec) applySecrets(sec);
+      else { state.revealed = false; state.screen = state.role === "member" ? "follow" : state.teamLockedAt ? "wait" : "role"; save(); }
+    }
+    $("#phase-chip").textContent = PHASE_NAME[state.screen] || "";
+    SCREENS.forEach((s) => { $("#s-" + s).hidden = state.screen !== s; });
+    if (state.screen === "cover") renderCover();
+    if (state.screen === "solo") renderSolo();
+    if (state.screen === "team") { lastTeamAlert = "__"; renderTeam(); }
+    if (state.screen === "follow") renderFollow();
+    if (state.screen === "wait") renderWait();
+    if (state.screen === "result") renderResult();
+    if (state.screen === "feedback") renderFeedback();
+    if (state.screen === "done") renderDone();
+    tick();
+  }
+  function go(screen) { state.screen = screen; save(); closeSheet(); show(); toTop(); }
+
+  /* ---------- Events: cover + gut call ---------- */
+  $("#f-name").addEventListener("input", (e) => { state.name = e.target.value; save(); });
+  $("#f-team").addEventListener("input", (e) => { state.team = e.target.value; save(); });
+  $("#open-case").addEventListener("click", () => {
+    const miss = [];
+    if (!state.name.trim()) miss.push("your name");
+    if (!state.team.trim()) miss.push("your team");
+    if (miss.length) { showAlert($("#cover-alert"), "Add " + miss.join(" and ") + " first."); return; }
+    hideAlert($("#cover-alert"));
+    if (!state.soloStartAt) state.soloStartAt = Date.now();
+    go("solo");
+  });
+  $("#solo-opts").addEventListener("change", (e) => { state.soloAnswer = e.target.value; syncOn($("#solo-opts")); hideAlert($("#solo-alert")); save(); });
+  $("#conf").addEventListener("change", (e) => { state.soloConf = Number(e.target.value); syncOn($("#conf")); hideAlert($("#solo-alert")); save(); });
+  $("#solo-lock").addEventListener("click", () => {
+    const miss = [];
+    if (!state.soloAnswer) miss.push("pick what's really wrong");
+    if (!state.soloConf) miss.push("say how sure you are");
+    if (miss.length) { showAlert($("#solo-alert"), miss.join(" and ").replace(/^./, (c) => c.toUpperCase()) + "."); return; }
+    const p = PROB[state.soloAnswer];
+    confirmSheet("Part 1 · Gut call", "Lock your gut call?",
+      `<p><b>${p.k} · ${esc(p.label)}</b><br><span class="muted">Sure ${state.soloConf}/5. You can't change it afterwards.</span></p>`,
+      "Lock my gut call", () => { state.soloLockedAt = Date.now(); go("role"); sendRow("Gut call locked"); });
+  });
+
+  /* ---------- Events: role ---------- */
+  $("#role-screen").addEventListener("click", () => { state.role = "screen"; go("team"); sendRow("Team part"); });
+  $("#role-member").addEventListener("click", () => { state.role = "member"; go("follow"); sendRow("Team part"); });
+  $("#switch-screen").addEventListener("click", () => {
+    confirmSheet("Part 2 · Team", "Use this device as your team screen?",
+      '<p class="muted">Only do this if your team has no other team screen. You will open the clues and lock the answers.</p>',
+      "Make this our team screen", () => { state.role = "screen"; go("team"); sendRow("Team part"); });
+  });
+
+  /* ---------- Events: team screen ---------- */
+  $("#start-team").addEventListener("click", () => { if (!state.teamStartAt) state.teamStartAt = Date.now(); save(); show(); toTop(); });
+  $("#board").addEventListener("click", (e) => { const b = e.target.closest(".clue"); if (b) showClue(b.getAttribute("data-id")); });
+  $("#team-p-opts").addEventListener("change", (e) => { if (state.teamProblemAt) return; state.teamProblem = e.target.value; syncOn($("#team-p-opts")); hideAlert($("#tp-alert")); save(); });
+  $("#team-f-opts").addEventListener("change", (e) => { if (state.teamLockedAt) return; state.teamFix = e.target.value; syncOn($("#team-f-opts")); hideAlert($("#tf-alert")); save(); });
+  $("#lock-problem").addEventListener("click", () => {
+    if (!state.teamProblem) { showAlert($("#tp-alert"), "Pick what's really wrong first."); return; }
+    const p = PROB[state.teamProblem];
+    confirmSheet("A · The problem", "Lock the problem?",
+      `<p><b>${p.k} · ${esc(p.label)}</b></p><p class="muted">You can't change it afterwards. The fix options open next.</p>`,
+      "Lock the problem", () => {
+        state.teamProblemAt = Date.now();
+        save();
+        renderTeam();
+        const card = $("#fix-card");
+        if (card) card.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
+        announce("Problem locked. The fix options are open.");
+      });
+  });
+  $("#lock-fix").addEventListener("click", () => {
+    if (!state.teamFix) { showAlert($("#tf-alert"), "Pick the fix first."); return; }
+    const f = FIX[state.teamFix];
+    const el = (Date.now() - state.teamStartAt) / 1000, left = TEAM_SECONDS - el, b = bonusFor(el);
+    const line = left < 0 ? "You're in overtime, so this costs 2 points." : b ? `Locking now with ${fmt(left)} left earns +${b} if your problem is on track.` : "There's no early-finish bonus at this point.";
+    confirmSheet("B · The fix", "Lock the fix and close the case?",
+      `<p><b>${f.k} · ${esc(f.label)}</b><br><span class="muted">${esc(f.sub)}</span></p><p class="muted">${esc(line)}</p>`,
+      "Lock and close", () => { state.teamLockedAt = Date.now(); go("wait"); sendRow("Team answers locked"); });
+  });
+
+  /* ---------- Events: reveal ---------- */
+  function busy(btn, on) {
+    if (!btn) return;
+    if (on) { btn.dataset.label = btn.textContent; btn.textContent = "Checking…"; btn.disabled = true; }
+    else { btn.textContent = btn.dataset.label || btn.textContent; btn.disabled = false; }
+  }
+  function tryReveal(input, alertEl, btn) {
+    const v = normCode(input.value);
+    if (!v) { showAlert(alertEl, "Type the code your facilitator shows on the big screen."); return; }
+    busy(btn, true);
+    setTimeout(() => { const sec = unseal(v); busy(btn, false); finishReveal(sec, v, alertEl); }, 30);
+  }
+  function finishReveal(sec, v, alertEl) {
+    if (!sec) { showAlert(alertEl, "That code doesn't match. Check it on the big screen."); return; }
+    applySecrets(sec);
+    state.code = v; state.revealed = true; animateScores = true;
+    go("result");
+    sendRowSoon("Revealed", 300 + Math.random() * 3000);   // spread out the class's sends
+  }
+  $("#do-reveal").addEventListener("click", () => tryReveal($("#f-code"), $("#code-alert"), $("#do-reveal")));
+  $("#f-code").addEventListener("keydown", (e) => { if (e.key === "Enter") { e.preventDefault(); tryReveal($("#f-code"), $("#code-alert"), $("#do-reveal")); } });
+  $("#do-reveal-m").addEventListener("click", () => tryReveal($("#f-code-m"), $("#code-alert-m"), $("#do-reveal-m")));
+  $("#f-code-m").addEventListener("keydown", (e) => { if (e.key === "Enter") { e.preventDefault(); tryReveal($("#f-code-m"), $("#code-alert-m"), $("#do-reveal-m")); } });
+  $("#to-feedback").addEventListener("click", () => go("feedback"));
+  $("#dl-png").addEventListener("click", () => saveCard("png"));
+  $("#dl-pdf").addEventListener("click", () => saveCard("pdf"));
+  $("#m-team-score").addEventListener("input", (e) => {
+    const v = e.target.value.replace(/[^0-9\-−]/g, "").slice(0, 3);
+    if (v !== e.target.value) e.target.value = v;
+    state.memberScore = v;
+    save();
+    sendRowSoon("Revealed", 2500);
+    clearTimeout(cardTimer);
+    cardTimer = setTimeout(makeCard, 400);
+  });
+  function resultText() {
+    const solo = soloPts(), sp = PROB[state.soloAnswer];
+    const lines = ["The Vilkas Case · result", `${state.name.trim()} · ${state.team.trim()}`, `Gut call: ${sp ? sp.k + " " + sp.label : "none"} (sure ${state.soloConf}/5) = ${solo}/10`];
+    if (state.role === "screen") {
+      const s = teamScore(), p = PROB[state.teamProblem], f = FIX[state.teamFix];
+      lines.push(`Team problem: ${p ? p.k + " " + p.label : "none"} = ${s.pp}`);
+      lines.push(`Team fix: ${f ? f.k + " " + f.label : "none"} = ${s.fp}`);
+      lines.push(`Finish early: ${signed(s.speed)} (locked with ${timeText(s.sec)}) · 6th clue: ${state.extra ? "−2" : "no"} · Overtime: ${s.over ? "−2" : "no"}`);
+      lines.push(`Team score: ${s.total}/${MAX}`);
+      lines.push(`Clues opened: ${state.opened.length ? state.opened.map((id) => CLUE[id].n + " " + CLUE[id].title).join("; ") : "none"}`);
+    } else {
+      lines.push(state.memberScore ? `Team score: ${state.memberScore}/${MAX} (from our team screen)` : "Team score: on our team screen");
+    }
+    return lines.join("\n");
+  }
+  $("#copy-result").addEventListener("click", () => {
+    const text = resultText(), msg = $("#copy-msg"), ta = $("#copy-fallback");
+    const fallback = () => { ta.value = text; ta.hidden = false; ta.focus(); ta.select(); msg.textContent = "Copy the text below."; };
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(() => { msg.textContent = "Copied."; ta.hidden = true; }, fallback);
+      else fallback();
+    } catch (e) { fallback(); }
+  });
+
+  /* ---------- Events: feedback ---------- */
+  [["objective", "#fb-objective"], ["clarity", "#fb-clarity"], ["teamwork", "#fb-teamwork"]].forEach(([k, sel]) => {
+    $(sel).addEventListener("change", (e) => { state.fb[k] = Number(e.target.value); syncOn($(sel)); hideAlert($("#fb-alert")); save(); });
+  });
+  $("#fb-time").addEventListener("change", (e) => { state.fb.time = e.target.value; syncOn($("#fb-time")); save(); });
+  $("#fb-improve").addEventListener("input", (e) => { state.fb.improve = e.target.value; save(); });
+  function fbMissing() {
+    const m = [];
+    if (!state.fb.objective) m.push("1");
+    if (!state.fb.clarity) m.push("2");
+    if (state.fb.improve.trim().length < 2) m.push("3");
+    return m;
+  }
+  $("#fb-send-btn").addEventListener("click", () => {
+    const m = fbMissing();
+    if (m.length) { showAlert($("#fb-alert"), `Answer question${m.length > 1 ? "s" : ""} ${m.join(", ")} to send.`); return; }
+    const btn = $("#fb-send-btn");
+    btn.disabled = true;
+    const finish = () => { state.fbSent = true; go("done"); };
+    sendToSheet({ kind: "feedback", objective: state.fb.objective, clarity: state.fb.clarity, improve: state.fb.improve.trim(), time: TIME_LABEL[state.fb.time] || "", teamwork: state.fb.teamwork || "" }).then(finish, finish);
+  });
+  $("#prev-open").addEventListener("click", () => {
+    if (!cardUrl) return;
+    openSheet({ kicker: "Your result card", title: "Save your card",
+      body: `<p class="muted">On a phone: press and hold the image, then save it. On a laptop: right-click it, then Save image as.</p><img class="full-card" src="${cardUrl}" alt="Your result card">`,
+      actions: [{ label: "Close", cls: "btn-dark" }] });
+  });
+  $("#fb-back").addEventListener("click", () => go("result"));
+  $("#done-back").addEventListener("click", () => go("result"));
+
+  /* ---------- Reset ---------- */
+  $("#reset").addEventListener("click", () => {
+    openSheet({ kicker: "This device", title: "Start over?", body: '<p class="muted">This clears your name, your team, your answers and the timers on this device.</p>',
+      actions: [{ label: "Keep my answers" }, { label: "Start over", cls: "btn-danger", onClick: () => { state = fresh(); state.did = newId(); SEC = null; try { localStorage.removeItem(KEY); } catch (e) {} go("cover"); } }] });
+  });
+
+  /* ---------- Facilitator view ---------- */
+  const PHASES = [
+    { id: "intro", t: "Intro", min: 2, tip: "Objective and rules. Everyone scans the code and types their name and team." },
+    { id: "you", t: "Gut call", min: 4, tip: "No talking. Everyone reads the brief and makes a gut call alone. Teams pick their team screen." },
+    { id: "team", t: "Team", min: 11, grace: 2, tip: "Team screens open up to 5 clues, lock the problem, then the fix. They lock by themselves at 13:00." },
+    { id: "reveal", t: "Reveal", min: 3, tip: "Read out the code. Everyone downloads their result card, then you collect each team's score." },
+    { id: "debrief", t: "Debrief", min: 6, tip: "Four questions, about 90 seconds each." },
+    { id: "feedback", t: "Feedback", min: 1, tip: "Everyone gives feedback on their own device." }
+  ];
+  const SESSION = fmt(PHASES.reduce((a, p) => a + p.min, 0) * 60);
+  const freshHost = () => ({ v: 2, i: 0, run: 0, acc: PHASES.map(() => 0), code: false, unlock: "", rows: [{ team: "", score: "" }, { team: "", score: "" }, { team: "", score: "" }, { team: "", score: "" }, { team: "", score: "" }] });
+  function cleanHost(h) {
+    if (!h || h.v !== 2) return null;
+    const o = Object.assign(freshHost(), h);
+    if (!Array.isArray(o.acc) || o.acc.length !== PHASES.length) o.acc = PHASES.map(() => 0);
+    o.i = Math.min(Math.max(0, o.i | 0), PHASES.length - 1);
+    if (!Array.isArray(o.rows) || !o.rows.length) o.rows = freshHost().rows;
+    return o;
+  }
+  const saveHost = () => { try { localStorage.setItem(HOST_KEY, JSON.stringify(host)); } catch (e) {} };
+  let host = freshHost();
+  const phaseMs = (i) => (host.acc[i] || 0) + (i === host.i && host.run ? Date.now() - host.run : 0);
+  const totalMs = () => PHASES.reduce((a, _, i) => a + phaseMs(i), 0);
+  function pauseHost() { if (host.run) { host.acc[host.i] += Date.now() - host.run; host.run = 0; } }
+  /* On a normal website the link is this page's own address; inside the Claude viewer it is the artifact link. */
+  const shareLink = () => (!window.claude && /^https?:$/.test(location.protocol) ? location.origin + location.pathname : SHARE_URL);
+
+  function renderQR() {
+    const box = $("#qr");
+    let m = null;
+    try { if (typeof VilkasQR === "function") m = VilkasQR(shareLink()); } catch (e) { m = null; }
+    if (!m) { box.textContent = "QR code unavailable here. Share the link below."; return; }
+    const n = m.size, q = 4, w = n + q * 2;
+    let d = "";
+    for (let r = 0; r < n; r++) for (let c = 0; c < n; c++) if (m.isDark(r, c)) d += `M${c + q} ${r + q}h1v1h-1z`;
+    box.innerHTML = `<svg viewBox="0 0 ${w} ${w}" role="img" aria-label="QR code that opens the game" shape-rendering="crispEdges"><rect class="qr-bg" width="${w}" height="${w}"/><path class="qr-fg" d="${d}"/></svg>`;
+  }
+  function renderHostClock() {
+    const p = PHASES[host.i], el = phaseMs(host.i) / 1000, left = p.min * 60 - el;
+    const tEl = $("#clock-time");
+    let toneName = "", label = host.run ? "Running" : el > 0 ? "Paused" : "Ready";
+    if (left >= 0) { tEl.textContent = fmt(left); toneName = left <= 60 ? "warn" : ""; }
+    else {
+      const over = -left;
+      tEl.textContent = "+" + fmt(over);
+      toneName = "warn";
+      if (host.run) label = "Over time";
+      if (p.grace && over >= p.grace * 60) { toneName = "bad"; label = "Case closed"; }
+    }
+    tEl.setAttribute("data-tone", toneName);
+    $("#clock-label").textContent = label;
+    $("#clock-total").textContent = `Session ${fmt(totalMs() / 1000)} of ${SESSION}`;
+    $("#h-start").textContent = host.run ? "Pause" : el > 0 ? "Resume" : "Start";
+    $("#phase-chip").textContent = `Facilitator · ${p.t}`;
+    const t = $("#timer");
+    t.hidden = false;
+    t.setAttribute("data-tone", toneName);
+    $("#timer-v").textContent = fmt(totalMs() / 1000);
+    $("#timer-n").textContent = "of " + SESSION;
+  }
+  function renderRail() {
+    $("#rail").innerHTML = PHASES.map((p, i) => `<li><button type="button" data-i="${i}" data-s="${i < host.i ? "done" : i === host.i ? "now" : "todo"}"${i === host.i ? ' aria-current="step"' : ""}><span class="r-n">${pad(i + 1)}</span><span class="r-t">${p.t}</span><span class="r-m">${p.min} min</span></button></li>`).join("");
+  }
+  function renderRows() {
+    $("#sb-rows").innerHTML = host.rows.map((r, i) => `<div class="sb-row"><label class="sr-only" for="sb-t-${i}">Team ${i + 1} name</label><input class="input" id="sb-t-${i}" data-i="${i}" data-k="team" value="${esc(r.team)}" placeholder="Team ${i + 1}" autocomplete="off"><label class="sr-only" for="sb-s-${i}">Team ${i + 1} score</label><input class="input num" id="sb-s-${i}" data-i="${i}" data-k="score" value="${esc(r.score)}" placeholder="0" inputmode="numeric" autocomplete="off"></div>`).join("");
+    renderRank();
+  }
+  function renderRank() {
+    const list = host.rows.map((r, i) => ({ team: r.team.trim() || `Team ${i + 1}`, score: parseInt(String(r.score).replace("−", "-"), 10) })).filter((r) => !isNaN(r.score)).sort((a, b) => b.score - a.score);
+    $("#sb-rank").innerHTML = list.length ? list.map((r, k) => `<li><span class="rk">${k + 1}</span><span class="rt">${esc(r.team)}</span><span class="rs">${r.score}<small>${Math.round(Math.max(0, r.score) / MAX * 100)}%</small></span></li>`).join("") : '<li class="empty">Scores appear here, highest first.</li>';
+  }
+  function renderHost() {
+    const p = PHASES[host.i];
+    $("#clock-phase").textContent = p.t;
+    $("#clock-tip").textContent = p.tip;
+    $$("[data-panel]").forEach((s) => { s.hidden = s.getAttribute("data-panel") !== p.id; });
+    $("#join-url").textContent = shareLink();
+    renderQR();
+    if (host.unlock && !SEC) { const sec = unseal(host.unlock); if (sec) applySecrets(sec); else { host.unlock = ""; saveHost(); } }
+    const open = !!(host.unlock && SEC);
+    renderSheetStatus();
+    $("#h-unlock").hidden = open;
+    $("#h-unlocked").hidden = !open;
+    $("#h-key").innerHTML = open ? SEC.html.key : '<p class="fine">Locked. Type the reveal code in Facilitator notes, at the top of this screen.</p>';
+    $("#h-debrief").innerHTML = open ? SEC.html.debrief : '<p class="fine">The debrief guide is locked. Type the reveal code in Facilitator notes, at the top of this screen.</p>';
+    $("#h-codebox").hidden = !(open && host.code);
+    $("#h-codebox").textContent = open && host.code ? showCode(host.unlock) : "";
+    $("#h-code").disabled = !open;
+    $("#h-code-note").hidden = open;
+    $("#h-code").textContent = open && host.code ? "Hide the code" : "Show the reveal code";
+    $("#h-back").disabled = host.i === 0;
+    $("#h-next").disabled = host.i === PHASES.length - 1;
+    renderRail();
+    renderRows();
+    renderHostClock();
+  }
+  $("#h-start").addEventListener("click", () => { if (host.run) pauseHost(); else host.run = Date.now(); saveHost(); renderHostClock(); });
+  $("#h-next").addEventListener("click", () => { if (host.i >= PHASES.length - 1) return; pauseHost(); host.i += 1; host.run = Date.now(); saveHost(); renderHost(); });
+  $("#h-back").addEventListener("click", () => { if (host.i <= 0) return; pauseHost(); host.i -= 1; saveHost(); renderHost(); });
+  $("#rail").addEventListener("click", (e) => { const b = e.target.closest("button[data-i]"); if (!b) return; pauseHost(); host.i = Number(b.getAttribute("data-i")); saveHost(); renderHost(); });
+  $("#h-reset").addEventListener("click", () => {
+    openSheet({ kicker: "Facilitator", title: "Reset the clock?", body: '<p class="muted">The clock goes back to the intro. The scoreboard stays.</p>',
+      actions: [{ label: "Keep it" }, { label: "Reset clock", cls: "btn-danger", onClick: () => { const rows = host.rows; host = freshHost(); host.rows = rows; saveHost(); renderHost(); } }] });
+  });
+  $("#h-code").addEventListener("click", () => { host.code = !host.code; saveHost(); renderHost(); });
+  let sheetPing = "";   // "", "checking", "ok", "fail"
+  function renderSheetStatus() {
+    const h = $("#sheet-h"), d = $("#sheet-d"), test = $("#sheet-test"), again = $("#sheet-recheck");
+    test.hidden = !canCollect(); again.hidden = !onWeb();
+    if (!onWeb()) { h.textContent = "Collected on the class website only"; d.textContent = "Open your GitHub link to see whether the sheet is connected."; return; }
+    if (sheetState === "checking") { h.textContent = "Checking…"; d.textContent = ""; return; }
+    if (sheetState === "none") { h.textContent = "Not set up yet"; d.textContent = "Add a file called sheet-link.txt to your GitHub repository, with your Google Apps Script web app link inside (it ends in /exec)."; return; }
+    if (sheetState === "bad") { h.textContent = "The link in sheet-link.txt isn't right"; d.textContent = "It should be your Google Apps Script web app link: it starts with https://script.google.com/ and ends in /exec."; return; }
+    if (sheetPing === "ok") { h.textContent = "Connected ✓"; d.textContent = "Every player's answers and feedback go to your Google Sheet."; return; }
+    if (sheetPing === "fail") { h.textContent = "Link found, but the sheet didn't answer"; d.textContent = "Press Send a test row and look in your Sheet. If nothing arrives, check in Apps Script under Deploy, Manage deployments, that Who has access is Anyone."; return; }
+    h.textContent = "Checking the sheet…"; d.textContent = "";
+    if (sheetPing === "") {
+      sheetPing = "checking";
+      fetch(collectUrl, { cache: "no-store" }).then((r) => r.text()).then((t) => { sheetPing = /collector is running/i.test(t) ? "ok" : "fail"; }, () => { sheetPing = "fail"; }).then(renderSheetStatus);
+    }
+  }
+  $("#sheet-test").addEventListener("click", () => {
+    $("#sheet-msg").textContent = "Sending…";
+    sendToSheet({ kind: "result", id: "facilitator-test", status: "Test", name: "Test row (you can delete it)", team: "Test", role: "Facilitator test" })
+      .then((ok) => { $("#sheet-msg").textContent = ok ? "Test row sent. It should appear in the Results tab of your Sheet within a few seconds." : "The test row couldn't be sent. Check your internet connection."; });
+  });
+  $("#sheet-recheck").addEventListener("click", () => { $("#sheet-msg").textContent = ""; collectUrl = COLLECT_URL; sheetState = "checking"; sheetPing = ""; renderSheetStatus(); loadSheetLink(); });
+
+  function hostUnlock() {
+    const input = $("#h-unlock-code"), v = normCode(input.value), btn = $("#h-unlock-btn");
+    if (!v) { showAlert($("#h-unlock-alert"), "Type the reveal code."); return; }
+    busy(btn, true);
+    setTimeout(() => { const sec = unseal(v); busy(btn, false); finishUnlock(sec, v, input); }, 30);
+  }
+  function finishUnlock(sec, v, input) {
+    if (!sec) { showAlert($("#h-unlock-alert"), "That code doesn't match."); return; }
+    applySecrets(sec);
+    host.unlock = v;
+    input.value = "";
+    hideAlert($("#h-unlock-alert"));
+    saveHost();
+    renderHost();
+  }
+  $("#h-unlock-btn").addEventListener("click", hostUnlock);
+  $("#h-unlock-code").addEventListener("keydown", (e) => { if (e.key === "Enter") { e.preventDefault(); hostUnlock(); } });
+  $("#h-relock").addEventListener("click", () => { host.unlock = ""; host.code = false; saveHost(); renderHost(); });
+  $("#sb-rows").addEventListener("input", (e) => { const t = e.target, i = Number(t.getAttribute("data-i")), k = t.getAttribute("data-k"); if (!host.rows[i] || !k) return; host.rows[i][k] = t.value; saveHost(); renderRank(); });
+  $("#sb-add").addEventListener("click", () => { host.rows.push({ team: "", score: "" }); saveHost(); renderRows(); const last = $(`#sb-t-${host.rows.length - 1}`); if (last) last.focus(); });
+  $("#copy-link").addEventListener("click", () => {
+    const msg = $("#copy-link-msg");
+    const fallback = () => { msg.textContent = "Select the link above and copy it."; };
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(shareLink()).then(() => { msg.textContent = "Link copied."; }, fallback);
+      else fallback();
+    } catch (e) { fallback(); }
+  });
+
+  /* ---------- Boot ---------- */
+  let booted = false;
+  function start(data) {
+    if (booted) return;
+    booted = true;
+    state = (data && data.state && clean(data.state)) || clean(load(KEY)) || fresh();
+    host = (data && data.host && cleanHost(data.host)) || cleanHost(load(HOST_KEY)) || freshHost();
+    if (!state.did) { state.did = newId(); save(); }
+    show();
+    loadSheetLink();
+    setInterval(tick, 1000);
+    window.addEventListener("hashchange", () => { closeSheet(); show(); toTop(); });
+    try { getDl(); } catch (e) {}
+  }
+  try { if (window.claude && window.claude.hot && window.claude.hot.snapshot) window.claude.hot.snapshot(() => ({ state, host })); } catch (e) {}
+  if (window.claude && window.claude.hot && window.claude.hot.ready) window.claude.hot.ready(start);
+  else start((window.claude && window.claude.hot && window.claude.hot.data) || {});
+})();
+</script>
+
+</body>
+</html>
